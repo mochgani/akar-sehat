@@ -20,7 +20,7 @@
 /public/storage
 /storage/*.key
 /storage/pail
-/vendor
+# /vendor  ← dimasukkan ke git untuk deploy ke shared hosting tanpa terminal
 _ide_helper.php
 Homestead.json
 Homestead.yaml

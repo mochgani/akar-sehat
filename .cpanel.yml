@@ -1,0 +1,13 @@
+---
+deployment:
+  tasks:
+    # Salin isi public/ ke public_html/
+    - /bin/cp -r /home/$USER/akar-sehat/public/. /home/$USER/public_html/
+
+    # Clear & rebuild cache setelah pull
+    - /usr/local/bin/php /home/$USER/akar-sehat/artisan config:clear
+    - /usr/local/bin/php /home/$USER/akar-sehat/artisan config:cache
+    - /usr/local/bin/php /home/$USER/akar-sehat/artisan route:clear
+    - /usr/local/bin/php /home/$USER/akar-sehat/artisan route:cache
+    - /usr/local/bin/php /home/$USER/akar-sehat/artisan view:clear
+    - /usr/local/bin/php /home/$USER/akar-sehat/artisan view:cache
