@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login — Akar Sehat Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  @include('partials.favicon')
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -25,7 +26,9 @@
       top: 50%; left: 50%; transform: translate(-50%,-50%);
     }
     .ll-content { position: relative; text-align: center; max-width: 320px; }
-    .ll-logo { font-size: 56px; margin-bottom: 20px; }
+    .ll-logo { margin-bottom: 20px; display: flex; align-items: center; gap: 12px; justify-content: center; }
+    .ll-logo svg { color: #fff; width: 52px; height: 52px; }
+    .ll-logo img { height: 52px; width: auto; object-fit: contain; }
     .ll-brand { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; }
     .ll-tagline { font-size: 14px; color: rgba(255,255,255,.5); margin-bottom: 48px; }
     .ll-feat { display: flex; flex-direction: column; gap: 14px; text-align: left; }
@@ -49,8 +52,6 @@
     .btn-login:hover { background: var(--cpd); }
     .remember-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; color: var(--cmt); }
     .remember-row input { accent-color: var(--cp); }
-    .lf-demo { margin-top: 24px; background: rgba(200,106,68,.08); border: 1px solid rgba(200,106,68,.2); border-radius: 8px; padding: 14px 16px; font-size: 12.5px; color: var(--cmt); }
-    .lf-demo strong { color: var(--cp); }
     .lf-back { display: inline-flex; align-items: center; gap: 6px; color: var(--cmt); font-size: 12.5px; text-decoration: none; margin-top: 20px; }
     .lf-back:hover { color: var(--cp); }
 
@@ -63,8 +64,11 @@
 <body>
   <div class="login-left">
     <div class="ll-content">
-      <div class="ll-logo">🌿</div>
-      <div class="ll-brand">Akar Sehat</div>
+      <div class="ll-logo">
+        @php $logoStyle = 'height:52px;width:auto;object-fit:contain'; $logoSvgStyle = 'width:52px;height:52px;'; @endphp
+        @include('partials.logo')
+      </div>
+      <div class="ll-brand">{{ $siteSettings['name'] ?? 'Akar Sehat' }}</div>
       <div class="ll-tagline">Panel Admin — Kelola konten website Anda</div>
       <div class="ll-feat">
         <div class="ll-feat-item">
@@ -116,11 +120,6 @@
         </div>
         <button type="submit" class="btn-login">Masuk ke Admin Panel</button>
       </form>
-
-      <div class="lf-demo">
-        <strong>Demo Login:</strong><br>
-        Username: <strong>kangbahri</strong> &nbsp;|&nbsp; Password: <strong>akarsehat123</strong>
-      </div>
 
       <a href="{{ route('home') }}" class="lf-back">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
