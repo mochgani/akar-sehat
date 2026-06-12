@@ -49,6 +49,7 @@
                         <svg class="nav-lang-chevron" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                     </button>
                     <div class="nav-lang-menu" id="nav-lang-menu" role="menu">
+                        <div class="nav-lang-menu-inner">
                         @foreach($activeLanguages ?? [] as $lang)
                         <a href="{{ route('lang.switch', $lang->code) }}"
                            class="nav-lang-item {{ ($currentLocale ?? 'id') === $lang->code ? 'active' : '' }}"
@@ -60,6 +61,7 @@
                             @endif
                         </a>
                         @endforeach
+                        </div>
                     </div>
                 </li>
                 @endif

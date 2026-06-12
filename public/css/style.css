@@ -348,15 +348,19 @@ img {
 .nav-lang-menu {
     display: none;
     position: absolute;
-    top: calc(100% + 8px);
+    top: 100%;
     right: 0;
+    padding-top: 8px;
+    z-index: 100;
+}
+
+.nav-lang-menu-inner {
     background: #fff;
     border: 1px solid var(--color-muted-sand);
     border-radius: 10px;
     box-shadow: var(--shadow-md);
     min-width: 150px;
     overflow: hidden;
-    z-index: 100;
 }
 
 .nav-lang-wrap:hover .nav-lang-menu,
