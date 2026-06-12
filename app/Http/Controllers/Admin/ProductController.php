@@ -31,7 +31,11 @@ class ProductController extends Controller
         }
 
         $products  = $query->orderBy('urutan')->paginate(15)->withQueryString();
-        $kategoris = KategoriProduk::aktif()->orderBy('urutan')->orderBy('nama')->pluck('nama');
+        try {
+            $kategoris = KategoriProduk::aktif()->orderBy('urutan')->orderBy('nama')->pluck('nama');
+        } catch (\Exception $e) {
+            $kategoris = Product::distinct()->pluck('kategori')->filter();
+        }
         $languages = Language::aktif()->get();
 
         return view('admin.produk.index', compact('products', 'kategoris', 'languages'));

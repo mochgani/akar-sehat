@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         // Convert existing single-string foto values to JSON arrays before changing column type
-        DB::table('products')->whereNotNull('foto')->where('foto', '!=', '')->each(function ($product) {
+        DB::table('products')->whereNotNull('foto')->where('foto', '!=', '')->orderBy('id')->each(function ($product) {
             $decoded = json_decode($product->foto, true);
             if (!is_array($decoded)) {
                 DB::table('products')->where('id', $product->id)
