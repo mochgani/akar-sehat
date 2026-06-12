@@ -149,7 +149,6 @@
             <select name="kategori" class="fc" required>
               <option value="">Pilih kategori...</option>
               @foreach($kategoris as $k)<option value="{{ $k }}">{{ $k }}</option>@endforeach
-              <option value="__new__">+ Kategori Baru</option>
             </select>
           </div>
         </div>
