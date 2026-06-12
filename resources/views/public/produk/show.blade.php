@@ -743,9 +743,10 @@
         overflow: hidden;
     }
     .produk-card-img {
-        width: 70%;
-        height: 80%;
-        object-fit: contain;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
         transition: transform 0.4s ease;
     }
     .produk-card:hover .produk-card-img { transform: scale(1.06); }
@@ -882,7 +883,7 @@
                     @if(count($produk->fotos) > 1)
                     <div class="detail-thumbnails">
                         @foreach($produk->fotos as $i => $fotoPath)
-                        <div class="detail-thumb {{ $i === 0 ? 'active' : '' }}" data-src="{{ asset('storage/'.$fotoPath) }}">
+                        <div class="detail-thumb {{ $i === 0 ? 'active' : '' }}" data-src="{{ asset('storage/'.$fotoPath) }}" onclick="switchThumb(this)">
                             <img src="{{ asset('storage/'.$fotoPath) }}" alt="{{ $produk->trans('nama') }} foto {{ $i+1 }}">
                         </div>
                         @endforeach
@@ -1156,8 +1157,8 @@
 @push('scripts')
 <script>
 (function() {
-    var produkHarga = {{ $produk->harga }};
-    var produkNama  = {{ json_encode($produk->trans('nama')) }};
+    var produkHarga = {{ (int)$produk->harga }};
+    var produkNama  = {!! json_encode($produk->trans('nama'), JSON_HEX_TAG | JSON_HEX_AMP) !!};
     var waNumber    = "{{ $siteSettings['wa_number'] ?? '6281234567890' }}";
     var currentQty  = 1;
 
@@ -1192,31 +1193,6 @@
     if (minusBtn) minusBtn.addEventListener('click', function() { updateQty(-1); });
     if (plusBtn)  plusBtn.addEventListener('click',  function() { updateQty(+1); });
 
-    // Thumbnail switcher dengan fade transition
-    var thumbs = document.querySelectorAll('.detail-thumb');
-    thumbs.forEach(function(thumb) {
-        thumb.addEventListener('click', function() {
-            var newSrc = thumb.getAttribute('data-src');
-            var mainImg = document.getElementById('main-img');
-            if (!mainImg || !newSrc || mainImg.src === newSrc) return;
-
-            // Update active state
-            thumbs.forEach(function(t) { t.classList.remove('active'); });
-            thumb.classList.add('active');
-
-            // Fade out → swap src → fade in
-            mainImg.classList.add('switching');
-            setTimeout(function() {
-                mainImg.src = newSrc;
-                mainImg.onload = function() {
-                    mainImg.classList.remove('switching');
-                };
-                // Fallback: remove class even if onload doesn't fire
-                setTimeout(function() { mainImg.classList.remove('switching'); }, 400);
-            }, 180);
-        });
-    });
-
     // Sticky WA — show when order block scrolls out
     var stickyEl = document.getElementById('sticky-wa');
     if (stickyEl) {
@@ -1228,6 +1204,21 @@
         }, { passive: true });
     }
 })();
+
+// Thumbnail switcher — global so onclick attribute can call it
+function switchThumb(thumb) {
+    var newSrc = thumb.getAttribute('data-src');
+    var mainImg = document.getElementById('main-img');
+    if (!mainImg || !newSrc || mainImg.src === newSrc) return;
+    document.querySelectorAll('.detail-thumb').forEach(function(t) { t.classList.remove('active'); });
+    thumb.classList.add('active');
+    mainImg.classList.add('switching');
+    setTimeout(function() {
+        mainImg.src = newSrc;
+        mainImg.onload = function() { mainImg.classList.remove('switching'); };
+        setTimeout(function() { mainImg.classList.remove('switching'); }, 400);
+    }, 180);
+}
 
 // Tab switching
 function switchTab(tabId) {

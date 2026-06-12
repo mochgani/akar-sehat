@@ -149,7 +149,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 5. PRODUCT FAVORITE BUTTON TOGGLE
+    // 5. PRODUCT DETAIL — THUMBNAIL SWITCHER
+    // ==========================================
+    const detailThumbs = document.querySelectorAll('.detail-thumb');
+    if (detailThumbs.length > 0) {
+        detailThumbs.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                const newSrc = thumb.getAttribute('data-src');
+                const mainImg = document.getElementById('main-img');
+                if (!mainImg || !newSrc || mainImg.src === newSrc) return;
+                detailThumbs.forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+                mainImg.classList.add('switching');
+                setTimeout(() => {
+                    mainImg.src = newSrc;
+                    mainImg.onload = () => mainImg.classList.remove('switching');
+                    setTimeout(() => mainImg.classList.remove('switching'), 400);
+                }, 180);
+            });
+        });
+    }
+
+    // ==========================================
+    // 6. PRODUCT FAVORITE BUTTON TOGGLE
     // ==========================================
     const favButtons = document.querySelectorAll('.product-fav-btn');
 

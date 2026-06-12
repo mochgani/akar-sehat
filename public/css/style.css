@@ -1474,3 +1474,14 @@ img {
         font-size: 1.4rem;
     }
 }
+
+
+/* ================================================================
+   Product detail page — related products image override
+================================================================ */
+.related-section .produk-card-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center;
+}
