@@ -5,7 +5,7 @@
  * Jalankan setiap kali setelah pull dari cPanel Git Version Control
  */
 
-define('DEPLOY_TOKEN', 'ganti_dengan_token_rahasia_kamu');
+define('DEPLOY_TOKEN', '4k4r');
 
 if (empty($_GET['token']) || $_GET['token'] !== DEPLOY_TOKEN) {
     http_response_code(403);
@@ -28,8 +28,22 @@ echo str_repeat('─', 44) . "\n\n";
 echo "📂 Repo root  : $repoRoot\n";
 echo "📂 Public html: $publicHtml\n\n";
 
+// Debug: tampilkan isi repo root
+echo "📂 Isi repo root:\n";
+foreach (scandir($repoRoot) as $f) {
+    if ($f === '.' || $f === '..') continue;
+    $type = is_dir("$repoRoot/$f") ? '[dir]' : '[file]';
+    echo "   $type $f\n";
+}
+flush();
+
 // 1. Sync public/ → public_html/ (skip folder storage)
-echo "📋 Sinkronisasi public/ → public_html/...\n"; flush();
+if (!is_dir($publicSrc)) {
+    echo "\n❌ Folder public/ tidak ditemukan di: $publicSrc\n";
+    echo "   Sesuaikan path \$publicSrc di script ini.\n";
+    echo '</pre>'; exit;
+}
+echo "\n📋 Sinkronisasi public/ → public_html/...\n"; flush();
 $result = syncDir($publicSrc, $publicHtml, ['storage']);
 echo "   ✅ Selesai ({$result['copied']} file, {$result['errors']} error)\n"; flush();
 
