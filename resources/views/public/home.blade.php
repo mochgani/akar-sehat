@@ -355,8 +355,8 @@
                     @forelse($featuredProducts as $produk)
                     <div class="product-card">
                         <div class="product-img-box">
-                            @if($produk->foto)
-                            <img src="{{ asset('storage/'.$produk->foto) }}" alt="{{ $produk->nama }}"
+                            @if($produk->fotos)
+                            <img src="{{ asset('storage/'.($produk->fotos[0] ?? '')) }}" alt="{{ $produk->nama }}"
                                 class="product-img-box-img">
                             @endif
                         </div>

@@ -16,6 +16,8 @@ class Product extends Model
         'foto', 'is_featured', 'urutan', 'translations',
     ];
 
+    protected $appends = ['fotos'];
+
     protected function casts(): array
     {
         return [
@@ -25,6 +27,16 @@ class Product extends Model
             'harga'        => 'integer',
             'stok'         => 'integer',
         ];
+    }
+
+    /** Always returns an array of storage paths. Handles both old string and new JSON format. */
+    public function getFotosAttribute(): array
+    {
+        $raw = $this->attributes['foto'] ?? null;
+        if (empty($raw)) return [];
+        $decoded = json_decode($raw, true);
+        if (is_array($decoded)) return array_values(array_filter($decoded));
+        return [$raw]; // backward compat: old single-string path
     }
 
     protected static function booted(): void
@@ -51,9 +63,7 @@ class Product extends Model
 
     public function getFotoUrlAttribute(): string
     {
-        if ($this->foto && file_exists(public_path('asset/produk/' . $this->foto))) {
-            return asset('asset/produk/' . $this->foto);
-        }
-        return asset('asset/produk/placeholder.png');
+        $fotos = $this->fotos;
+        return $fotos ? asset('storage/' . $fotos[0]) : '';
     }
 }

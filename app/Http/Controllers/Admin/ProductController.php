@@ -48,16 +48,22 @@ class ProductController extends Controller
             'deskripsi'   => 'nullable|string',
             'cara_pakai'  => 'nullable|string',
             'is_featured' => 'boolean',
-            'foto'        => 'nullable|image|max:2048',
+            'fotos'       => 'nullable|array|max:5',
+            'fotos.*'     => 'image|max:2048',
         ]);
 
         $data['slug']         = Str::slug($data['nama']);
         $data['is_featured']  = $request->boolean('is_featured');
         $data['translations'] = $this->extractTranslations($request, ['nama', 'deskripsi', 'cara_pakai']);
 
-        if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('produk', 'public');
+        $uploadedFotos = [];
+        if ($request->hasFile('fotos')) {
+            foreach (array_slice($request->file('fotos'), 0, 5) as $file) {
+                $uploadedFotos[] = $file->store('produk', 'public');
+            }
         }
+        $data['foto'] = json_encode($uploadedFotos);
+        unset($data['fotos']);
 
         Product::create($data);
         return response()->json(['success' => true, 'message' => 'Produk berhasil ditambahkan.']);
@@ -66,25 +72,47 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
-            'nama'        => 'required|string|max:255',
-            'sku'         => "required|string|max:50|unique:products,sku,{$product->id}",
-            'kategori'    => 'required|string|max:100',
-            'harga'       => 'required|integer|min:0',
-            'stok'        => 'required|integer|min:0',
-            'kandungan'   => 'nullable|array',
-            'deskripsi'   => 'nullable|string',
-            'cara_pakai'  => 'nullable|string',
-            'is_featured' => 'boolean',
-            'foto'        => 'nullable|image|max:2048',
+            'nama'           => 'required|string|max:255',
+            'sku'            => "required|string|max:50|unique:products,sku,{$product->id}",
+            'kategori'       => 'required|string|max:100',
+            'harga'          => 'required|integer|min:0',
+            'stok'           => 'required|integer|min:0',
+            'kandungan'      => 'nullable|array',
+            'deskripsi'      => 'nullable|string',
+            'cara_pakai'     => 'nullable|string',
+            'is_featured'    => 'boolean',
+            'fotos_existing' => 'nullable|array|max:5',
+            'fotos_existing.*' => 'string',
+            'fotos_new'      => 'nullable|array',
+            'fotos_new.*'    => 'image|max:2048',
         ]);
 
         $data['is_featured']  = $request->boolean('is_featured');
         $data['translations'] = $this->extractTranslations($request, ['nama', 'deskripsi', 'cara_pakai']);
 
-        if ($request->hasFile('foto')) {
-            if ($product->foto) Storage::disk('public')->delete($product->foto);
-            $data['foto'] = $request->file('foto')->store('produk', 'public');
+        // Existing photos to keep (validate paths belong to produk/)
+        $existing = array_values(array_filter(
+            $request->input('fotos_existing', []),
+            fn($p) => is_string($p) && str_starts_with($p, 'produk/')
+        ));
+
+        // Delete photos that were removed by admin
+        $oldFotos = $product->fotos;
+        foreach (array_diff($oldFotos, $existing) as $path) {
+            Storage::disk('public')->delete($path);
         }
+
+        // Upload new photos
+        $newFotos = [];
+        if ($request->hasFile('fotos_new')) {
+            $slotsLeft = max(0, 5 - count($existing));
+            foreach (array_slice($request->file('fotos_new'), 0, $slotsLeft) as $file) {
+                $newFotos[] = $file->store('produk', 'public');
+            }
+        }
+
+        $data['foto'] = json_encode(array_merge($existing, $newFotos));
+        unset($data['fotos_existing'], $data['fotos_new']);
 
         $product->update($data);
         return response()->json(['success' => true, 'message' => 'Produk berhasil diperbarui.']);

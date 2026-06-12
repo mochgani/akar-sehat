@@ -996,9 +996,9 @@
             <div class="produk-terkait-grid">
                 @foreach($produkTerkait as $p)
                 <a href="{{ route('produk.show', $p->slug) }}" class="pt-card">
-                    <div class="pt-card-img-wrap {{ $p->foto ? '' : 'no-img' }}">
-                        @if($p->foto)
-                            <img class="pt-card-img" src="{{ asset('storage/'.$p->foto) }}" alt="{{ $p->nama }}" loading="lazy">
+                    <div class="pt-card-img-wrap {{ $p->fotos ? '' : 'no-img' }}">
+                        @if($p->fotos)
+                            <img class="pt-card-img" src="{{ asset('storage/'.($p->fotos[0] ?? '')) }}" alt="{{ $p->nama }}" loading="lazy">
                         @else
                             <svg class="pt-placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8">
                                 <rect x="3" y="3" width="18" height="18" rx="2"/>

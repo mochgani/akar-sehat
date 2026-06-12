@@ -850,9 +850,9 @@
 
                 <!-- LEFT: Image -->
                 <div class="detail-img-panel">
-                    <div class="detail-main-img-box {{ $produk->foto ? '' : 'no-img' }}" id="main-img-box">
-                        @if($produk->foto)
-                            <img src="{{ asset('storage/'.$produk->foto) }}" id="main-img" alt="{{ $produk->trans('nama') }}">
+                    <div class="detail-main-img-box {{ $produk->fotos ? '' : 'no-img' }}" id="main-img-box">
+                        @if($produk->fotos)
+                            <img src="{{ asset('storage/'.($produk->fotos[0] ?? '')) }}" id="main-img" alt="{{ $produk->trans('nama') }}">
                         @else
                             <svg class="detail-placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.7">
                                 <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -870,11 +870,13 @@
                         @endif
                     </div>
 
-                    @if($produk->foto)
+                    @if(count($produk->fotos) > 1)
                     <div class="detail-thumbnails">
-                        <div class="detail-thumb active" data-src="{{ asset('storage/'.$produk->foto) }}">
-                            <img src="{{ asset('storage/'.$produk->foto) }}" alt="{{ $produk->trans('nama') }}">
+                        @foreach($produk->fotos as $i => $fotoPath)
+                        <div class="detail-thumb {{ $i === 0 ? 'active' : '' }}" data-src="{{ asset('storage/'.$fotoPath) }}">
+                            <img src="{{ asset('storage/'.$fotoPath) }}" alt="{{ $produk->trans('nama') }} foto {{ $i+1 }}">
                         </div>
+                        @endforeach
                     </div>
                     @endif
 
@@ -1096,9 +1098,9 @@
             <div class="related-grid">
                 @foreach($related as $r)
                 <a href="{{ route('produk.show', $r->slug) }}" class="produk-card">
-                    <div class="produk-card-img-wrap {{ $r->foto ? '' : 'no-img' }}">
-                        @if($r->foto)
-                            <img class="produk-card-img" src="{{ asset('storage/'.$r->foto) }}" alt="{{ $r->nama }}" loading="lazy">
+                    <div class="produk-card-img-wrap {{ $r->fotos ? '' : 'no-img' }}">
+                        @if($r->fotos)
+                            <img class="produk-card-img" src="{{ asset('storage/'.($r->fotos[0] ?? '')) }}" alt="{{ $r->nama }}" loading="lazy">
                         @else
                             <svg class="produk-placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                         @endif

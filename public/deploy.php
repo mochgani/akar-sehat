@@ -80,7 +80,7 @@ require $repoRoot . '/vendor/autoload.php';
 $app    = require_once $repoRoot . '/bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 
-foreach (['config:clear','config:cache','route:clear','route:cache','view:clear','view:cache'] as $cmd) {
+foreach (['migrate --force','config:clear','config:cache','route:clear','route:cache','view:clear','view:cache'] as $cmd) {
     try {
         $kernel->call($cmd);
         echo "   ✅ $cmd\n";

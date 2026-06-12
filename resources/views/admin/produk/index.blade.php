@@ -71,8 +71,8 @@
           <td>
             <div style="display:flex;align-items:center;gap:10px">
               <div style="width:38px;height:38px;background:var(--cbg);border-radius:var(--r1);display:grid;place-items:center;flex-shrink:0;overflow:hidden">
-                @if($p->foto)
-                  <img src="{{ asset('storage/'.$p->foto) }}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
+                @if($p->fotos)
+                  <img src="{{ asset('storage/'.($p->fotos[0] ?? '')) }}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
                 @else
                   <span style="font-size:18px">📦</span>
                 @endif
@@ -158,14 +158,10 @@
           <div class="fg"><label class="fl">Stok *</label><input type="number" name="stok" class="fc" required placeholder="50" min="0"></div>
         </div>
         <div class="fg">
-          <label class="fl">Foto Produk <span style="color:var(--cmt);font-weight:400;font-size:11px">(sama untuk semua bahasa)</span></label>
-          <div style="display:flex;align-items:center;gap:10px">
-            <div id="add-foto-preview" style="width:52px;height:52px;background:var(--cbg);border:1px solid var(--cms);border-radius:var(--r2);display:grid;place-items:center;overflow:hidden;flex-shrink:0;font-size:20px">📦</div>
-            <div style="flex:1">
-              <input type="file" name="foto" id="add-foto" class="fc" accept="image/*" onchange="previewFoto(this,'add-foto-preview')" style="padding:6px 8px">
-              <p style="font-size:11px;color:var(--cmt);margin-top:4px">JPG/PNG/WEBP, maks 2MB</p>
-            </div>
-          </div>
+          <label class="fl">Foto Produk <span style="color:var(--cmt);font-weight:400;font-size:11px">(maks 5 foto, sama untuk semua bahasa)</span></label>
+          <div class="foto-grid" id="add-foto-grid"></div>
+          <input type="file" id="add-foto-input" accept="image/*" multiple style="display:none" onchange="handleAddFotos(this)">
+          <p style="font-size:11px;color:var(--cmt);margin-top:4px">JPG/PNG/WEBP, maks 2MB per foto</p>
         </div>
         <div class="fg"><label class="fl">Kandungan <span style="color:var(--cmt);font-weight:400;font-size:11px">(pisahkan koma)</span></label><input type="text" name="kandungan_raw" class="fc" placeholder="Jahe Merah, Madu Hutan" id="add-kandungan"></div>
 
@@ -251,14 +247,10 @@
           <div class="fg"><label class="fl">Stok *</label><input type="number" id="edit-stok" name="stok" class="fc" required min="0"></div>
         </div>
         <div class="fg">
-          <label class="fl">Foto Produk <span style="color:var(--cmt);font-weight:400;font-size:11px">(sama untuk semua bahasa)</span></label>
-          <div style="display:flex;align-items:center;gap:10px">
-            <div id="edit-foto-preview" style="width:52px;height:52px;background:var(--cbg);border:1px solid var(--cms);border-radius:var(--r2);display:grid;place-items:center;overflow:hidden;flex-shrink:0;font-size:20px">📦</div>
-            <div style="flex:1">
-              <input type="file" name="foto" id="edit-foto" class="fc" accept="image/*" onchange="previewFoto(this,'edit-foto-preview')" style="padding:6px 8px">
-              <p style="font-size:11px;color:var(--cmt);margin-top:4px">Kosongkan untuk tetap pakai foto lama</p>
-            </div>
-          </div>
+          <label class="fl">Foto Produk <span style="color:var(--cmt);font-weight:400;font-size:11px">(maks 5 foto, sama untuk semua bahasa)</span></label>
+          <div class="foto-grid" id="edit-foto-grid"></div>
+          <input type="file" id="edit-foto-input" accept="image/*" multiple style="display:none" onchange="handleEditFotos(this)">
+          <p style="font-size:11px;color:var(--cmt);margin-top:4px">JPG/PNG/WEBP, maks 2MB per foto. Klik × untuk hapus foto lama.</p>
         </div>
         <div class="fg"><label class="fl">Kandungan</label><input type="text" id="edit-kandungan" name="kandungan_raw" class="fc"></div>
 
@@ -324,6 +316,18 @@
 
 @endsection
 
+@push('styles')
+<style>
+.foto-grid{display:flex;flex-wrap:wrap;gap:8px;min-height:84px;align-items:flex-start}
+.foto-slot{width:80px;height:80px;border:2px dashed var(--cms);border-radius:var(--r2);overflow:hidden;position:relative;flex-shrink:0}
+.foto-slot img{width:100%;height:100%;object-fit:cover;display:block}
+.foto-rm{position:absolute;top:3px;right:3px;width:20px;height:20px;background:rgba(239,68,68,.85);color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:14px;display:grid;place-items:center;padding:0;line-height:1}
+.foto-rm:hover{background:#ef4444}
+.foto-add-slot{cursor:pointer;background:var(--cbg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--cmt);border-style:dashed;transition:var(--tr)}
+.foto-add-slot:hover{border-color:var(--cp);color:var(--cp);background:var(--cpl)}
+</style>
+@endpush
+
 @push('scripts')
 <script>
 const PRODS = JSON.parse(document.getElementById('prod-data').textContent);
@@ -357,14 +361,48 @@ document.querySelector('#f-add [name=nama]').addEventListener('input', function(
   document.getElementById('add-sku').value = 'AS-' + String(count).padStart(3,'0');
 });
 
+// ─── MULTI-FOTO: Add Modal ───────────────────────────────────────────
+let addFotoFiles = [];
+
+function renderAddGrid() {
+  const grid = document.getElementById('add-foto-grid');
+  grid.innerHTML = '';
+  addFotoFiles.forEach((file, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'foto-slot';
+    slot.innerHTML = `<img src="${URL.createObjectURL(file)}"><button type="button" class="foto-rm" onclick="removeAddFoto(${i})">×</button>`;
+    grid.appendChild(slot);
+  });
+  if (addFotoFiles.length < 5) {
+    const add = document.createElement('div');
+    add.className = 'foto-slot foto-add-slot';
+    add.onclick = () => document.getElementById('add-foto-input').click();
+    add.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>Tambah</span>';
+    grid.appendChild(add);
+  }
+}
+function handleAddFotos(input) {
+  Array.from(input.files).slice(0, 5 - addFotoFiles.length).forEach(f => addFotoFiles.push(f));
+  input.value = '';
+  renderAddGrid();
+}
+function removeAddFoto(i) { addFotoFiles.splice(i, 1); renderAddGrid(); }
+
+// Reset add modal foto state on open
+document.querySelector('[onclick="openModal(\'m-add\')"]')?.addEventListener('click', () => {
+  addFotoFiles = []; renderAddGrid();
+});
+// Also init on page load
+renderAddGrid();
+
 async function submitAdd(e) {
   e.preventDefault();
   const fd = new FormData(e.target);
-  // Proses kandungan raw → array
   const kandRaw = fd.get('kandungan_raw') || '';
   fd.delete('kandungan_raw');
   kandRaw.split(',').map(s => s.trim()).filter(Boolean).forEach(t => fd.append('kandungan[]', t));
   fd.set('is_featured', fd.has('is_featured') ? 1 : 0);
+  addFotoFiles.forEach(f => fd.append('fotos[]', f));
 
   const r = await apiFetch("{{ route('admin.produk.store') }}", 'POST', fd);
   if (r.success) { showToast(r.message); closeModal('m-add'); location.reload(); }
@@ -379,6 +417,42 @@ function switchLangTab(section, btn, locale) {
   if (pane) pane.classList.add('active');
 }
 
+// ─── MULTI-FOTO: Edit Modal ───────────────────────────────────────────
+let editFotosExisting = [];
+let editFotoFiles = [];
+
+function renderEditGrid() {
+  const grid = document.getElementById('edit-foto-grid');
+  grid.innerHTML = '';
+  editFotosExisting.forEach((path, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'foto-slot';
+    slot.innerHTML = `<img src="/storage/${path}" onerror="this.style.opacity='.3'"><button type="button" class="foto-rm" onclick="removeEditExisting(${i})">×</button>`;
+    grid.appendChild(slot);
+  });
+  editFotoFiles.forEach((file, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'foto-slot';
+    slot.innerHTML = `<img src="${URL.createObjectURL(file)}"><button type="button" class="foto-rm" onclick="removeEditNew(${i})">×</button>`;
+    grid.appendChild(slot);
+  });
+  if (editFotosExisting.length + editFotoFiles.length < 5) {
+    const add = document.createElement('div');
+    add.className = 'foto-slot foto-add-slot';
+    add.onclick = () => document.getElementById('edit-foto-input').click();
+    add.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>Tambah</span>';
+    grid.appendChild(add);
+  }
+}
+function handleEditFotos(input) {
+  const total = editFotosExisting.length + editFotoFiles.length;
+  Array.from(input.files).slice(0, 5 - total).forEach(f => editFotoFiles.push(f));
+  input.value = '';
+  renderEditGrid();
+}
+function removeEditExisting(i) { editFotosExisting.splice(i, 1); renderEditGrid(); }
+function removeEditNew(i) { editFotoFiles.splice(i, 1); renderEditGrid(); }
+
 function editProduk(id) {
   const p = PRODS.find(x => x.id === id);
   if (!p) return;
@@ -387,13 +461,9 @@ function editProduk(id) {
   document.getElementById('edit-sku').value = p.sku;
   document.getElementById('edit-harga').value = p.harga;
   document.getElementById('edit-stok').value = p.stok;
-  document.getElementById('edit-foto').value = '';
-  const prev = document.getElementById('edit-foto-preview');
-  if (p.foto) {
-    prev.innerHTML = `<img src="/storage/${p.foto}" style="width:100%;height:100%;object-fit:contain;padding:4px">`;
-  } else {
-    prev.innerHTML = '📦';
-  }
+  editFotosExisting = Array.isArray(p.fotos) ? [...p.fotos] : [];
+  editFotoFiles = [];
+  renderEditGrid();
   document.getElementById('edit-featured').checked = !!p.is_featured;
   document.getElementById('edit-kandungan').value = (p.kandungan || []).join(', ');
   const sel = document.getElementById('edit-kategori');
@@ -433,8 +503,9 @@ async function submitEdit(e) {
   fd.delete('kandungan_raw');
   kandRaw.split(',').map(s => s.trim()).filter(Boolean).forEach(t => fd.append('kandungan[]', t));
   fd.set('is_featured', fd.has('is_featured') ? 1 : 0);
-  // Untuk PUT via multipart: Laravel butuh _method=PUT
   fd.set('_method', 'PUT');
+  editFotosExisting.forEach(p => fd.append('fotos_existing[]', p));
+  editFotoFiles.forEach(f => fd.append('fotos_new[]', f));
 
   const r = await apiFetch(`/admin/produk/${id}`, 'POST', fd);
   if (r.success) { showToast(r.message); closeModal('m-edit'); location.reload(); }
@@ -455,14 +526,5 @@ async function bulkDelete() {
   else showToast(r.message, 'error');
 }
 
-function previewFoto(input, previewId) {
-  if (!input.files || !input.files[0]) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const box = document.getElementById(previewId);
-    box.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:contain;padding:4px">`;
-  };
-  reader.readAsDataURL(input.files[0]);
-}
 </script>
 @endpush
