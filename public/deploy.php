@@ -12,60 +12,14 @@ if (empty($_GET['token']) || $_GET['token'] !== DEPLOY_TOKEN) {
     die('403 Forbidden.');
 }
 
-$repoRoot  = dirname(__DIR__);
-$publicHtml = dirname($repoRoot) . '/public_html';
+$repoRoot = dirname(__DIR__);
 
 echo '<pre style="font-family:monospace;font-size:14px;padding:20px;line-height:1.6;">';
 echo "🚀 Akar Sehat — Deploy Utility\n";
 echo str_repeat('─', 44) . "\n\n";
 
-// 1. Buat folder storage di public_html
-$storageDirs = [
-    "$publicHtml/storage",
-    "$publicHtml/storage/site",
-    "$publicHtml/storage/homepage",
-    "$publicHtml/storage/tentang",
-    "$publicHtml/storage/produk",
-    "$publicHtml/storage/artikel",
-];
-
-echo "📁 Membuat folder storage...\n";
-foreach ($storageDirs as $dir) {
-    if (!is_dir($dir)) {
-        if (mkdir($dir, 0755, true)) {
-            echo "   ✅ Dibuat: " . basename($dir) . "\n";
-        } else {
-            echo "   ❌ Gagal: $dir\n";
-        }
-    } else {
-        echo "   ✓  Sudah ada: " . str_replace($publicHtml . '/', '', $dir) . "\n";
-    }
-}
-
-// 2. Salin isi public/ ke public_html/ (sync file index.php, assets, dll)
-echo "\n📋 Sinkronisasi public/ → public_html/...\n";
-$publicSrc = $repoRoot . '/public';
-$copied = 0;
-$skipped = 0;
-foreach (new DirectoryIterator($publicSrc) as $item) {
-    if ($item->isDot() || $item->getFilename() === 'storage') continue;
-    $src  = $item->getPathname();
-    $dest = $publicHtml . '/' . $item->getFilename();
-    if ($item->isDir()) {
-        copyDir($src, $dest);
-        $copied++;
-    } else {
-        if (copy($src, $dest)) $copied++;
-        else $skipped++;
-    }
-}
-echo "   ✅ $copied item disinkronisasi\n";
-
-// 3. Jalankan artisan cache commands
-echo "\n⚙️  Clear & rebuild cache...\n";
-
 if (!file_exists($repoRoot . '/vendor/autoload.php')) {
-    echo "   ❌ vendor/autoload.php tidak ditemukan\n";
+    echo "❌ vendor/autoload.php tidak ditemukan\n";
     echo '</pre>';
     exit;
 }
@@ -74,16 +28,42 @@ require $repoRoot . '/vendor/autoload.php';
 $app    = require_once $repoRoot . '/bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 
-$commands = [
-    'config:clear'  => 'Config cache cleared',
-    'config:cache'  => 'Config cached',
-    'route:clear'   => 'Route cache cleared',
-    'route:cache'   => 'Routes cached',
-    'view:clear'    => 'View cache cleared',
-    'view:cache'    => 'Views cached',
+// 1. Buat folder storage
+echo "📁 Membuat folder storage...\n";
+$dirs = [
+    $repoRoot . '/storage/app/public',
+    $repoRoot . '/storage/app/public/site',
+    $repoRoot . '/storage/app/public/homepage',
+    $repoRoot . '/storage/app/public/tentang',
+    $repoRoot . '/storage/app/public/produk',
+    $repoRoot . '/storage/app/public/artikel',
 ];
+foreach ($dirs as $dir) {
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true);
+        echo "   ✅ Dibuat: " . str_replace($repoRoot . '/storage/app/public', 'storage/app/public', $dir) . "\n";
+    } else {
+        echo "   ✓  Sudah ada: " . str_replace($repoRoot . '/storage/app/public', 'storage/app/public', $dir) . "\n";
+    }
+}
 
-foreach ($commands as $cmd => $label) {
+// 2. Storage link
+echo "\n🔗 Storage link...\n";
+try {
+    $kernel->call('storage:link');
+    echo "   ✅ storage:link\n";
+} catch (\Throwable $e) {
+    echo "   ⚠️  " . $e->getMessage() . "\n";
+}
+
+// 3. Clear & rebuild cache
+echo "\n⚙️  Clear & rebuild cache...\n";
+$commands = [
+    'config:clear', 'config:cache',
+    'route:clear',  'route:cache',
+    'view:clear',   'view:cache',
+];
+foreach ($commands as $cmd) {
     try {
         $kernel->call($cmd);
         echo "   ✅ $cmd\n";
@@ -95,15 +75,3 @@ foreach ($commands as $cmd => $label) {
 echo "\n" . str_repeat('─', 44) . "\n";
 echo "🎉 Deploy selesai!\n";
 echo '</pre>';
-
-// Helper: copy folder rekursif
-function copyDir($src, $dst) {
-    if (!is_dir($dst)) mkdir($dst, 0755, true);
-    foreach (new DirectoryIterator($src) as $item) {
-        if ($item->isDot()) continue;
-        $s = $item->getPathname();
-        $d = $dst . '/' . $item->getFilename();
-        if ($item->isDir()) copyDir($s, $d);
-        else copy($s, $d);
-    }
-}
