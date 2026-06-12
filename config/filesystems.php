@@ -40,7 +40,11 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            'root' => env('STORAGE_PUBLIC_PATH', (function () {
+                // Auto-detect cPanel: public_html adalah sibling dari folder Laravel
+                $sibling = dirname(base_path()) . '/public_html/storage';
+                return is_dir(dirname($sibling)) ? $sibling : storage_path('app/public');
+            })()),
             'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
             'visibility' => 'public',
             'throw' => false,
