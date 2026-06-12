@@ -4,9 +4,10 @@ deployment:
     # Salin isi public/ ke public_html/
     - /bin/cp -r /home/$USER/akar-sehat/public/. /home/$USER/public_html/
 
-    # Pastikan storage/ di public_html mengarah ke Laravel storage (bukan copy statis)
-    - /bin/rm -rf /home/$USER/public_html/storage
-    - /bin/ln -s /home/$USER/akar-sehat/storage/app/public /home/$USER/public_html/storage
+    # Buat folder storage di public_html (tempat file upload masuk langsung)
+    - /bin/mkdir -p /home/$USER/public_html/storage/site
+    - /bin/mkdir -p /home/$USER/public_html/storage/homepage
+    - /bin/mkdir -p /home/$USER/public_html/storage/tentang
 
     # Clear & rebuild cache setelah pull
     - /usr/local/bin/php /home/$USER/akar-sehat/artisan config:clear
