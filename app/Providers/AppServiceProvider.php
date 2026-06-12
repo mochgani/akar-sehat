@@ -13,12 +13,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
-            try {
-                $siteSettings = Setting::getGroup('site');
-            } catch (\Exception $e) {
-                $siteSettings = [];
+            static $cached = null;
+            if ($cached === null) {
+                try {
+                    $cached = Setting::getGroup('site');
+                } catch (\Exception $e) {
+                    $cached = [];
+                }
             }
-            $view->with('siteSettings', $siteSettings);
+            $view->with('siteSettings', $cached);
         });
     }
 }

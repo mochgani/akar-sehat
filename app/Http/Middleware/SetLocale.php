@@ -14,16 +14,15 @@ class SetLocale
         // Determine locale from session, fallback to 'id'
         $locale = session('locale', 'id');
 
-        // Validate the locale against active languages
-        $validCodes = Language::aktif()->pluck('code')->toArray();
-        if (!in_array($locale, $validCodes)) {
+        // Single query for active languages
+        $activeLanguages = Language::aktif()->get();
+        if (!$activeLanguages->pluck('code')->contains($locale)) {
             $locale = 'id';
         }
 
         app()->setLocale($locale);
-        // Share locale and active languages with all views
         view()->share('currentLocale', $locale);
-        view()->share('activeLanguages', Language::aktif()->get());
+        view()->share('activeLanguages', $activeLanguages);
 
         return $next($request);
     }
