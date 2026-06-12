@@ -26,6 +26,7 @@ class SettingSeeder extends Seeder
             'site.fb_url'      => '',
             'site.ig_url'      => '',
             'site.yt_url'      => '',
+            'site.tiktok_url'  => '',
 
             // Under Construction
             'uc.mode'           => 'off',

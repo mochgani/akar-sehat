@@ -32,9 +32,10 @@ class SettingController extends Controller
             'fb_url'      => 'nullable|url|max:255',
             'ig_url'      => 'nullable|url|max:255',
             'yt_url'      => 'nullable|url|max:255',
+            'tiktok_url'  => 'nullable|url|max:255',
         ]);
 
-        foreach (['name','tagline','wa_number','wa_number_2','email','instagram','address','footer_desc','copyright','fb_url','ig_url','yt_url'] as $key) {
+        foreach (['name','tagline','wa_number','wa_number_2','email','instagram','address','footer_desc','copyright','fb_url','ig_url','yt_url','tiktok_url'] as $key) {
             Setting::set("site.{$key}", $request->input($key, ''));
         }
 

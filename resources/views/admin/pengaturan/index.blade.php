@@ -57,10 +57,13 @@
         <div class="fg"><label class="fl">Alamat</label><input type="text" name="address" class="fc" value="{{ $site['address'] ?? '' }}" placeholder="Bandung, Jawa Barat"></div>
         <div class="fg"><label class="fl">Teks Copyright</label><input type="text" name="copyright" class="fc" value="{{ $site['copyright'] ?? '' }}" placeholder="© 2026 Akar Sehat. All rights reserved."></div>
       </div>
-      <div class="frow frow-3">
+      <div class="frow frow-2">
         <div class="fg"><label class="fl">URL Facebook</label><input type="url" name="fb_url" class="fc" value="{{ $site['fb_url'] ?? '' }}" placeholder="https://facebook.com/..."></div>
         <div class="fg"><label class="fl">URL Instagram</label><input type="url" name="ig_url" class="fc" value="{{ $site['ig_url'] ?? '' }}" placeholder="https://instagram.com/..."></div>
+      </div>
+      <div class="frow frow-2">
         <div class="fg"><label class="fl">URL YouTube</label><input type="url" name="yt_url" class="fc" value="{{ $site['yt_url'] ?? '' }}" placeholder="https://youtube.com/..."></div>
+        <div class="fg"><label class="fl">URL TikTok</label><input type="url" name="tiktok_url" class="fc" value="{{ $site['tiktok_url'] ?? '' }}" placeholder="https://tiktok.com/@..."></div>
       </div>
 
       {{-- LOGO & FAVICON --}}
