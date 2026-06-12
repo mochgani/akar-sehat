@@ -57,6 +57,7 @@ $dirs = [
     "$publicHtml/storage/tentang",
     "$publicHtml/storage/produk",
     "$publicHtml/storage/artikel",
+    "$publicHtml/storage/testimoni",
 ];
 foreach ($dirs as $dir) {
     if (!is_dir($dir)) {

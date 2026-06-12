@@ -543,7 +543,7 @@
                     <article class="edu-article-card">
                         <div class="edu-article-img-box {{ $item->thumbnail ? '' : 'no-img' }}">
                             @if($item->thumbnail)
-                                <img src="{{ asset('asset/artikel/'.$item->thumbnail) }}" alt="{{ $item->judul }}" loading="lazy">
+                                <img src="{{ asset('storage/'.$item->thumbnail) }}" alt="{{ $item->judul }}" loading="lazy">
                             @else
                                 <svg class="placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8">
                                     <rect x="3" y="3" width="18" height="18" rx="2"/>

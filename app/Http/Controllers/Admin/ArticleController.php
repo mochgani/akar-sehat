@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Language;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ArticleController extends Controller
@@ -50,10 +51,7 @@ class ArticleController extends Controller
         $data['translations'] = $this->extractTranslations($request, ['judul', 'konten', 'meta_title', 'meta_desc']);
 
         if ($request->hasFile('thumbnail')) {
-            $ext               = $request->file('thumbnail')->getClientOriginalExtension();
-            $filename          = Str::slug($data['judul']) . '-' . uniqid() . '.' . $ext;
-            $request->file('thumbnail')->move(public_path('asset/artikel'), $filename);
-            $data['thumbnail'] = $filename;
+            $data['thumbnail'] = $request->file('thumbnail')->store('artikel', 'public');
         }
 
         Article::create($data);
@@ -77,13 +75,8 @@ class ArticleController extends Controller
         $data['translations'] = $this->extractTranslations($request, ['judul', 'konten', 'meta_title', 'meta_desc']);
 
         if ($request->hasFile('thumbnail')) {
-            if ($article->thumbnail && file_exists(public_path('asset/artikel/' . $article->thumbnail))) {
-                @unlink(public_path('asset/artikel/' . $article->thumbnail));
-            }
-            $ext               = $request->file('thumbnail')->getClientOriginalExtension();
-            $filename          = Str::slug($data['judul']) . '-' . uniqid() . '.' . $ext;
-            $request->file('thumbnail')->move(public_path('asset/artikel'), $filename);
-            $data['thumbnail'] = $filename;
+            if ($article->thumbnail) Storage::disk('public')->delete($article->thumbnail);
+            $data['thumbnail'] = $request->file('thumbnail')->store('artikel', 'public');
         }
 
         $article->update($data);

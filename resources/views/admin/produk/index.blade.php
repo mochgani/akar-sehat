@@ -72,7 +72,7 @@
             <div style="display:flex;align-items:center;gap:10px">
               <div style="width:38px;height:38px;background:var(--cbg);border-radius:var(--r1);display:grid;place-items:center;flex-shrink:0;overflow:hidden">
                 @if($p->foto)
-                  <img src="{{ asset('asset/produk/'.$p->foto) }}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
+                  <img src="{{ asset('storage/'.$p->foto) }}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
                 @else
                   <span style="font-size:18px">📦</span>
                 @endif
@@ -390,7 +390,7 @@ function editProduk(id) {
   document.getElementById('edit-foto').value = '';
   const prev = document.getElementById('edit-foto-preview');
   if (p.foto) {
-    prev.innerHTML = `<img src="/asset/produk/${p.foto}" style="width:100%;height:100%;object-fit:contain;padding:4px">`;
+    prev.innerHTML = `<img src="/storage/${p.foto}" style="width:100%;height:100%;object-fit:contain;padding:4px">`;
   } else {
     prev.innerHTML = '📦';
   }

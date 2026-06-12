@@ -294,7 +294,7 @@
                     <div class="insight-card">
                         <div class="article-img-box">
                             @if($artikel->thumbnail)
-                            <img src="{{ asset('asset/artikel/'.$artikel->thumbnail) }}" alt="{{ $artikel->judul }}" class="article-img-box-img">
+                            <img src="{{ asset('storage/'.$artikel->thumbnail) }}" alt="{{ $artikel->judul }}" class="article-img-box-img">
                             @else
                             <img src="{{ asset('asset/artikel/default.png') }}" alt="{{ $artikel->judul }}" class="article-img-box-img">
                             @endif
@@ -356,7 +356,7 @@
                     <div class="product-card">
                         <div class="product-img-box">
                             @if($produk->foto)
-                            <img src="{{ asset('asset/produk/'.$produk->foto) }}" alt="{{ $produk->nama }}"
+                            <img src="{{ asset('storage/'.$produk->foto) }}" alt="{{ $produk->nama }}"
                                 class="product-img-box-img">
                             @endif
                         </div>

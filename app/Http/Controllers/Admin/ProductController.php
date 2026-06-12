@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Language;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -55,10 +56,7 @@ class ProductController extends Controller
         $data['translations'] = $this->extractTranslations($request, ['nama', 'deskripsi', 'cara_pakai']);
 
         if ($request->hasFile('foto')) {
-            $ext          = $request->file('foto')->getClientOriginalExtension();
-            $filename     = Str::slug($data['nama']) . '-' . uniqid() . '.' . $ext;
-            $request->file('foto')->move(public_path('asset/produk'), $filename);
-            $data['foto'] = $filename;
+            $data['foto'] = $request->file('foto')->store('produk', 'public');
         }
 
         Product::create($data);
@@ -84,13 +82,8 @@ class ProductController extends Controller
         $data['translations'] = $this->extractTranslations($request, ['nama', 'deskripsi', 'cara_pakai']);
 
         if ($request->hasFile('foto')) {
-            if ($product->foto && file_exists(public_path('asset/produk/' . $product->foto))) {
-                @unlink(public_path('asset/produk/' . $product->foto));
-            }
-            $ext          = $request->file('foto')->getClientOriginalExtension();
-            $filename     = Str::slug($data['nama']) . '-' . uniqid() . '.' . $ext;
-            $request->file('foto')->move(public_path('asset/produk'), $filename);
-            $data['foto'] = $filename;
+            if ($product->foto) Storage::disk('public')->delete($product->foto);
+            $data['foto'] = $request->file('foto')->store('produk', 'public');
         }
 
         $product->update($data);

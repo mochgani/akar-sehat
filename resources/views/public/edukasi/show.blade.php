@@ -868,7 +868,7 @@
                 <!-- Hero Image -->
                 <div class="article-hero-img-box {{ $artikel->thumbnail ? '' : 'no-img' }}">
                     @if($artikel->thumbnail)
-                        <img src="{{ asset('asset/artikel/'.$artikel->thumbnail) }}" alt="{{ $artikel->trans('judul') }}">
+                        <img src="{{ asset('storage/'.$artikel->thumbnail) }}" alt="{{ $artikel->trans('judul') }}">
                     @else
                         <svg class="placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8">
                             <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -954,7 +954,7 @@
                 <a href="{{ route('edukasi.show', $r->slug) }}" class="edu-article-card">
                     <div class="edu-article-img-box {{ $r->thumbnail ? '' : 'no-img' }}">
                         @if($r->thumbnail)
-                            <img src="{{ asset('asset/artikel/'.$r->thumbnail) }}" alt="{{ $r->judul }}" loading="lazy">
+                            <img src="{{ asset('storage/'.$r->thumbnail) }}" alt="{{ $r->judul }}" loading="lazy">
                         @else
                             <svg class="placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8">
                                 <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -998,7 +998,7 @@
                 <a href="{{ route('produk.show', $p->slug) }}" class="pt-card">
                     <div class="pt-card-img-wrap {{ $p->foto ? '' : 'no-img' }}">
                         @if($p->foto)
-                            <img class="pt-card-img" src="{{ asset('asset/produk/'.$p->foto) }}" alt="{{ $p->nama }}" loading="lazy">
+                            <img class="pt-card-img" src="{{ asset('storage/'.$p->foto) }}" alt="{{ $p->nama }}" loading="lazy">
                         @else
                             <svg class="pt-placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8">
                                 <rect x="3" y="3" width="18" height="18" rx="2"/>

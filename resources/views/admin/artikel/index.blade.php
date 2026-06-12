@@ -55,7 +55,7 @@
             <div style="display:flex;align-items:center;gap:10px">
               @if($a->thumbnail)
               <div style="width:46px;height:30px;background:var(--cbg);border-radius:4px;flex-shrink:0;overflow:hidden">
-                <img src="{{ asset('asset/artikel/'.$a->thumbnail) }}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='📝'">
+                <img src="{{ asset('storage/'.$a->thumbnail) }}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='📝'">
               </div>
               @endif
               <div>
@@ -311,7 +311,7 @@ function editArtikel(id) {
   document.getElementById('a-thumb').value = '';
   const prev = document.getElementById('thumb-preview');
   if (a.thumbnail) {
-    prev.innerHTML = `<img src="/asset/artikel/${a.thumbnail}" style="width:100%;height:100%;object-fit:cover">`;
+    prev.innerHTML = `<img src="/storage/${a.thumbnail}" style="width:100%;height:100%;object-fit:cover">`;
   } else {
     prev.innerHTML = '🖼️';
   }
