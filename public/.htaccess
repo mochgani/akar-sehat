@@ -36,11 +36,17 @@
     php_value post_max_size 12M
 </IfModule>
 
-# Disable ModSecurity for admin upload routes
+# -------------------------------------------------------
+# Disable ModSecurity (blocks HTML form content & image uploads)
+# Admin panel sends HTML content from rich text editor which
+# triggers ModSecurity XSS rules — disable for all routes.
+# -------------------------------------------------------
+<IfModule mod_security.c>
+    SecFilterEngine Off
+    SecFilterScanPOST Off
+</IfModule>
 <IfModule mod_security2.c>
-    <LocationMatch "^/admin/pengaturan">
-        SecRuleEngine Off
-    </LocationMatch>
+    SecRuleEngine Off
 </IfModule>
 
 # -------------------------------------------------------
