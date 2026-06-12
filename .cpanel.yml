@@ -1,13 +1,4 @@
 ---
 deployment:
   tasks:
-    - /bin/cp -r $REPO_DIR/public/. /home/$USER/public_html/
-    - /bin/mkdir -p /home/$USER/public_html/storage/site
-    - /bin/mkdir -p /home/$USER/public_html/storage/homepage
-    - /bin/mkdir -p /home/$USER/public_html/storage/tentang
-    - /usr/local/bin/php $REPO_DIR/artisan config:clear
-    - /usr/local/bin/php $REPO_DIR/artisan config:cache
-    - /usr/local/bin/php $REPO_DIR/artisan route:clear
-    - /usr/local/bin/php $REPO_DIR/artisan route:cache
-    - /usr/local/bin/php $REPO_DIR/artisan view:clear
-    - /usr/local/bin/php $REPO_DIR/artisan view:cache
+    - /bin/true
