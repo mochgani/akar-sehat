@@ -66,14 +66,19 @@
     }
 
     .detail-main-img-box img {
-        width: 72%;
-        height: 88%;
-        object-fit: contain;
-        transition: transform 0.45s ease;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.45s ease, opacity 0.2s ease;
     }
 
     .detail-main-img-box:hover img {
         transform: scale(1.05);
+    }
+
+    .detail-main-img-box img.switching {
+        opacity: 0;
     }
 
     .detail-main-img-box.no-img {
@@ -113,20 +118,24 @@
         border-radius: var(--border-radius-md);
         background-color: var(--color-soft-ivory);
         border: 2px solid rgba(56,42,33,0.08);
-        display: flex;
-        align-items: center;
-        justify-content: center;
         cursor: pointer;
         overflow: hidden;
         transition: var(--transition-normal);
         flex-shrink: 0;
+        position: relative;
     }
-    .detail-thumb.active { border-color: var(--color-primary); }
+    .detail-thumb.active {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(200,106,68,0.15);
+    }
     .detail-thumb:hover  { border-color: var(--color-primary); }
     .detail-thumb img {
-        width: 80%;
-        height: 80%;
-        object-fit: contain;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        pointer-events: none;
+        display: block;
     }
 
     /* Trust strip below image */
@@ -1183,13 +1192,28 @@
     if (minusBtn) minusBtn.addEventListener('click', function() { updateQty(-1); });
     if (plusBtn)  plusBtn.addEventListener('click',  function() { updateQty(+1); });
 
-    // Thumbnail switcher
-    document.querySelectorAll('.detail-thumb').forEach(function(thumb) {
+    // Thumbnail switcher dengan fade transition
+    var thumbs = document.querySelectorAll('.detail-thumb');
+    thumbs.forEach(function(thumb) {
         thumb.addEventListener('click', function() {
-            document.querySelectorAll('.detail-thumb').forEach(function(t) { t.classList.remove('active'); });
-            thumb.classList.add('active');
+            var newSrc = thumb.getAttribute('data-src');
             var mainImg = document.getElementById('main-img');
-            if (mainImg) mainImg.src = thumb.dataset.src;
+            if (!mainImg || !newSrc || mainImg.src === newSrc) return;
+
+            // Update active state
+            thumbs.forEach(function(t) { t.classList.remove('active'); });
+            thumb.classList.add('active');
+
+            // Fade out → swap src → fade in
+            mainImg.classList.add('switching');
+            setTimeout(function() {
+                mainImg.src = newSrc;
+                mainImg.onload = function() {
+                    mainImg.classList.remove('switching');
+                };
+                // Fallback: remove class even if onload doesn't fire
+                setTimeout(function() { mainImg.classList.remove('switching'); }, 400);
+            }, 180);
         });
     });
 
