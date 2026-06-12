@@ -346,6 +346,7 @@ img {
 }
 
 .nav-lang-menu {
+    display: none;
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
@@ -355,18 +356,12 @@ img {
     box-shadow: var(--shadow-md);
     min-width: 150px;
     overflow: hidden;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-6px);
-    transition: opacity 0.18s ease, transform 0.18s ease;
     z-index: 100;
 }
 
 .nav-lang-wrap:hover .nav-lang-menu,
 .nav-lang-menu.open {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
+    display: block;
 }
 
 .nav-lang-item {
