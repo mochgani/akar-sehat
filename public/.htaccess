@@ -25,6 +25,25 @@
 </IfModule>
 
 # -------------------------------------------------------
+# PHP Upload Limits (shared hosting override)
+# -------------------------------------------------------
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+</IfModule>
+<IfModule mod_php8.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+</IfModule>
+
+# Disable ModSecurity for admin upload routes
+<IfModule mod_security2.c>
+    <LocationMatch "^/admin/pengaturan">
+        SecRuleEngine Off
+    </LocationMatch>
+</IfModule>
+
+# -------------------------------------------------------
 # Gzip Compression
 # -------------------------------------------------------
 <IfModule mod_deflate.c>
