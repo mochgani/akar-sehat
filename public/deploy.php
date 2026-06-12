@@ -18,9 +18,10 @@ if (empty($_GET['token']) || $_GET['token'] !== DEPLOY_TOKEN) {
 @ob_implicit_flush(true);
 if (ob_get_level()) @ob_end_flush();
 
-$repoRoot   = dirname(__DIR__);
-$publicSrc  = $repoRoot . '/public';
-$publicHtml = $repoRoot . '/public_html';
+$homeDir    = dirname(__DIR__);           // /home/ldpcxuzg
+$repoRoot   = $homeDir . '/akar-sehat';  // /home/ldpcxuzg/akar-sehat
+$publicSrc  = $repoRoot . '/public';      // /home/ldpcxuzg/akar-sehat/public
+$publicHtml = $homeDir . '/public_html';  // /home/ldpcxuzg/public_html
 
 echo '<pre style="font-family:monospace;font-size:14px;padding:20px;line-height:1.6;">';
 echo "🚀 Akar Sehat — Deploy Utility\n";
