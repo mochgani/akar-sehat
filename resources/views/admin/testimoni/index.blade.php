@@ -314,6 +314,18 @@
 const t = document.getElementById('auto-toast');
 if (t) { setTimeout(() => t.remove(), 3500); }
 
+// Compress foto inputs on change
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('input[type=file][name=foto]').forEach(inp => {
+    inp.addEventListener('change', async () => {
+      if (!inp.files || !inp.files[0]) return;
+      setLoading('Mengompresi gambar...');
+      await compressInputFile(inp);
+      clearLoading();
+    });
+  });
+});
+
 function switchLangTab(section, btn, locale) {
   document.querySelectorAll(`#${section}-tabs .lang-tab`).forEach(t => t.classList.remove('active'));
   btn.classList.add('active');

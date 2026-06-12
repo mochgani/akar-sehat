@@ -79,7 +79,7 @@
               @endif
             </div>
             <div>
-              <input type="file" name="logo" id="logo-file" accept="image/*" style="display:none" onchange="previewImg(this,'logo-preview')">
+              <input type="file" name="logo" id="logo-file" accept="image/*" style="display:none" data-preview="logo-preview" onchange="previewImg(this,'logo-preview')">
               <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('logo-file').click()">Upload Logo</button>
               @if(!empty($site['logo']))
               <a href="{{ route('admin.pengaturan.site.delete-logo', 'logo') }}" class="btn btn-sm" style="color:#ef4444;border-color:#ef4444;background:none;margin-left:6px" onclick="return confirm('Hapus logo?')">Hapus</a>
@@ -99,7 +99,7 @@
               @endif
             </div>
             <div>
-              <input type="file" name="favicon" id="favicon-file" accept="image/*" style="display:none" onchange="previewImg(this,'favicon-preview')">
+              <input type="file" name="favicon" id="favicon-file" accept="image/*" style="display:none" data-preview="favicon-preview" onchange="previewImg(this,'favicon-preview')">
               <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('favicon-file').click()">Upload Favicon</button>
               @if(!empty($site['favicon']))
               <a href="{{ route('admin.pengaturan.site.delete-logo', 'favicon') }}" class="btn btn-sm" style="color:#ef4444;border-color:#ef4444;background:none;margin-left:6px" onclick="return confirm('Hapus favicon?')">Hapus</a>
@@ -119,8 +119,11 @@
 
 @push('scripts')
 <script>
-function previewImg(input, previewId) {
+async function previewImg(input, previewId) {
   if (!input.files || !input.files[0]) return;
+  setLoading('Mengompresi gambar...');
+  await compressInputFile(input);
+  clearLoading();
   const reader = new FileReader();
   reader.onload = e => {
     const box = document.getElementById(previewId);

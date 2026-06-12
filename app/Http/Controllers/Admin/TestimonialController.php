@@ -28,7 +28,7 @@ class TestimonialController extends Controller
             'warna'   => 'nullable|string|max:20',
             'aktif'   => 'nullable|boolean',
             'urutan'  => 'nullable|integer',
-            'foto'    => 'nullable|image|max:512',
+            'foto'    => 'nullable|image|max:2048',
         ]);
 
         $data['aktif']        = $request->boolean('aktif', true);
@@ -59,7 +59,7 @@ class TestimonialController extends Controller
             'warna'   => 'nullable|string|max:20',
             'aktif'   => 'nullable|boolean',
             'urutan'  => 'nullable|integer',
-            'foto'    => 'nullable|image|max:512',
+            'foto'    => 'nullable|image|max:2048',
         ]);
 
         $data['aktif']        = $request->boolean('aktif', true);

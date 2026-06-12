@@ -163,15 +163,17 @@ function switchTab(section, btn, locale) {
   if (pane) pane.classList.add('active');
 }
 
-function previewImg(input, previewId) {
+async function previewImg(input, previewId) {
+  if (!input.files || !input.files[0]) return;
+  setLoading('Mengompresi gambar...');
+  await compressInputFile(input);
+  clearLoading();
   const preview = document.getElementById(previewId);
-  if (input.files && input.files[0]) {
-    const reader = new FileReader();
-    reader.onload = e => {
-      preview.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;object-position:top">`;
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    preview.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;object-position:top">`;
+  };
+  reader.readAsDataURL(input.files[0]);
 }
 </script>
 @endpush

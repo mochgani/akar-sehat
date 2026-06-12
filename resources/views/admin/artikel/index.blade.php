@@ -261,6 +261,7 @@ async function saveDraft() {
   await saveArtikel('draft');
 }
 async function saveArtikel(status) {
+  setLoading('Menyimpan artikel...');
   const id = document.getElementById('a-id').value;
   syncEditor();
   const fd = new FormData();
@@ -284,17 +285,22 @@ async function saveArtikel(status) {
   if (ad_{{ $lang->code }}) fd.append('trans[{{ $lang->code }}][meta_desc]',  ad_{{ $lang->code }}.value);
   @endif
   @endforeach
-  // Lampirkan thumbnail jika ada file baru
+  // Lampirkan thumbnail jika ada file baru (compress dulu)
   const thumbFile = document.getElementById('a-thumb');
-  if (thumbFile.files && thumbFile.files[0]) fd.append('thumbnail', thumbFile.files[0]);
+  if (thumbFile.files && thumbFile.files[0]) {
+    const compressed = await compressImage(thumbFile.files[0]);
+    fd.append('thumbnail', compressed);
+  }
 
   if (id) {
     fd.append('_method', 'PUT');
     const r = await apiFetch(`/admin/artikel/${id}`, 'POST', fd);
+    clearLoading();
     if (r.success) { showToast(r.message); closeModal('m-add'); location.reload(); }
     else showToast(r.message || 'Gagal menyimpan.', 'error');
   } else {
     const r = await apiFetch("{{ route('admin.artikel.store') }}", 'POST', fd);
+    clearLoading();
     if (r.success) { showToast(r.message); closeModal('m-add'); location.reload(); }
     else showToast(r.message || 'Gagal menyimpan.', 'error');
   }

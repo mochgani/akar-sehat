@@ -127,6 +127,14 @@
     .toast.error { border-left-color: #ef4444; }
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
+    /* UPLOAD LOADING OVERLAY */
+    #pg-loading { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:9999; display:none; align-items:center; justify-content:center; }
+    #pg-loading.show { display:flex; }
+    .pg-loading-box { background:#fff; border-radius:var(--r3); padding:28px 40px; text-align:center; box-shadow:var(--s3); min-width:200px; }
+    .pg-spinner { width:36px; height:36px; border:3px solid var(--cbg); border-top-color:var(--cp); border-radius:50%; animation:pgSpin .7s linear infinite; margin:0 auto; }
+    @keyframes pgSpin { to { transform:rotate(360deg); } }
+    .pg-loading-box p { margin-top:12px; font-size:13.5px; color:var(--ctm); font-weight:500; }
+
     /* FILTER BAR */
     .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
     .filter-bar .fc { width: auto; min-width: 160px; }
@@ -303,6 +311,14 @@
 
   <div id="tf"></div>
 
+  <!-- UPLOAD LOADING OVERLAY -->
+  <div id="pg-loading">
+    <div class="pg-loading-box">
+      <div class="pg-spinner"></div>
+      <p id="pg-loading-msg">Memproses...</p>
+    </div>
+  </div>
+
   <script>
     function toggleSB() {
       document.getElementById('sb').classList.toggle('open');
@@ -333,6 +349,63 @@
     function nowStr() {
       return new Date().toISOString().slice(0, 16).replace('T', ' ');
     }
+    // ── LOADING OVERLAY ──────────────────────────────────────────────────
+    function setLoading(msg = 'Memproses...') {
+      document.getElementById('pg-loading-msg').textContent = msg;
+      document.getElementById('pg-loading').classList.add('show');
+    }
+    function clearLoading() {
+      document.getElementById('pg-loading').classList.remove('show');
+    }
+
+    // ── IMAGE COMPRESSOR (Canvas, max 1200px, 78% quality) ──────────────
+    function compressImage(file, maxW = 1200, maxH = 1200, quality = 0.78) {
+      return new Promise(resolve => {
+        if (!file.type.startsWith('image/') || file.size < 150 * 1024) {
+          resolve(file); return;
+        }
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          let { width, height } = img;
+          if (width > maxW || height > maxH) {
+            const ratio = Math.min(maxW / width, maxH / height);
+            width = Math.round(width * ratio);
+            height = Math.round(height * ratio);
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width; canvas.height = height;
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+          canvas.toBlob(blob => {
+            const out = new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'),
+              { type: 'image/jpeg', lastModified: Date.now() });
+            resolve(out.size < file.size ? out : file);
+          }, 'image/jpeg', quality);
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+        img.src = url;
+      });
+    }
+
+    // Compress & replace file in <input type=file> using DataTransfer
+    async function compressInputFile(input) {
+      if (!input.files || !input.files[0]) return;
+      const compressed = await compressImage(input.files[0]);
+      if (compressed !== input.files[0]) {
+        const dt = new DataTransfer();
+        dt.items.add(compressed);
+        input.files = dt.files;
+      }
+    }
+
+    // Show loading overlay when regular multipart forms are submitted
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('form[enctype="multipart/form-data"]').forEach(form => {
+        form.addEventListener('submit', () => setLoading('Menyimpan...'));
+      });
+    });
+
     // CSRF helper untuk fetch
     const CSRF = document.querySelector('meta[name=csrf-token]').content;
     function apiFetch(url, method, body) {

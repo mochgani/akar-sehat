@@ -381,9 +381,14 @@ function renderAddGrid() {
     grid.appendChild(add);
   }
 }
-function handleAddFotos(input) {
-  Array.from(input.files).slice(0, 5 - addFotoFiles.length).forEach(f => addFotoFiles.push(f));
+async function handleAddFotos(input) {
+  const newFiles = Array.from(input.files).slice(0, 5 - addFotoFiles.length);
   input.value = '';
+  if (!newFiles.length) return;
+  setLoading('Mengompresi gambar...');
+  const compressed = await Promise.all(newFiles.map(f => compressImage(f)));
+  clearLoading();
+  compressed.forEach(f => addFotoFiles.push(f));
   renderAddGrid();
 }
 function removeAddFoto(i) { addFotoFiles.splice(i, 1); renderAddGrid(); }
@@ -397,6 +402,7 @@ renderAddGrid();
 
 async function submitAdd(e) {
   e.preventDefault();
+  setLoading('Menyimpan produk...');
   const fd = new FormData(e.target);
   const kandRaw = fd.get('kandungan_raw') || '';
   fd.delete('kandungan_raw');
@@ -405,6 +411,7 @@ async function submitAdd(e) {
   addFotoFiles.forEach(f => fd.append('fotos[]', f));
 
   const r = await apiFetch("{{ route('admin.produk.store') }}", 'POST', fd);
+  clearLoading();
   if (r.success) { showToast(r.message); closeModal('m-add'); location.reload(); }
   else showToast(r.message || 'Terjadi kesalahan.', 'error');
 }
@@ -444,10 +451,15 @@ function renderEditGrid() {
     grid.appendChild(add);
   }
 }
-function handleEditFotos(input) {
+async function handleEditFotos(input) {
   const total = editFotosExisting.length + editFotoFiles.length;
-  Array.from(input.files).slice(0, 5 - total).forEach(f => editFotoFiles.push(f));
+  const newFiles = Array.from(input.files).slice(0, 5 - total);
   input.value = '';
+  if (!newFiles.length) return;
+  setLoading('Mengompresi gambar...');
+  const compressed = await Promise.all(newFiles.map(f => compressImage(f)));
+  clearLoading();
+  compressed.forEach(f => editFotoFiles.push(f));
   renderEditGrid();
 }
 function removeEditExisting(i) { editFotosExisting.splice(i, 1); renderEditGrid(); }
@@ -497,6 +509,7 @@ function editProduk(id) {
 
 async function submitEdit(e) {
   e.preventDefault();
+  setLoading('Menyimpan produk...');
   const id = document.getElementById('edit-id').value;
   const fd = new FormData(e.target);
   const kandRaw = fd.get('kandungan_raw') || '';
@@ -508,6 +521,7 @@ async function submitEdit(e) {
   editFotoFiles.forEach(f => fd.append('fotos_new[]', f));
 
   const r = await apiFetch(`/admin/produk/${id}`, 'POST', fd);
+  clearLoading();
   if (r.success) { showToast(r.message); closeModal('m-edit'); location.reload(); }
   else showToast(r.message || 'Terjadi kesalahan.', 'error');
 }
