@@ -14,7 +14,7 @@ if (empty($_GET['token']) || $_GET['token'] !== DEPLOY_TOKEN) {
 
 $repoRoot   = dirname(__DIR__);
 $publicSrc  = $repoRoot . '/public';
-$publicHtml = dirname($repoRoot) . '/public_html';
+$publicHtml = $repoRoot . '/public_html';
 
 echo '<pre style="font-family:monospace;font-size:14px;padding:20px;line-height:1.6;">';
 echo "🚀 Akar Sehat — Deploy Utility\n";
