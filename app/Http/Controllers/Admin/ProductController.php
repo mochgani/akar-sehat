@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\KategoriProduk;
 use App\Models\Language;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class ProductController extends Controller
         }
 
         $products  = $query->orderBy('urutan')->paginate(15)->withQueryString();
-        $kategoris = Product::distinct()->pluck('kategori');
+        $kategoris = KategoriProduk::aktif()->orderBy('urutan')->orderBy('nama')->pluck('nama');
         $languages = Language::aktif()->get();
 
         return view('admin.produk.index', compact('products', 'kategoris', 'languages'));

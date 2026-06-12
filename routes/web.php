@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\KategoriProdukController;
 use Illuminate\Support\Facades\Route;
 
 // ─── HALAMAN PUBLIK ───────────────────────────────────────────────────────────
@@ -56,6 +57,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/produk/{product}', [AdminProductController::class, 'destroy'])->name('produk.destroy');
         Route::post('/produk/bulk-destroy',[AdminProductController::class, 'bulkDestroy'])->name('produk.bulk-destroy');
         Route::get('/produk/export-csv',   [AdminProductController::class, 'exportCsv'])->name('produk.export-csv');
+
+        // Kategori Produk
+        Route::get('/kategori',                    [KategoriProdukController::class, 'index'])->name('kategori.index');
+        Route::post('/kategori',                   [KategoriProdukController::class, 'store'])->name('kategori.store');
+        Route::put('/kategori/{kategori}',         [KategoriProdukController::class, 'update'])->name('kategori.update');
+        Route::delete('/kategori/{kategori}',      [KategoriProdukController::class, 'destroy'])->name('kategori.destroy');
+        Route::patch('/kategori/{kategori}/toggle',[KategoriProdukController::class, 'toggle'])->name('kategori.toggle');
 
         // Artikel
         Route::get('/artikel',              [AdminArticleController::class, 'index'])->name('artikel.index');
