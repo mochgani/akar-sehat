@@ -14,6 +14,7 @@ class SettingSeeder extends Seeder
             'site.name'        => 'Akar Sehat',
             'site.tagline'     => 'Herbal Tradisional Terpercaya',
             'site.wa_number'   => '6281234567890',
+            'site.wa_number_2' => '',
             'site.email'       => 'info@akarsehat.id',
             'site.instagram'   => '@akarsehat.id',
             'site.logo'        => '',

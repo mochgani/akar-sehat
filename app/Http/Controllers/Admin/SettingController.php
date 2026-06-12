@@ -21,6 +21,7 @@ class SettingController extends Controller
             'name'        => 'required|string|max:100',
             'tagline'     => 'nullable|string|max:200',
             'wa_number'   => 'nullable|string|max:20',
+            'wa_number_2' => 'nullable|string|max:20',
             'email'       => 'nullable|email',
             'instagram'   => 'nullable|string|max:100',
             'logo'        => 'nullable|image|max:512',
@@ -33,7 +34,7 @@ class SettingController extends Controller
             'yt_url'      => 'nullable|url|max:255',
         ]);
 
-        foreach (['name','tagline','wa_number','email','instagram','address','footer_desc','copyright','fb_url','ig_url','yt_url'] as $key) {
+        foreach (['name','tagline','wa_number','wa_number_2','email','instagram','address','footer_desc','copyright','fb_url','ig_url','yt_url'] as $key) {
             Setting::set("site.{$key}", $request->input($key, ''));
         }
 

@@ -44,9 +44,9 @@
         <div class="fg"><label class="fl">Tagline</label><input type="text" name="tagline" class="fc" value="{{ $site['tagline'] ?? '' }}"></div>
       </div>
       <div class="frow frow-3">
-        <div class="fg"><label class="fl">Nomor WhatsApp</label><input type="text" name="wa_number" class="fc" value="{{ $site['wa_number'] ?? '' }}" placeholder="6281234567890"></div>
+        <div class="fg"><label class="fl">Nomor WhatsApp 1</label><input type="text" name="wa_number" class="fc" value="{{ $site['wa_number'] ?? '' }}" placeholder="6281234567890"></div>
+        <div class="fg"><label class="fl">Nomor WhatsApp 2 (Arab)</label><input type="text" name="wa_number_2" class="fc" value="{{ $site['wa_number_2'] ?? '' }}" placeholder="966XXXXXXXXX"></div>
         <div class="fg"><label class="fl">Email</label><input type="email" name="email" class="fc" value="{{ $site['email'] ?? '' }}"></div>
-        <div class="fg"><label class="fl">Instagram</label><input type="text" name="instagram" class="fc" value="{{ $site['instagram'] ?? '' }}" placeholder="@akarsehat.id"></div>
       </div>
 
       {{-- FOOTER --}}

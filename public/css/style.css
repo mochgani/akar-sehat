@@ -1215,6 +1215,10 @@ img {
     transform: translateY(-2px);
 }
 
+.social-icon--wa:hover {
+    background-color: #25D366;
+}
+
 .footer-col h3 {
     color: var(--color-white);
     font-size: 1rem;
