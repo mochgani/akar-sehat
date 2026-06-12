@@ -41,6 +41,28 @@
                 <li><a href="{{ route('tentang') }}" class="nav-link {{ request()->routeIs('tentang') ? 'active' : '' }}">{{ __('nav.about') }}</a></li>
                 <li><a href="{{ route('edukasi.index') }}" class="nav-link {{ request()->routeIs('edukasi.*') ? 'active' : '' }}">{{ __('nav.education') }}</a></li>
                 <li><a href="{{ route('produk.index') }}" class="nav-link {{ request()->routeIs('produk.*') ? 'active' : '' }}">{{ __('nav.products') }}</a></li>
+                @if(($activeLanguages ?? collect())->count() > 1)
+                <li class="nav-lang-wrap">
+                    <button class="nav-lang-btn" id="nav-lang-btn" aria-expanded="false" aria-haspopup="true">
+                        <span class="nav-lang-flag">{{ ($activeLanguages ?? collect())->firstWhere('code', $currentLocale ?? 'id')?->flag ?? '🌐' }}</span>
+                        <span class="nav-lang-code">{{ strtoupper($currentLocale ?? 'id') }}</span>
+                        <svg class="nav-lang-chevron" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="nav-lang-menu" id="nav-lang-menu" role="menu">
+                        @foreach($activeLanguages ?? [] as $lang)
+                        <a href="{{ route('lang.switch', $lang->code) }}"
+                           class="nav-lang-item {{ ($currentLocale ?? 'id') === $lang->code ? 'active' : '' }}"
+                           role="menuitem">
+                            <span>{{ $lang->flag }}</span>
+                            <span>{{ $lang->native_name }}</span>
+                            @if(($currentLocale ?? 'id') === $lang->code)
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:auto;color:var(--color-primary)"><polyline points="20 6 9 17 4 12"/></svg>
+                            @endif
+                        </a>
+                        @endforeach
+                    </div>
+                </li>
+                @endif
             </ul>
             <div class="menu-toggle" id="mobile-menu" aria-label="Toggle navigation menu">
                 <span class="bar"></span>
@@ -108,22 +130,6 @@
                         @if(!empty($siteSettings['instagram']))
                         <li><span>📷</span> {{ $siteSettings['instagram'] }}</li>
                         @endif
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3>{{ __('footer.language') }}</h3>
-                    <ul class="footer-links">
-                        @foreach($activeLanguages ?? [] as $lang)
-                        <li>
-                            <a href="{{ route('lang.switch', $lang->code) }}"
-                               style="{{ ($currentLocale ?? 'id') === $lang->code ? 'color:var(--color-primary);font-weight:600' : '' }}">
-                                {{ $lang->flag }} {{ $lang->native_name }}
-                                @if(($currentLocale ?? 'id') === $lang->code)
-                                <span style="font-size:10px;background:var(--color-primary);color:#fff;border-radius:4px;padding:1px 5px;margin-left:4px">✓</span>
-                                @endif
-                            </a>
-                        </li>
-                        @endforeach
                     </ul>
                 </div>
             </div>

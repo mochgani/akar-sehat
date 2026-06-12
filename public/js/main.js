@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (mobileMenu && navMenu) {
         mobileMenu.addEventListener('click', toggleMenu);
-        
+
         // Close menu when clicking a link
         navLinks.forEach(link => {
             link.addEventListener('click', closeMenu);
@@ -41,10 +41,25 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('click', (event) => {
             const isClickInsideMenu = navMenu.contains(event.target);
             const isClickOnToggle = mobileMenu.contains(event.target);
-            
+
             if (!isClickInsideMenu && !isClickOnToggle && navMenu.classList.contains('active')) {
                 closeMenu();
             }
+        });
+    }
+
+    // Language dropdown toggle (for touch/mobile)
+    const langBtn = document.getElementById('nav-lang-btn');
+    const langMenu = document.getElementById('nav-lang-menu');
+    if (langBtn && langMenu) {
+        langBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = langMenu.classList.toggle('open');
+            langBtn.setAttribute('aria-expanded', isOpen);
+        });
+        document.addEventListener('click', () => {
+            langMenu.classList.remove('open');
+            langBtn.setAttribute('aria-expanded', 'false');
         });
     }
 
