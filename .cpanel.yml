@@ -1,15 +1,10 @@
 ---
 deployment:
   tasks:
-    # Salin isi public/ ke public_html/
     - /bin/cp -r /home/$USER/akar-sehat/public/. /home/$USER/public_html/
-
-    # Buat folder storage di public_html (tempat file upload masuk langsung)
     - /bin/mkdir -p /home/$USER/public_html/storage/site
     - /bin/mkdir -p /home/$USER/public_html/storage/homepage
     - /bin/mkdir -p /home/$USER/public_html/storage/tentang
-
-    # Clear & rebuild cache setelah pull
     - /usr/local/bin/php /home/$USER/akar-sehat/artisan config:clear
     - /usr/local/bin/php /home/$USER/akar-sehat/artisan config:cache
     - /usr/local/bin/php /home/$USER/akar-sehat/artisan route:clear
