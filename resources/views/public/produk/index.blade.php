@@ -60,23 +60,24 @@
     .stats-strip {
         background-color: var(--color-white);
         border-bottom: 1px solid rgba(56, 42, 33, 0.06);
-        padding: 20px 0;
+        padding: 28px 0;
     }
 
     .stats-strip-inner {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 48px;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
     }
 
     .stats-strip-item {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 10px;
+        text-align: center;
+        gap: 8px;
         font-size: 0.875rem;
         color: var(--color-text-muted);
+        padding: 8px 12px;
     }
 
     .stats-strip-item svg {
@@ -271,9 +272,10 @@
     }
 
     .produk-card-img {
-        width: 75%;
-        height: 85%;
-        object-fit: contain;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
         transition: transform 0.45s ease;
     }
 
@@ -531,7 +533,7 @@
 
         .filter-bar { top: 62px; }
 
-        .stats-strip-inner { gap: 28px; }
+        .stats-strip-inner { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 
         .cta-banner { padding: 40px; }
 
@@ -553,7 +555,7 @@
 
         .cta-banner-icon { margin: 0 auto; }
 
-        .stats-strip-inner { gap: 20px; justify-content: flex-start; }
+        .stats-strip-inner { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     }
 
     @media (max-width: 576px) {
