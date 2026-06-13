@@ -605,7 +605,7 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                     </svg>
-                    <span><strong>Ratusan+</strong> pengguna aktif terbantu</span>
+                    <span><strong>{{ __('produk.trust4_strong') }}</strong> {{ __('produk.trust4') }}</span>
                 </div>
                 <div class="stats-strip-item">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
