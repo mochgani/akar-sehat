@@ -29,10 +29,12 @@ class SettingController extends Controller
             'instagram'     => 'nullable|string|max:100',
             'logo'          => 'nullable|image|max:512',
             'favicon'       => 'nullable|image|max:128',
-            'address'       => 'nullable|string|max:200',
+            'address'       => 'nullable|array',
+            'address.*'     => 'nullable|string|max:200',
             'footer_desc'   => 'nullable|array',
             'footer_desc.*' => 'nullable|string|max:300',
-            'copyright'     => 'nullable|string|max:200',
+            'copyright'     => 'nullable|array',
+            'copyright.*'   => 'nullable|string|max:200',
             'fb_url'        => 'nullable|url|max:255',
             'ig_url'        => 'nullable|url|max:255',
             'yt_url'        => 'nullable|url|max:255',
@@ -42,7 +44,7 @@ class SettingController extends Controller
         // Field multi-bahasa (per locale)
         $locales = \App\Models\Language::aktif()->pluck('code')->toArray();
         foreach ($locales as $locale) {
-            foreach (['tagline', 'footer_desc'] as $key) {
+            foreach (['tagline', 'footer_desc', 'address', 'copyright'] as $key) {
                 $val = is_array($request->input($key))
                     ? $request->input("{$key}.{$locale}", '')
                     : ($locale === 'id' ? $request->input($key, '') : '');
@@ -53,7 +55,7 @@ class SettingController extends Controller
         }
 
         // Field tunggal (locale-independent, disimpan di 'id')
-        foreach (['name','wa_number','wa_number_2','email','instagram','address','copyright','fb_url','ig_url','yt_url','tiktok_url'] as $key) {
+        foreach (['name','wa_number','wa_number_2','email','instagram','fb_url','ig_url','yt_url','tiktok_url'] as $key) {
             Setting::set("site.{$key}", $request->input($key, ''));
         }
 

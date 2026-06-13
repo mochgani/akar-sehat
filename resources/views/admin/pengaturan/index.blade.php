@@ -70,6 +70,14 @@
           <div class="fg"><label class="fl">Deskripsi Footer</label>
             <textarea name="footer_desc[{{ $loc }}]" class="fc" rows="2" placeholder="Deskripsi singkat di footer website...">{{ $d['footer_desc'] ?? ($dId['footer_desc'] ?? '') }}</textarea>
           </div>
+          <div class="frow frow-2">
+            <div class="fg"><label class="fl">Alamat</label>
+              <input type="text" name="address[{{ $loc }}]" class="fc" value="{{ $d['address'] ?? ($dId['address'] ?? '') }}" placeholder="Bandung, Jawa Barat">
+            </div>
+            <div class="fg"><label class="fl">Teks Copyright</label>
+              <input type="text" name="copyright[{{ $loc }}]" class="fc" value="{{ $d['copyright'] ?? ($dId['copyright'] ?? '') }}" placeholder="© 2026 Akar Sehat. All rights reserved.">
+            </div>
+          </div>
         </div>
         @endforeach
       </div>
@@ -80,10 +88,6 @@
         <div class="fg"><label class="fl">Email</label><input type="email" name="email" class="fc" value="{{ $site['email'] ?? '' }}"></div>
       </div>
 
-      <div class="frow frow-2">
-        <div class="fg"><label class="fl">Alamat</label><input type="text" name="address" class="fc" value="{{ $site['address'] ?? '' }}" placeholder="Bandung, Jawa Barat"></div>
-        <div class="fg"><label class="fl">Teks Copyright</label><input type="text" name="copyright" class="fc" value="{{ $site['copyright'] ?? '' }}" placeholder="© 2026 Akar Sehat. All rights reserved."></div>
-      </div>
       <div class="frow frow-2">
         <div class="fg"><label class="fl">URL Facebook</label><input type="url" name="fb_url" class="fc" value="{{ $site['fb_url'] ?? '' }}" placeholder="https://facebook.com/..."></div>
         <div class="fg"><label class="fl">URL Instagram</label><input type="url" name="ig_url" class="fc" value="{{ $site['ig_url'] ?? '' }}" placeholder="https://instagram.com/..."></div>

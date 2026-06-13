@@ -96,6 +96,14 @@ class SettingSeeder extends Seeder
                 'en' => 'A modern health education and mentoring platform that helps people understand their body from the root of the problem, naturally.',
                 'ar' => 'منصة حديثة للتثقيف والإرشاد الصحي تساعد الناس على فهم أجسادهم من جذر المشكلة بشكل طبيعي.',
             ],
+            'site.address' => [
+                'en' => 'Bandung, West Java',
+                'ar' => 'باندونغ، جاوة الغربية',
+            ],
+            'site.copyright' => [
+                'en' => '© 2026 Akar Sehat. All rights reserved.',
+                'ar' => '© 2026 أكار سيهات. جميع الحقوق محفوظة.',
+            ],
         ];
         foreach ($siteTrans as $key => $locales) {
             foreach ($locales as $loc => $val) {
