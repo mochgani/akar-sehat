@@ -557,7 +557,7 @@
 
     /* ---- CTA Banner ---- */
     .cta-banner-wrapper {
-        padding: 0 0 80px;
+        padding: 72px 0 80px;
     }
 
     .cta-banner {
@@ -681,7 +681,7 @@
 
         .cta-banner { padding: 28px 20px; }
         .cta-banner-text h2 { font-size: 1.375rem; }
-        .cta-banner-wrapper { padding: 0 0 60px; }
+        .cta-banner-wrapper { padding: 48px 0 60px; }
 
         .produk-card-img-wrap { height: 220px; }
 
