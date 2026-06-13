@@ -808,7 +808,7 @@
     <div class="breadcrumb-bar">
         <div class="container">
             <nav class="breadcrumb" aria-label="Breadcrumb">
-                <a href="{{ route('home') }}">Beranda</a>
+                <a href="{{ route('home') }}">{{ __('common.home') }}</a>
                 <span class="breadcrumb-sep">›</span>
                 <a href="{{ route('edukasi.index') }}">{{ __('edukasi.breadcrumb') }}</a>
                 <span class="breadcrumb-sep">›</span>

@@ -844,9 +844,9 @@
     <div class="breadcrumb-bar">
         <div class="container">
             <nav class="breadcrumb" aria-label="Breadcrumb">
-                <a href="{{ route('home') }}">Beranda</a>
+                <a href="{{ route('home') }}">{{ __('common.home') }}</a>
                 <span class="breadcrumb-sep">›</span>
-                <a href="{{ route('produk.index') }}">Produk</a>
+                <a href="{{ route('produk.index') }}">{{ __('nav.products') }}</a>
                 <span class="breadcrumb-sep">›</span>
                 <span class="breadcrumb-current">{{ $produk->trans('nama') }}</span>
             </nav>
