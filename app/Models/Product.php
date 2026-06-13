@@ -21,7 +21,7 @@ class Product extends Model
     protected function casts(): array
     {
         return [
-            'kandungan'    => 'array',
+            // kandungan kini berupa HTML (WYSIWYG), bukan array lagi
             'translations' => 'array',
             'is_featured'  => 'boolean',
             'harga'        => 'integer',

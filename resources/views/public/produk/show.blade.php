@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('title', $produk->trans('nama') . ' — Akar Sehat')
-@section('meta_desc', \Illuminate\Support\Str::limit($produk->trans('deskripsi'), 160))
+@section('meta_desc', \Illuminate\Support\Str::limit(strip_tags($produk->trans('deskripsi')), 160))
 
 @push('styles')
 <style>
@@ -556,6 +556,21 @@
         border-radius: 50%;
     }
 
+    /* Rich content (deskripsi / kandungan / cara pakai dari WYSIWYG) */
+    .rich-content { max-width: 820px; font-size: 0.9375rem; color: var(--color-text-main); line-height: 1.8; }
+    .rich-content p { margin-bottom: 16px; }
+    .rich-content h2, .rich-content h3 { font-weight: 700; color: var(--color-dark-bark); margin: 26px 0 12px; line-height: 1.3; }
+    .rich-content h2 { font-size: 1.25rem; }
+    .rich-content h3 { font-size: 1.0625rem; }
+    .rich-content ul, .rich-content ol { margin: 0 0 18px; padding-inline-start: 22px; }
+    .rich-content li { margin-bottom: 8px; }
+    .rich-content strong { color: var(--color-dark-bark); }
+    .rich-content a { color: var(--color-primary); }
+    .rich-content table { width: 100%; border-collapse: collapse; margin: 8px 0 20px; font-size: 0.9375rem; }
+    .rich-content th, .rich-content td { border: 1px solid var(--color-muted-sand); padding: 12px 16px; text-align: start; vertical-align: top; line-height: 1.55; }
+    .rich-content thead th { background-color: var(--color-bg-alt); font-weight: 700; color: var(--color-dark-bark); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+    .rich-content tbody tr:nth-child(even) { background-color: rgba(56,42,33,0.02); }
+
     /* Kandungan table */
     .ingredients-table {
         width: 100%;
@@ -942,7 +957,7 @@
                         <div class="detail-price-note">{{ __('common.price_per_bottle') }}</div>
                     </div>
 
-                    <p class="detail-short-desc">{{ $produk->trans('deskripsi') }}</p>
+                    <p class="detail-short-desc">{{ \Illuminate\Support\Str::limit(strip_tags($produk->trans('deskripsi')), 160) }}</p>
 
                     @php $kandungan = $produk->trans('kandungan'); $kandungan = is_array($kandungan) ? $kandungan : []; @endphp
                     @if(count($kandungan) > 0)
@@ -1002,40 +1017,20 @@
                 <button class="tab-btn active" data-tab="deskripsi"  onclick="switchTab('deskripsi')">{{ __('produk.tab_desc') }}</button>
                 <button class="tab-btn"         data-tab="kandungan" onclick="switchTab('kandungan')">{{ __('produk.tab_ingredients') }}</button>
                 <button class="tab-btn"         data-tab="cara-pakai" onclick="switchTab('cara-pakai')">{{ __('produk.tab_how_to_use') }}</button>
-                <button class="tab-btn"         data-tab="testimoni" onclick="switchTab('testimoni')">{{ __('produk.tab_review') }}</button>
             </div>
 
             <!-- Deskripsi -->
             <div class="tab-panel active" id="tab-deskripsi">
-                <div class="tab-deskripsi">
-                    {!! $produk->deskripsi_lengkap ?? '<p>'.$produk->trans('deskripsi').'</p>' !!}
+                <div class="tab-deskripsi rich-content">
+                    {!! $produk->trans('deskripsi') ?: '<p>'.e(__('produk.ingredients_empty')).'</p>' !!}
                 </div>
             </div>
 
             <!-- Kandungan -->
             <div class="tab-panel" id="tab-kandungan">
-                <p style="font-size:.9375rem;color:var(--color-text-muted);margin-bottom:24px;">{{ __('produk.ingredients_intro') }}</p>
-                @php $kandunganTab = $produk->trans('kandungan'); $kandunganTab = is_array($kandunganTab) ? $kandunganTab : []; @endphp
-                @if(count($kandunganTab) > 0)
-                <table class="ingredients-table">
-                    <thead>
-                        <tr><th>{{ __('produk.ingredients_col1') }}</th><th>{{ __('produk.ingredients_col2') }}</th><th>{{ __('produk.ingredients_col3') }}</th></tr>
-                    </thead>
-                    <tbody>
-                        @foreach($kandunganTab as $k)
-                        <tr>
-                            @if(is_array($k))
-                                <td>{{ $k['name'] ?? $k['bahan'] ?? '-' }}</td>
-                                <td>{{ $k['amount'] ?? $k['jumlah'] ?? '-' }}</td>
-                                <td>{{ $k['benefit'] ?? $k['manfaat'] ?? '-' }}</td>
-                            @else
-                                <td colspan="3">{{ $k }}</td>
-                            @endif
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <p style="font-size:.8125rem;color:var(--color-text-muted);margin-top:20px;">{{ __('produk.ingredients_note') }}</p>
+                @php $kandunganHtml = trim((string) $produk->trans('kandungan')); @endphp
+                @if($kandunganHtml !== '')
+                <div class="rich-content">{!! $kandunganHtml !!}</div>
                 @else
                 <p style="color:var(--color-text-muted);">{{ __('produk.ingredients_empty') }}</p>
                 @endif
@@ -1043,18 +1038,11 @@
 
             <!-- Cara Pakai -->
             <div class="tab-panel" id="tab-cara-pakai">
+                @php $caraHtml = trim((string) $produk->trans('cara_pakai')); @endphp
+                @if($caraHtml !== '')
+                <div class="rich-content">{!! $caraHtml !!}</div>
+                @else
                 <div class="cara-pakai-steps">
-                    @if($produk->trans('cara_pakai'))
-                        @foreach(array_filter(array_map('trim', preg_split('/\n|\r\n/', $produk->trans('cara_pakai')))) as $i => $step)
-                        <div class="step-item">
-                            <div class="step-number">{{ $i + 1 }}</div>
-                            <div class="step-content">
-                                <h4>{{ __('common.step') }} {{ $i + 1 }}</h4>
-                                <p>{{ $step }}</p>
-                            </div>
-                        </div>
-                        @endforeach
-                    @else
                     <div class="step-item">
                         <div class="step-number">1</div>
                         <div class="step-content">
@@ -1062,45 +1050,7 @@
                             <p>{{ __('produk.default_step_desc') }}</p>
                         </div>
                     </div>
-                    @endif
                 </div>
-                @if($produk->peringatan ?? false)
-                <div class="warning-box">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-                    </svg>
-                    <p><strong>{{ __('produk.caution') }} </strong>{{ $produk->peringatan }}</p>
-                </div>
-                @endif
-            </div>
-
-            <!-- Testimoni -->
-            <div class="tab-panel" id="tab-testimoni">
-                @if(isset($produk->testimoni) && count($produk->testimoni) > 0)
-                <div class="testi-grid">
-                    @foreach($produk->testimoni as $t)
-                    <div class="testi-card">
-                        <div class="testi-card-stars">
-                            @for($i = 0; $i < ($t['rating'] ?? 5); $i++)<span>★</span>@endfor
-                        </div>
-                        <p class="testi-card-text">"{{ $t['text'] ?? $t }}"</p>
-                        <div class="testi-card-user">
-                            <div class="testi-avatar">{{ strtoupper(substr($t['name'] ?? 'U', 0, 1)) }}</div>
-                            <div>
-                                <div class="testi-user-name">{{ $t['name'] ?? 'Pengguna' }}</div>
-                                <div class="testi-user-loc">{{ $t['loc'] ?? '' }}</div>
-                                <span class="testi-verified">
-                                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                                    Pembeli Terverifikasi
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-                @else
-                <p style="color:var(--color-text-muted);font-size:.9375rem;">Belum ada testimoni untuk produk ini.</p>
                 @endif
             </div>
         </div>

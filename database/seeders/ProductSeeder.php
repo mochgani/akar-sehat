@@ -117,7 +117,18 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($products as $data) {
+            $data['kandungan'] = $this->kandunganHtml($data['kandungan']);
             Product::updateOrCreate(['sku' => $data['sku']], $data);
         }
+    }
+
+    /** Ubah daftar bahan menjadi HTML (intro + list) untuk editor WYSIWYG. */
+    private function kandunganHtml(array $items): string
+    {
+        $items = array_values(array_filter(array_map('trim', $items)));
+        if (empty($items)) return '';
+        return '<p>Diformulasikan dari bahan-bahan herbal pilihan berikut:</p><ul>'
+            . implode('', array_map(fn ($x) => '<li>' . e($x) . '</li>', $items))
+            . '</ul>';
     }
 }

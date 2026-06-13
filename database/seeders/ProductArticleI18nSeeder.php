@@ -52,6 +52,23 @@ class ProductArticleI18nSeeder extends Seeder
             ],
         ];
 
+        // Kandungan kini berupa HTML (WYSIWYG) — ubah array bahan jadi intro + list per bahasa
+        $kandunganIntro = [
+            'en' => 'Formulated from the following selected herbal ingredients:',
+            'ar' => 'مُركّبة من المكونات العشبية المنتقاة التالية:',
+        ];
+        foreach ($products as $nama => &$trans) {
+            foreach ($trans as $loc => &$fields) {
+                if (isset($fields['kandungan']) && is_array($fields['kandungan'])) {
+                    $items = array_values(array_filter(array_map('trim', $fields['kandungan'])));
+                    $fields['kandungan'] = empty($items) ? '' :
+                        '<p>' . e($kandunganIntro[$loc] ?? '') . '</p><ul>'
+                        . implode('', array_map(fn ($x) => '<li>' . e($x) . '</li>', $items)) . '</ul>';
+                }
+            }
+        }
+        unset($trans, $fields);
+
         foreach ($products as $nama => $trans) {
             $p = Product::where('nama', $nama)->first();
             if ($p) $this->mergeTranslations($p, $trans);

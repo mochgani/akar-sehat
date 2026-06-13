@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('harga');
             $table->integer('stok')->default(0);
             $table->enum('status', ['tersedia', 'hampir-habis', 'habis'])->default('tersedia');
-            $table->json('kandungan')->nullable();
+            $table->longText('kandungan')->nullable(); // HTML (WYSIWYG)
             $table->text('deskripsi')->nullable();
             $table->text('cara_pakai')->nullable();
             $table->string('foto')->nullable();

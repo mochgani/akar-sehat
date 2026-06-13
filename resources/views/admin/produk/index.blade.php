@@ -187,25 +187,25 @@
             <div class="fg">
               <label class="fl">Deskripsi</label>
               @if($isId)
-                <textarea name="deskripsi" class="fc" rows="3" placeholder="Deskripsi produk..."></textarea>
+                <textarea name="deskripsi" class="js-rich" data-min="120"></textarea>
               @else
-                <textarea name="trans[{{ $loc }}][deskripsi]" class="fc" rows="3" placeholder="Terjemahan deskripsi (opsional)"></textarea>
+                <textarea name="trans[{{ $loc }}][deskripsi]" class="js-rich" data-min="120"></textarea>
               @endif
             </div>
             <div class="fg">
               <label class="fl">Cara Pakai</label>
               @if($isId)
-                <textarea name="cara_pakai" class="fc" rows="2" placeholder="Cara penggunaan..."></textarea>
+                <textarea name="cara_pakai" class="js-rich" data-min="120"></textarea>
               @else
-                <textarea name="trans[{{ $loc }}][cara_pakai]" class="fc" rows="2" placeholder="Terjemahan cara pakai (opsional)"></textarea>
+                <textarea name="trans[{{ $loc }}][cara_pakai]" class="js-rich" data-min="120"></textarea>
               @endif
             </div>
             <div class="fg">
-              <label class="fl">Kandungan <span style="color:var(--cmt);font-weight:400;font-size:11px">(pisahkan koma)</span></label>
+              <label class="fl">Kandungan <span style="color:var(--cmt);font-weight:400;font-size:11px">(bisa sisip tabel & teks)</span></label>
               @if($isId)
-                <input type="text" id="add-kandungan" name="kandungan_raw" class="fc" placeholder="Jahe Merah, Madu Hutan">
+                <textarea id="add-kandungan" name="kandungan" class="js-rich" data-min="140"></textarea>
               @else
-                <input type="text" id="add-kandungan-{{ $loc }}" name="trans[{{ $loc }}][kandungan_raw]" class="fc" placeholder="Terjemahan kandungan (opsional)" dir="{{ $lang->dir ?? 'ltr' }}">
+                <textarea id="add-kandungan-{{ $loc }}" name="trans[{{ $loc }}][kandungan]" class="js-rich" data-min="140" dir="{{ $lang->dir ?? 'ltr' }}"></textarea>
               @endif
             </div>
           </div>
@@ -282,25 +282,25 @@
             <div class="fg">
               <label class="fl">Deskripsi</label>
               @if($isId)
-                <textarea id="edit-deskripsi" name="deskripsi" class="fc" rows="3"></textarea>
+                <textarea id="edit-deskripsi" name="deskripsi" class="js-rich" data-min="120"></textarea>
               @else
-                <textarea id="edit-deskripsi-{{ $loc }}" name="trans[{{ $loc }}][deskripsi]" class="fc" rows="3" placeholder="Terjemahan deskripsi (opsional)"></textarea>
+                <textarea id="edit-deskripsi-{{ $loc }}" name="trans[{{ $loc }}][deskripsi]" class="js-rich" data-min="120"></textarea>
               @endif
             </div>
             <div class="fg">
               <label class="fl">Cara Pakai</label>
               @if($isId)
-                <textarea id="edit-cara" name="cara_pakai" class="fc" rows="2"></textarea>
+                <textarea id="edit-cara" name="cara_pakai" class="js-rich" data-min="120"></textarea>
               @else
-                <textarea id="edit-cara-{{ $loc }}" name="trans[{{ $loc }}][cara_pakai]" class="fc" rows="2" placeholder="Terjemahan cara pakai (opsional)"></textarea>
+                <textarea id="edit-cara-{{ $loc }}" name="trans[{{ $loc }}][cara_pakai]" class="js-rich" data-min="120"></textarea>
               @endif
             </div>
             <div class="fg">
-              <label class="fl">Kandungan <span style="color:var(--cmt);font-weight:400;font-size:11px">(pisahkan koma)</span></label>
+              <label class="fl">Kandungan <span style="color:var(--cmt);font-weight:400;font-size:11px">(bisa sisip tabel & teks)</span></label>
               @if($isId)
-                <input type="text" id="edit-kandungan" name="kandungan_raw" class="fc" placeholder="Jahe Merah, Madu Hutan">
+                <textarea id="edit-kandungan" name="kandungan" class="js-rich" data-min="140"></textarea>
               @else
-                <input type="text" id="edit-kandungan-{{ $loc }}" name="trans[{{ $loc }}][kandungan_raw]" class="fc" placeholder="Terjemahan kandungan (opsional)" dir="{{ $lang->dir ?? 'ltr' }}">
+                <textarea id="edit-kandungan-{{ $loc }}" name="trans[{{ $loc }}][kandungan]" class="js-rich" data-min="140" dir="{{ $lang->dir ?? 'ltr' }}"></textarea>
               @endif
             </div>
           </div>
@@ -336,11 +336,136 @@
 .foto-rm:hover{background:#ef4444}
 .foto-add-slot{cursor:pointer;background:var(--cbg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--cmt);border-style:dashed;transition:var(--tr)}
 .foto-add-slot:hover{border-color:var(--cp);color:var(--cp);background:var(--cpl)}
+
+/* ── Editor WYSIWYG ── */
+.rich-wrap{border:1px solid var(--cms);border-radius:var(--r1);overflow:hidden;background:var(--cw)}
+.rich-tb{display:flex;gap:2px;flex-wrap:wrap;padding:6px;background:var(--cbg);border-bottom:1px solid var(--cms)}
+.rich-tb button{height:26px;min-width:26px;padding:0 7px;border:1px solid var(--cms);background:var(--cw);border-radius:4px;cursor:pointer;font-size:12px;color:var(--ctm);display:inline-flex;align-items:center;justify-content:center}
+.rich-tb button:hover{background:var(--cpl);border-color:var(--cp);color:var(--cp)}
+.rich-tb .sep{width:1px;background:var(--cms);margin:2px 3px}
+.rich-area{padding:12px 14px;min-height:120px;font-size:13.5px;line-height:1.7;outline:none;color:var(--ctm)}
+.rich-area[dir="rtl"]{text-align:right}
+.rich-area:empty:before{content:attr(data-ph);color:var(--cmt)}
+.rich-area p{margin:0 0 8px}
+.rich-area h3{font-size:15px;font-weight:600;margin:10px 0 6px}
+.rich-area ul,.rich-area ol{margin:0 0 8px;padding-inline-start:22px}
+.rich-area li{margin-bottom:3px}
+.rich-area table{border-collapse:collapse;width:100%;margin:8px 0;font-size:12.5px}
+.rich-area th,.rich-area td{border:1px solid var(--cms);padding:6px 8px;text-align:start;vertical-align:top}
+.rich-area th{background:var(--cbg);font-weight:600}
 </style>
 @endpush
 
 @push('scripts')
 <script>
+/* ═══════════ Editor WYSIWYG sederhana (mendukung tabel) ═══════════ */
+let activeRich = null;
+function richExec(cmd, val) {
+  if (!activeRich) return;
+  activeRich.focus();
+  document.execCommand(cmd, false, val || null);
+  activeRich.dispatchEvent(new Event('input'));
+}
+function richInsertTable() {
+  if (!activeRich) return;
+  const cols = Math.max(1, Math.min(8, parseInt(prompt('Jumlah kolom?', '3') || '0', 10)));
+  const rows = Math.max(1, Math.min(30, parseInt(prompt('Jumlah baris (termasuk header)?', '3') || '0', 10)));
+  if (!cols || !rows) return;
+  let html = '<table><thead><tr>';
+  for (let c = 0; c < cols; c++) html += '<th>Judul</th>';
+  html += '</tr></thead><tbody>';
+  for (let r = 1; r < rows; r++) {
+    html += '<tr>';
+    for (let c = 0; c < cols; c++) html += '<td>—</td>';
+    html += '</tr>';
+  }
+  html += '</tbody></table><p><br></p>';
+  activeRich.focus();
+  document.execCommand('insertHTML', false, html);
+  activeRich.dispatchEvent(new Event('input'));
+}
+function richTableEdit(action) {
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+  let node = sel.anchorNode;
+  while (node && node.nodeName !== 'TD' && node.nodeName !== 'TH') node = node.parentNode;
+  if (!node) { alert('Letakkan kursor di dalam sel tabel.'); return; }
+  const cell = node, row = cell.parentNode, table = row.closest('table');
+  const colIdx = [...row.children].indexOf(cell);
+  if (action === 'addRow') {
+    const nr = row.cloneNode(true);
+    [...nr.children].forEach(td => { td.innerHTML = '—'; });
+    row.parentNode.insertBefore(nr, row.nextSibling);
+  } else if (action === 'delRow') {
+    if (table.rows.length > 1) row.remove();
+  } else if (action === 'addCol') {
+    [...table.rows].forEach(tr => {
+      const isHead = tr.parentNode.tagName === 'THEAD';
+      const c = document.createElement(isHead ? 'th' : 'td');
+      c.innerHTML = isHead ? 'Judul' : '—';
+      tr.insertBefore(c, tr.children[colIdx + 1] || null);
+    });
+  } else if (action === 'delCol') {
+    [...table.rows].forEach(tr => { if (tr.children.length > 1 && tr.children[colIdx]) tr.children[colIdx].remove(); });
+  }
+  if (activeRich) activeRich.dispatchEvent(new Event('input'));
+}
+function buildRichToolbar() {
+  const btn = (label, title, fn) => `<button type="button" title="${title}" onmousedown="event.preventDefault()" onclick="${fn}">${label}</button>`;
+  return '<div class="rich-tb">'
+    + btn('<b>B</b>', 'Tebal', "richExec('bold')")
+    + btn('<i>I</i>', 'Miring', "richExec('italic')")
+    + btn('<u>U</u>', 'Garis bawah', "richExec('underline')")
+    + '<span class="sep"></span>'
+    + btn('H', 'Sub-judul', "richExec('formatBlock','<h3>')")
+    + btn('¶', 'Paragraf', "richExec('formatBlock','<p>')")
+    + btn('•', 'Daftar', "richExec('insertUnorderedList')")
+    + btn('1.', 'Daftar nomor', "richExec('insertOrderedList')")
+    + '<span class="sep"></span>'
+    + btn('⊞ Tabel', 'Sisip tabel', "richInsertTable()")
+    + btn('+Baris', 'Tambah baris', "richTableEdit('addRow')")
+    + btn('+Kolom', 'Tambah kolom', "richTableEdit('addCol')")
+    + btn('−Baris', 'Hapus baris', "richTableEdit('delRow')")
+    + btn('−Kolom', 'Hapus kolom', "richTableEdit('delCol')")
+    + '</div>';
+}
+function mountRichEditor(ta) {
+  if (ta.dataset.richMounted) return;
+  ta.dataset.richMounted = '1';
+  ta.style.display = 'none';
+  const wrap = document.createElement('div');
+  wrap.className = 'rich-wrap';
+  wrap.innerHTML = buildRichToolbar();
+  const area = document.createElement('div');
+  area.className = 'rich-area';
+  area.contentEditable = 'true';
+  area.style.minHeight = (ta.dataset.min || 120) + 'px';
+  if (ta.getAttribute('dir')) area.setAttribute('dir', ta.getAttribute('dir'));
+  area.dataset.ph = 'Tulis di sini…';
+  area.innerHTML = ta.value || '';
+  wrap.appendChild(area);
+  ta.parentNode.insertBefore(wrap, ta.nextSibling);
+  ta._richArea = area;
+  area._richTa = ta;
+  const sync = () => { ta.value = area.innerHTML; };
+  area.addEventListener('input', sync);
+  area.addEventListener('focus', () => { activeRich = area; });
+}
+function mountAllRich(scope) {
+  (scope || document).querySelectorAll('textarea.js-rich').forEach(mountRichEditor);
+}
+function refreshRichWithin(scope) {
+  (scope || document).querySelectorAll('textarea.js-rich').forEach(ta => {
+    if (ta._richArea) ta._richArea.innerHTML = ta.value || '';
+  });
+}
+function syncAllRich() {
+  document.querySelectorAll('textarea.js-rich').forEach(ta => {
+    if (ta._richArea) ta.value = ta._richArea.innerHTML;
+  });
+}
+document.addEventListener('DOMContentLoaded', () => mountAllRich(document));
+
 const PRODS = JSON.parse(document.getElementById('prod-data').textContent);
 let selected = new Set();
 
@@ -411,25 +536,11 @@ document.querySelector('[onclick="openModal(\'m-add\')"]')?.addEventListener('cl
 // Also init on page load
 renderAddGrid();
 
-// Ubah field "kandungan_raw" (string koma) jadi array kandungan[] — termasuk per bahasa
-function applyKandungan(fd) {
-  const toArr = v => (v || '').split(',').map(s => s.trim()).filter(Boolean);
-  const base = fd.get('kandungan_raw') || '';
-  fd.delete('kandungan_raw');
-  toArr(base).forEach(t => fd.append('kandungan[]', t));
-  [...fd.keys()].filter(k => /^trans\[[a-z-]+\]\[kandungan_raw\]$/.test(k)).forEach(k => {
-    const loc = k.match(/^trans\[([a-z-]+)\]/)[1];
-    const val = fd.get(k);
-    fd.delete(k);
-    toArr(val).forEach(t => fd.append(`trans[${loc}][kandungan][]`, t));
-  });
-}
-
 async function submitAdd(e) {
   e.preventDefault();
+  syncAllRich();
   setLoading('Menyimpan produk...');
   const fd = new FormData(e.target);
-  applyKandungan(fd);
   fd.set('is_featured', fd.has('is_featured') ? 1 : 0);
   addFotoFiles.forEach(f => fd.append('fotos[]', f));
 
@@ -500,7 +611,7 @@ function editProduk(id) {
   editFotoFiles = [];
   renderEditGrid();
   document.getElementById('edit-featured').checked = !!p.is_featured;
-  document.getElementById('edit-kandungan').value = (p.kandungan || []).join(', ');
+  document.getElementById('edit-kandungan').value = p.kandungan || '';
   const sel = document.getElementById('edit-kategori');
   for (let o of sel.options) if (o.value === p.kategori) o.selected = true;
 
@@ -521,9 +632,12 @@ function editProduk(id) {
   if (fn_{{ $lang->code }}) fn_{{ $lang->code }}.value = td_{{ $lang->code }}.nama || '';
   if (fd_{{ $lang->code }}) fd_{{ $lang->code }}.value = td_{{ $lang->code }}.deskripsi || '';
   if (fc_{{ $lang->code }}) fc_{{ $lang->code }}.value = td_{{ $lang->code }}.cara_pakai || '';
-  if (fk_{{ $lang->code }}) fk_{{ $lang->code }}.value = (td_{{ $lang->code }}.kandungan || []).join(', ');
+  if (fk_{{ $lang->code }}) fk_{{ $lang->code }}.value = td_{{ $lang->code }}.kandungan || '';
   @endif
   @endforeach
+
+  // Sinkronkan editor WYSIWYG dengan nilai textarea yang baru diisi
+  refreshRichWithin(document.getElementById('m-edit'));
 
   // Reset to first tab
   const firstTab = document.querySelector('#edit-prod-tabs .lang-tab');
@@ -534,10 +648,10 @@ function editProduk(id) {
 
 async function submitEdit(e) {
   e.preventDefault();
+  syncAllRich();
   setLoading('Menyimpan produk...');
   const id = document.getElementById('edit-id').value;
   const fd = new FormData(e.target);
-  applyKandungan(fd);
   fd.set('is_featured', fd.has('is_featured') ? 1 : 0);
   fd.set('_method', 'PUT');
   editFotosExisting.forEach(p => fd.append('fotos_existing[]', p));
