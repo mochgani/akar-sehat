@@ -37,8 +37,9 @@ class ProductController extends Controller
             $kategoris = Product::distinct()->pluck('kategori')->filter();
         }
         $languages = Language::aktif()->get();
+        $allProducts = Product::orderBy('nama')->get(['id', 'nama']);
 
-        return view('admin.produk.index', compact('products', 'kategoris', 'languages'));
+        return view('admin.produk.index', compact('products', 'kategoris', 'languages', 'allProducts'));
     }
 
     public function store(Request $request)
@@ -48,7 +49,11 @@ class ProductController extends Controller
             'sku'         => 'required|string|max:50|unique:products',
             'kategori'    => 'required|string|max:100',
             'harga'       => 'required|integer|min:0',
+            'harga_usd'   => 'nullable|numeric|min:0',
+            'harga_sar'   => 'nullable|numeric|min:0',
             'stok'        => 'required|integer|min:0',
+            'related_ids'   => 'nullable|array',
+            'related_ids.*' => 'integer|exists:products,id',
             'kandungan'   => 'nullable|string',
             'deskripsi'   => 'nullable|string',
             'deskripsi_singkat' => 'nullable|string',
@@ -63,6 +68,7 @@ class ProductController extends Controller
 
         $data['slug']         = Str::slug($data['nama']);
         $data['is_featured']  = $request->boolean('is_featured');
+        $data['related_ids']  = array_values(array_unique(array_map('intval', $request->input('related_ids', []))));
         $data['translations'] = $this->extractTranslations($request, ['nama', 'deskripsi', 'deskripsi_singkat', 'manfaat', 'satuan', 'isi_kemasan', 'cara_pakai', 'kandungan']);
 
         $uploadedFotos = [];
@@ -85,7 +91,11 @@ class ProductController extends Controller
             'sku'            => "required|string|max:50|unique:products,sku,{$product->id}",
             'kategori'       => 'required|string|max:100',
             'harga'          => 'required|integer|min:0',
+            'harga_usd'      => 'nullable|numeric|min:0',
+            'harga_sar'      => 'nullable|numeric|min:0',
             'stok'           => 'required|integer|min:0',
+            'related_ids'    => 'nullable|array',
+            'related_ids.*'  => 'integer|exists:products,id',
             'kandungan'      => 'nullable|string',
             'deskripsi'      => 'nullable|string',
             'deskripsi_singkat' => 'nullable|string',
@@ -101,6 +111,10 @@ class ProductController extends Controller
         ]);
 
         $data['is_featured']  = $request->boolean('is_featured');
+        $data['related_ids']  = array_values(array_filter(
+            array_unique(array_map('intval', $request->input('related_ids', []))),
+            fn ($id) => $id !== $product->id
+        ));
         $data['translations'] = $this->extractTranslations($request, ['nama', 'deskripsi', 'deskripsi_singkat', 'manfaat', 'satuan', 'isi_kemasan', 'cara_pakai', 'kandungan']);
 
         // Existing photos to keep (validate paths belong to produk/)

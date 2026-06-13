@@ -46,9 +46,18 @@ class ProductController extends Controller
     public function show(string $slug)
     {
         $produk  = Product::where('slug', $slug)->firstOrFail();
-        $related = Product::where('kategori', $produk->kategori)
-            ->where('id', '!=', $produk->id)
-            ->take(4)->get();
+
+        // Produk terkait: utamakan pilihan manual admin, jika kosong pakai kategori yang sama
+        if (!empty($produk->related_ids)) {
+            $related = Product::whereIn('id', $produk->related_ids)
+                ->where('id', '!=', $produk->id)
+                ->orderByRaw('FIELD(id, ' . implode(',', array_map('intval', $produk->related_ids)) . ')')
+                ->get();
+        } else {
+            $related = Product::where('kategori', $produk->kategori)
+                ->where('id', '!=', $produk->id)
+                ->take(4)->get();
+        }
         $siteSettings = Setting::getGroup('site');
 
         try {

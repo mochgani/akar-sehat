@@ -512,7 +512,7 @@
        Detail Tabs
     ================================================================ */
     .detail-tabs-section {
-        padding: 64px 0 0;
+        padding: 64px 0 80px;
     }
 
     .tabs-nav {
@@ -1011,7 +1011,7 @@
 
                     <div class="detail-price-block">
                         <div class="detail-price-label">{{ __('common.price') }}</div>
-                        <div class="detail-price" id="display-price">Rp {{ number_format($produk->harga, 0, ',', '.') }}</div>
+                        <div class="detail-price" id="display-price">{{ $produk->hargaFormatted() }}</div>
                         @php
                             $satuan = trim((string) $produk->trans('satuan'));
                             $isiKemasan = trim((string) $produk->trans('isi_kemasan'));
@@ -1133,7 +1133,7 @@
                         <span class="produk-card-category">{{ $kategoriObj ? $kategoriObj->trans('nama') : $r->kategori }}</span>
                         <h3 class="produk-card-name">{{ $r->trans('nama') }}</h3>
                         <div class="produk-card-footer">
-                            <span class="produk-card-price">Rp {{ number_format($r->harga, 0, ',', '.') }}</span>
+                            <span class="produk-card-price">{{ $r->hargaFormatted() }}</span>
                             <span class="produk-card-btn">{{ __('common.view_detail') }} →</span>
                         </div>
                     </div>
@@ -1149,7 +1149,7 @@
         <div class="sticky-wa-inner">
             <div class="sticky-wa-price">
                 <div class="label">{{ __('common.price') }}</div>
-                <div class="value" id="sticky-price">Rp {{ number_format($produk->harga, 0, ',', '.') }}</div>
+                <div class="value" id="sticky-price">{{ $produk->hargaFormatted() }}</div>
             </div>
             <a href="{{ 'https://wa.me/'.($siteSettings['wa_number'] ?? '6281234567890').'?text='.rawurlencode('Halo Kang Bahri, saya ingin memesan: *'.$produk->trans('nama').'*. Mohon info ketersediaan. Terima kasih!') }}"
                id="sticky-wa-btn" target="_blank" class="sticky-wa-btn">

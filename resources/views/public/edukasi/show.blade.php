@@ -1018,7 +1018,7 @@
                         <div class="pt-card-name">{{ $p->trans('nama') }}</div>
                         <p class="pt-card-desc">{{ $p->trans('deskripsi') }}</p>
                         <div class="pt-card-footer">
-                            <span class="pt-card-price">Rp {{ number_format($p->harga, 0, ',', '.') }}</span>
+                            <span class="pt-card-price">{{ $p->hargaFormatted() }}</span>
                             <span class="pt-card-btn">{{ __('common.view_detail') }} →</span>
                         </div>
                     </div>

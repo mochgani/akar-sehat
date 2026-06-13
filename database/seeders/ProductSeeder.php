@@ -130,6 +130,9 @@ class ProductSeeder extends Seeder
 
         foreach ($products as $data) {
             $data['kandungan'] = $this->kandunganHtml($data['kandungan']);
+            // Harga mata uang lain (perkiraan kurs)
+            $data['harga_usd'] = round($data['harga'] / 15500, 2);
+            $data['harga_sar'] = round($data['harga'] / 4130, 2);
             if ($e = $extra[$data['sku']] ?? null) {
                 $data['satuan']            = $e['satuan'];
                 $data['isi_kemasan']       = $e['isi'];
@@ -137,6 +140,25 @@ class ProductSeeder extends Seeder
                 $data['manfaat']           = '<ul>' . implode('', array_map(fn ($x) => '<li>' . e($x) . '</li>', $e['manfaat'])) . '</ul>';
             }
             Product::updateOrCreate(['sku' => $data['sku']], $data);
+        }
+
+        // Produk terkait (demo) — dipetakan per SKU
+        $ids = Product::pluck('id', 'sku');
+        $relations = [
+            'AS-001' => ['AS-002', 'AS-003', 'AS-007'],
+            'AS-002' => ['AS-007', 'AS-004', 'AS-001'],
+            'AS-003' => ['AS-001', 'AS-005', 'AS-006'],
+            'AS-004' => ['AS-002', 'AS-007', 'AS-005'],
+            'AS-005' => ['AS-001', 'AS-003', 'AS-004'],
+            'AS-006' => ['AS-003', 'AS-005', 'AS-007'],
+            'AS-007' => ['AS-002', 'AS-004', 'AS-001'],
+            'AS-008' => ['AS-002', 'AS-001', 'AS-003'],
+        ];
+        foreach ($relations as $sku => $relSkus) {
+            $p = Product::where('sku', $sku)->first();
+            if (!$p) continue;
+            $p->related_ids = array_values(array_filter(array_map(fn ($s) => $ids[$s] ?? null, $relSkus)));
+            $p->save();
         }
     }
 

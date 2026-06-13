@@ -153,8 +153,12 @@
           </div>
         </div>
         <div class="frow frow-2">
-          <div class="fg"><label class="fl">Harga (Rp) *</label><input type="number" name="harga" class="fc" required placeholder="85000" min="0"></div>
+          <div class="fg"><label class="fl">Harga (Rp / IDR) *</label><input type="number" name="harga" class="fc" required placeholder="85000" min="0"></div>
           <div class="fg"><label class="fl">Stok *</label><input type="number" name="stok" class="fc" required placeholder="50" min="0"></div>
+        </div>
+        <div class="frow frow-2">
+          <div class="fg"><label class="fl">Harga (USD) <span style="color:var(--cmt);font-weight:400;font-size:11px">(untuk bahasa EN)</span></label><input type="number" step="0.01" name="harga_usd" class="fc" placeholder="8.00" min="0"></div>
+          <div class="fg"><label class="fl">Harga (SAR) <span style="color:var(--cmt);font-weight:400;font-size:11px">(untuk bahasa AR)</span></label><input type="number" step="0.01" name="harga_sar" class="fc" placeholder="30.00" min="0"></div>
         </div>
         <div class="fg">
           <label class="fl">Foto Produk <span style="color:var(--cmt);font-weight:400;font-size:11px">(maks 5 foto, sama untuk semua bahasa)</span></label>
@@ -246,6 +250,15 @@
           @endforeach
         </div>
 
+        <div class="fg">
+          <label class="fl">Produk Terkait <span style="color:var(--cmt);font-weight:400;font-size:11px">(tampil di bagian "Produk Terkait")</span></label>
+          <div class="related-picker">
+            @foreach($allProducts as $ap)
+            <label class="related-opt"><input type="checkbox" name="related_ids[]" value="{{ $ap->id }}"> {{ $ap->nama }}</label>
+            @endforeach
+          </div>
+        </div>
+
         <div style="display:flex;align-items:center;gap:8px">
           <label class="tog"><input type="checkbox" name="is_featured" value="1" id="add-featured"><span class="tog-sl"></span></label>
           <span style="font-size:13px">Tampilkan di halaman utama (Featured)</span>
@@ -282,8 +295,12 @@
           </div>
         </div>
         <div class="frow frow-2">
-          <div class="fg"><label class="fl">Harga (Rp) *</label><input type="number" id="edit-harga" name="harga" class="fc" required min="0"></div>
+          <div class="fg"><label class="fl">Harga (Rp / IDR) *</label><input type="number" id="edit-harga" name="harga" class="fc" required min="0"></div>
           <div class="fg"><label class="fl">Stok *</label><input type="number" id="edit-stok" name="stok" class="fc" required min="0"></div>
+        </div>
+        <div class="frow frow-2">
+          <div class="fg"><label class="fl">Harga (USD) <span style="color:var(--cmt);font-weight:400;font-size:11px">(untuk bahasa EN)</span></label><input type="number" step="0.01" id="edit-harga-usd" name="harga_usd" class="fc" placeholder="8.00" min="0"></div>
+          <div class="fg"><label class="fl">Harga (SAR) <span style="color:var(--cmt);font-weight:400;font-size:11px">(untuk bahasa AR)</span></label><input type="number" step="0.01" id="edit-harga-sar" name="harga_sar" class="fc" placeholder="30.00" min="0"></div>
         </div>
         <div class="fg">
           <label class="fl">Foto Produk <span style="color:var(--cmt);font-weight:400;font-size:11px">(maks 5 foto, sama untuk semua bahasa)</span></label>
@@ -375,6 +392,15 @@
           @endforeach
         </div>
 
+        <div class="fg">
+          <label class="fl">Produk Terkait <span style="color:var(--cmt);font-weight:400;font-size:11px">(tampil di bagian "Produk Terkait")</span></label>
+          <div class="related-picker" id="edit-related">
+            @foreach($allProducts as $ap)
+            <label class="related-opt"><input type="checkbox" name="related_ids[]" value="{{ $ap->id }}" data-pid="{{ $ap->id }}"> {{ $ap->nama }}</label>
+            @endforeach
+          </div>
+        </div>
+
         <div style="display:flex;align-items:center;gap:8px">
           <label class="tog"><input type="checkbox" id="edit-featured" name="is_featured" value="1"><span class="tog-sl"></span></label>
           <span style="font-size:13px">Tampilkan di halaman utama (Featured)</span>
@@ -423,6 +449,12 @@
 .rich-area table{border-collapse:collapse;width:100%;margin:8px 0;font-size:12.5px}
 .rich-area th,.rich-area td{border:1px solid var(--cms);padding:6px 8px;text-align:start;vertical-align:top}
 .rich-area th{background:var(--cbg);font-weight:600}
+
+/* Picker produk terkait */
+.related-picker{max-height:180px;overflow-y:auto;border:1px solid var(--cms);border-radius:var(--r1);padding:8px;display:flex;flex-direction:column;gap:2px;background:var(--cw)}
+.related-opt{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ctm);padding:5px 6px;border-radius:4px;cursor:pointer}
+.related-opt:hover{background:var(--cbg)}
+.related-opt input{width:15px;height:15px;flex-shrink:0}
 </style>
 @endpush
 
@@ -719,11 +751,21 @@ function editProduk(id) {
   document.getElementById('edit-subtitle').textContent = p.nama;
   document.getElementById('edit-sku').value = p.sku;
   document.getElementById('edit-harga').value = p.harga;
+  document.getElementById('edit-harga-usd').value = p.harga_usd ?? '';
+  document.getElementById('edit-harga-sar').value = p.harga_sar ?? '';
   document.getElementById('edit-stok').value = p.stok;
   editFotosExisting = Array.isArray(p.fotos) ? [...p.fotos] : [];
   editFotoFiles = [];
   renderEditGrid();
   document.getElementById('edit-featured').checked = !!p.is_featured;
+  // Produk terkait: centang sesuai data, sembunyikan produk ini sendiri
+  const relIds = Array.isArray(p.related_ids) ? p.related_ids.map(Number) : [];
+  document.querySelectorAll('#edit-related .related-opt').forEach(opt => {
+    const cb = opt.querySelector('input');
+    const pid = Number(cb.dataset.pid);
+    opt.style.display = (pid === p.id) ? 'none' : '';
+    cb.checked = relIds.includes(pid);
+  });
   document.getElementById('edit-kandungan').value = p.kandungan || '';
   const sel = document.getElementById('edit-kategori');
   for (let o of sel.options) if (o.value === p.kategori) o.selected = true;

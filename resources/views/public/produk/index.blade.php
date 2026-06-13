@@ -707,7 +707,7 @@
                         <p class="produk-card-desc">{{ \Illuminate\Support\Str::limit(strip_tags($item->trans('deskripsi_singkat') ?: $item->trans('deskripsi')), 100) }}</p>
                         <div class="produk-card-footer">
                             <div class="produk-card-price">
-                                Rp {{ number_format($item->harga, 0, ',', '.') }}
+                                {{ $item->hargaFormatted() }}
                             </div>
                             <a href="{{ route('produk.show', $item->slug) }}" class="produk-card-btn">
                                 {{ __('common.view_detail') }}
