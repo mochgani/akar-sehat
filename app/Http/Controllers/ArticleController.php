@@ -10,7 +10,11 @@ class ArticleController extends Controller
     public function index()
     {
         $artikel = Article::published()->paginate(9);
-        $kategoris = Article::where('status', 'terbit')->distinct()->pluck('kategori')->filter();
+        try {
+            $kategoris = \App\Models\KategoriArtikel::aktif()->orderBy('urutan')->orderBy('nama')->get();
+        } catch (\Exception $e) {
+            $kategoris = collect();
+        }
         $siteSettings = Setting::getGroup('site');
         return view('public.edukasi.index', compact('artikel', 'kategoris', 'siteSettings'));
     }
@@ -29,7 +33,13 @@ class ArticleController extends Controller
         $produkTerkait = \App\Models\Product::where('kategori', $artikel->kategori)
             ->take(3)->get();
 
+        try {
+            $kategoriList = \App\Models\KategoriArtikel::aktif()->get()->keyBy('nama');
+        } catch (\Exception $e) {
+            $kategoriList = collect();
+        }
+
         $siteSettings = Setting::getGroup('site');
-        return view('public.edukasi.show', compact('artikel', 'related', 'produkTerkait', 'siteSettings'));
+        return view('public.edukasi.show', compact('artikel', 'related', 'produkTerkait', 'siteSettings', 'kategoriList'));
     }
 }

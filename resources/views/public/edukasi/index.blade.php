@@ -503,8 +503,8 @@
                         <a href="{{ route('edukasi.index', array_merge(request()->except('kategori', 'page'), [])) }}"
                            class="chip {{ !request('kategori') ? 'active' : '' }}">{{ __('common.all') }}</a>
                         @foreach($kategoris as $kat)
-                        <a href="{{ route('edukasi.index', array_merge(request()->except('kategori', 'page'), ['kategori' => $kat])) }}"
-                           class="chip {{ request('kategori') === $kat ? 'active' : '' }}">{{ $kat }}</a>
+                        <a href="{{ route('edukasi.index', array_merge(request()->except('kategori', 'page'), ['kategori' => $kat->nama])) }}"
+                           class="chip {{ request('kategori') === $kat->nama ? 'active' : '' }}">{{ $kat->trans('nama') }}</a>
                         @endforeach
                     </div>
                 </div>
@@ -520,7 +520,8 @@
                     <p class="articles-count">
                         {{ __('common.showing') }} <span>{{ $artikel->total() }}</span> {{ __('edukasi.hero_title') }}
                         @if(request('kategori'))
-                            {{ __('edukasi.search_in') }} <strong>{{ request('kategori') }}</strong>
+                            @php $activeKat = $kategoris->firstWhere('nama', request('kategori')); @endphp
+                            {{ __('edukasi.search_in') }} <strong>{{ $activeKat ? $activeKat->trans('nama') : request('kategori') }}</strong>
                         @endif
                         @if(request('q'))
                             untuk "<strong>{{ request('q') }}</strong>"
@@ -551,7 +552,7 @@
                                     <polyline points="21 15 16 10 5 21"/>
                                 </svg>
                             @endif
-                            <span class="edu-article-tag">{{ $item->kategori }}</span>
+                            <span class="edu-article-tag">{{ $kategoris->firstWhere('nama', $item->kategori)?->trans('nama') ?? $item->kategori }}</span>
                         </div>
                         <div class="edu-article-body">
                             <div class="edu-article-meta">

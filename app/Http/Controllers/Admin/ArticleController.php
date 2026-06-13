@@ -27,7 +27,12 @@ class ArticleController extends Controller
         }
 
         $articles  = $query->latest()->paginate(15)->withQueryString();
-        $kategoris = Article::distinct()->pluck('kategori')->filter();
+        // Daftar kategori untuk dropdown — utamakan dari master kategori artikel
+        try {
+            $kategoris = \App\Models\KategoriArtikel::aktif()->orderBy('urutan')->orderBy('nama')->pluck('nama');
+        } catch (\Exception $e) {
+            $kategoris = Article::distinct()->pluck('kategori')->filter();
+        }
         $languages = Language::aktif()->get();
 
         return view('admin.artikel.index', compact('articles', 'kategoris', 'languages'));

@@ -9,5 +9,6 @@ deployment:
     - /usr/local/bin/php /home/ldpcxuzg/akar-sehat/artisan view:cache
     - /usr/local/bin/php /home/ldpcxuzg/akar-sehat/artisan migrate --force
     - /usr/local/bin/php /home/ldpcxuzg/akar-sehat/artisan db:seed --class=KategoriProdukSeeder --force
+    - /usr/local/bin/php /home/ldpcxuzg/akar-sehat/artisan db:seed --class=KategoriArtikelSeeder --force
     - /usr/local/bin/php /home/ldpcxuzg/akar-sehat/artisan db:seed --class=TentangSeeder --force
     - /usr/local/bin/php /home/ldpcxuzg/akar-sehat/artisan db:seed --class=ProductArticleI18nSeeder --force

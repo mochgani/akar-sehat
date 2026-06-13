@@ -824,7 +824,7 @@
 
                 <!-- Category + Read Time -->
                 <div class="article-category-row">
-                    <span class="article-category-badge">{{ $artikel->kategori }}</span>
+                    <span class="article-category-badge">{{ ($kategoriList[$artikel->kategori] ?? null)?->trans('nama') ?? $artikel->kategori }}</span>
                     @if($artikel->read_time ?? $artikel->readTime ?? false)
                     <span class="article-read-time-badge">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -962,7 +962,7 @@
                                 <polyline points="21 15 16 10 5 21"/>
                             </svg>
                         @endif
-                        <span class="edu-article-tag">{{ $r->kategori }}</span>
+                        <span class="edu-article-tag">{{ ($kategoriList[$r->kategori] ?? null)?->trans('nama') ?? $r->kategori }}</span>
                     </div>
                     <div class="edu-article-body">
                         <div class="edu-article-meta">

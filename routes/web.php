@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\KategoriArtikelController;
 use App\Http\Controllers\Admin\KategoriProdukController;
 use Illuminate\Support\Facades\Route;
 
@@ -71,6 +72,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/artikel/{article}',    [AdminArticleController::class, 'update'])->name('artikel.update');
         Route::delete('/artikel/{article}', [AdminArticleController::class, 'destroy'])->name('artikel.destroy');
         Route::post('/artikel/bulk-destroy',[AdminArticleController::class, 'bulkDestroy'])->name('artikel.bulk-destroy');
+
+        // Kategori Artikel
+        Route::get('/kategori-artikel',                    [KategoriArtikelController::class, 'index'])->name('kategori-artikel.index');
+        Route::post('/kategori-artikel',                   [KategoriArtikelController::class, 'store'])->name('kategori-artikel.store');
+        Route::put('/kategori-artikel/{kategori}',         [KategoriArtikelController::class, 'update'])->name('kategori-artikel.update');
+        Route::delete('/kategori-artikel/{kategori}',      [KategoriArtikelController::class, 'destroy'])->name('kategori-artikel.destroy');
+        Route::patch('/kategori-artikel/{kategori}/toggle',[KategoriArtikelController::class, 'toggle'])->name('kategori-artikel.toggle');
 
         // Konsultasi
         Route::get('/konsultasi',                   [ConsultationController::class, 'index'])->name('konsultasi.index');
