@@ -912,9 +912,16 @@
 
                 <!-- RIGHT: Info -->
                 <div class="detail-info-panel">
+                    @php
+                        $statusLabels = [
+                            'tersedia'     => __('common.available'),
+                            'hampir-habis' => __('common.almost_out'),
+                            'habis'        => __('common.out_of_stock'),
+                        ];
+                    @endphp
                     <div class="detail-category-row">
                         <span class="detail-category-badge">{{ $kategoriObj ? $kategoriObj->trans('nama') : $produk->kategori }}</span>
-                        <span class="detail-stock">{{ $produk->status ?? 'Tersedia' }}</span>
+                        <span class="detail-stock">{{ $statusLabels[$produk->status] ?? ($produk->status ?? __('common.available')) }}</span>
                     </div>
 
                     <h1 class="detail-product-name">{{ $produk->trans('nama') }}</h1>
