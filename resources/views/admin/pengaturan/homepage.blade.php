@@ -19,6 +19,29 @@
 .lang-tab.active { color:var(--cp); border-bottom-color:var(--cp); background:var(--cpl); }
 .lang-pane { display:none; }
 .lang-pane.active { display:block; }
+
+/* Tab antar-section */
+.sec-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px; }
+.sec-tab { padding:9px 15px; font-size:13px; font-weight:600; cursor:pointer; border:1px solid var(--cms); background:var(--cw); color:var(--cmt); border-radius:var(--rr); transition:all .15s; }
+.sec-tab:hover { color:var(--ctm); border-color:var(--cp); }
+.sec-tab.active { background:var(--cp); color:#fff; border-color:var(--cp); }
+.sec-card { display:none; }
+.sec-card.active { display:block; }
+
+/* Editor WYSIWYG */
+.rich-wrap { border:1px solid var(--cms); border-radius:var(--r1); overflow:hidden; background:var(--cw); }
+.rich-tb { display:flex; gap:2px; flex-wrap:wrap; padding:6px; background:var(--cbg); border-bottom:1px solid var(--cms); }
+.rich-tb button { height:26px; min-width:26px; padding:0 7px; border:1px solid var(--cms); background:var(--cw); border-radius:4px; cursor:pointer; font-size:12px; color:var(--ctm); display:inline-flex; align-items:center; justify-content:center; }
+.rich-tb button:hover { background:var(--cpl); border-color:var(--cp); color:var(--cp); }
+.rich-tb .sep { width:1px; background:var(--cms); margin:2px 3px; }
+.rich-area { padding:10px 12px; min-height:80px; font-size:13.5px; line-height:1.7; outline:none; color:var(--ctm); }
+.rich-area[dir="rtl"] { text-align:right; }
+.rich-area:empty:before { content:attr(data-ph); color:var(--cmt); }
+.rich-area p { margin:0 0 8px; }
+.rich-area h3 { font-size:15px; font-weight:600; margin:10px 0 6px; }
+.rich-area ul, .rich-area ol { margin:0 0 8px; padding-inline-start:24px; }
+.rich-area ul { list-style:disc; } .rich-area ol { list-style:decimal; }
+.rich-area li { margin-bottom:3px; display:list-item; }
 </style>
 @endpush
 
@@ -43,8 +66,17 @@
 <form method="POST" action="{{ route('admin.pengaturan.homepage.save') }}" enctype="multipart/form-data">
   @csrf
 
+  {{-- Tab antar-section --}}
+  <div class="sec-tabs">
+    <button type="button" class="sec-tab active" onclick="switchSection('hero', this)">🏠 Hero / Banner</button>
+    <button type="button" class="sec-tab" onclick="switchSection('stat', this)">📊 Statistik</button>
+    <button type="button" class="sec-tab" onclick="switchSection('mentor', this)">👤 Mentor</button>
+    <button type="button" class="sec-tab" onclick="switchSection('cta', this)">📣 CTA Tengah</button>
+    <button type="button" class="sec-tab" onclick="switchSection('konsul', this)">💬 Konsultasi</button>
+  </div>
+
   {{-- ============ HERO SECTION ============ --}}
-  <div class="card" style="margin-bottom:16px">
+  <div class="card sec-card active" data-sec="hero" style="margin-bottom:16px">
     <div class="card-hd"><h3>🏠 Hero / Banner Utama</h3></div>
     <div class="card-body">
 
@@ -77,7 +109,7 @@
           </div>
         </div>
         <div class="fg"><label class="fl">Deskripsi</label>
-          <textarea name="hero_desc[{{ $loc }}]" class="fc" rows="3">{{ $d['hero_desc'] ?? ($all['id']['hero_desc'] ?? '') }}</textarea>
+          <textarea name="hero_desc[{{ $loc }}]" class="js-rich" data-min="80" dir="{{ $lang->dir ?? 'ltr' }}">{{ $d['hero_desc'] ?? ($all['id']['hero_desc'] ?? '') }}</textarea>
         </div>
       </div>
       @endforeach
@@ -106,7 +138,7 @@
   </div>
 
   {{-- ============ STATISTIK STRIP ============ --}}
-  <div class="card" style="margin-bottom:16px">
+  <div class="card sec-card" data-sec="stat" style="margin-bottom:16px">
     <div class="card-hd">
       <h3>📊 Statistik Strip</h3>
       <button type="button" class="btn btn-outline btn-sm" onclick="addStat(activeStatLocale())">+ Tambah</button>
@@ -139,7 +171,7 @@
   </div>
 
   {{-- ============ MENTOR SECTION ============ --}}
-  <div class="card" style="margin-bottom:16px">
+  <div class="card sec-card" data-sec="mentor" style="margin-bottom:16px">
     <div class="card-hd"><h3>👤 Seksi Mentor</h3></div>
     <div class="card-body">
 
@@ -163,7 +195,7 @@
           </div>
         </div>
         <div class="fg"><label class="fl">Bio Mentor</label>
-          <textarea name="mentor_bio[{{ $loc }}]" class="fc" rows="3">{{ $d['mentor_bio'] ?? ($dId['mentor_bio'] ?? '') }}</textarea>
+          <textarea name="mentor_bio[{{ $loc }}]" class="js-rich" data-min="80" dir="{{ $lang->dir ?? 'ltr' }}">{{ $d['mentor_bio'] ?? ($dId['mentor_bio'] ?? '') }}</textarea>
         </div>
         <div class="fg"><label class="fl">Teks Tombol</label>
           <input type="text" name="mentor_btn[{{ $loc }}]" class="fc" value="{{ $d['mentor_btn'] ?? ($dId['mentor_btn'] ?? '') }}" placeholder="{{ $dId['mentor_btn'] ?? '' }}">
@@ -211,7 +243,7 @@
   </div>
 
   {{-- ============ MID CTA ============ --}}
-  <div class="card" style="margin-bottom:16px">
+  <div class="card sec-card" data-sec="cta" style="margin-bottom:16px">
     <div class="card-hd"><h3>📣 Banner CTA Tengah</h3></div>
     <div class="card-body">
       <div class="lang-tabs" id="cta-tabs">
@@ -239,7 +271,7 @@
   </div>
 
   {{-- ============ KONSULTASI CTA ============ --}}
-  <div class="card" style="margin-bottom:16px">
+  <div class="card sec-card" data-sec="konsul" style="margin-bottom:16px">
     <div class="card-hd"><h3>💬 Seksi Konsultasi (CTA Bawah)</h3></div>
     <div class="card-body">
       <div class="lang-tabs" id="konsul-tabs">
@@ -256,7 +288,7 @@
           <input type="text" name="konsul_title[{{ $loc }}]" class="fc" value="{{ $d['konsul_title'] ?? ($dId['konsul_title'] ?? '') }}">
         </div>
         <div class="fg"><label class="fl">Deskripsi</label>
-          <textarea name="konsul_desc[{{ $loc }}]" class="fc" rows="3">{{ $d['konsul_desc'] ?? ($dId['konsul_desc'] ?? '') }}</textarea>
+          <textarea name="konsul_desc[{{ $loc }}]" class="js-rich" data-min="80" dir="{{ $lang->dir ?? 'ltr' }}">{{ $d['konsul_desc'] ?? ($dId['konsul_desc'] ?? '') }}</textarea>
         </div>
         <div class="fg"><label class="fl">Teks Tombol</label>
           <input type="text" name="konsul_btn[{{ $loc }}]" class="fc" value="{{ $d['konsul_btn'] ?? ($dId['konsul_btn'] ?? '') }}">
@@ -289,6 +321,80 @@ function switchTab(section, btn, locale) {
   if (pane) pane.classList.add('active');
   activeLoc[section] = locale;
 }
+
+function switchSection(sid, btn) {
+  document.querySelectorAll('.sec-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.sec-card').forEach(c => c.classList.toggle('active', c.dataset.sec === sid));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Editor WYSIWYG ── */
+let activeRich = null;
+function richSaveRange() {
+  const sel = window.getSelection();
+  if (activeRich && sel.rangeCount && activeRich.contains(sel.anchorNode)) activeRich._range = sel.getRangeAt(0).cloneRange();
+}
+function richRestoreRange() {
+  if (!activeRich) return null;
+  activeRich.focus();
+  const sel = window.getSelection();
+  let range = activeRich._range;
+  if (!range || !activeRich.contains(range.commonAncestorContainer)) {
+    range = document.createRange(); range.selectNodeContents(activeRich); range.collapse(false);
+  }
+  sel.removeAllRanges(); sel.addRange(range); return range;
+}
+function richExec(cmd, val) {
+  if (!activeRich) return;
+  richRestoreRange();
+  document.execCommand(cmd, false, val || null);
+  activeRich.dispatchEvent(new Event('input')); richSaveRange();
+}
+function buildRichToolbar() {
+  const b = (l, t, fn) => `<button type="button" title="${t}" onmousedown="event.preventDefault()" onclick="${fn}">${l}</button>`;
+  return '<div class="rich-tb">'
+    + b('<b>B</b>', 'Tebal', "richExec('bold')")
+    + b('<i>I</i>', 'Miring', "richExec('italic')")
+    + b('<u>U</u>', 'Garis bawah', "richExec('underline')")
+    + '<span class="sep"></span>'
+    + b('H', 'Sub-judul', "richExec('formatBlock','<h3>')")
+    + b('¶', 'Paragraf', "richExec('formatBlock','<p>')")
+    + b('•', 'Daftar', "richExec('insertUnorderedList')")
+    + b('1.', 'Daftar nomor', "richExec('insertOrderedList')")
+    + '</div>';
+}
+function mountRichEditor(ta) {
+  if (ta.dataset.richMounted) return;
+  ta.dataset.richMounted = '1';
+  ta.style.display = 'none';
+  const wrap = document.createElement('div');
+  wrap.className = 'rich-wrap';
+  wrap.innerHTML = buildRichToolbar();
+  const area = document.createElement('div');
+  area.className = 'rich-area';
+  area.contentEditable = 'true';
+  area.style.minHeight = (ta.dataset.min || 80) + 'px';
+  if (ta.getAttribute('dir')) area.setAttribute('dir', ta.getAttribute('dir'));
+  area.dataset.ph = 'Tulis di sini…';
+  area.innerHTML = ta.value || '';
+  wrap.appendChild(area);
+  ta.parentNode.insertBefore(wrap, ta.nextSibling);
+  ta._richArea = area;
+  const sync = () => { ta.value = area.innerHTML; };
+  area.addEventListener('input', () => { sync(); richSaveRange(); });
+  area.addEventListener('focus', () => { activeRich = area; richSaveRange(); });
+  area.addEventListener('keyup', richSaveRange);
+  area.addEventListener('mouseup', richSaveRange);
+}
+function syncAllRich() {
+  document.querySelectorAll('textarea.js-rich').forEach(ta => { if (ta._richArea) ta.value = ta._richArea.innerHTML; });
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('textarea.js-rich').forEach(mountRichEditor);
+  const form = document.querySelector('form[action*="homepage"]');
+  if (form) form.addEventListener('submit', syncAllRich);
+});
 
 function activeStatLocale() { return activeLoc['stat'] || '{{ $languages->first()->code ?? 'id' }}'; }
 
