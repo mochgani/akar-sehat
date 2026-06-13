@@ -645,8 +645,8 @@
                         <a href="{{ route('produk.index', array_merge(request()->except('kategori', 'page'), [])) }}"
                            class="chip {{ !request('kategori') ? 'active' : '' }}">{{ __('common.all') }}</a>
                         @foreach($kategoris as $kat)
-                        <a href="{{ route('produk.index', array_merge(request()->except('kategori', 'page'), ['kategori' => $kat])) }}"
-                           class="chip {{ request('kategori') === $kat ? 'active' : '' }}">{{ $kat }}</a>
+                        <a href="{{ route('produk.index', array_merge(request()->except('kategori', 'page'), ['kategori' => $kat->nama])) }}"
+                           class="chip {{ request('kategori') === $kat->nama ? 'active' : '' }}">{{ $kat->trans('nama') }}</a>
                         @endforeach
                     </div>
 
@@ -673,7 +673,8 @@
                 <p class="products-count">
                     {{ __('common.showing') }} <span>{{ $produk->total() }}</span> {{ __('common.products_unit') }}
                     @if(request('kategori'))
-                        dalam kategori <strong>{{ request('kategori') }}</strong>
+                        @php $activeKat = $kategoris->firstWhere('nama', request('kategori')); @endphp
+                        dalam kategori <strong>{{ $activeKat ? $activeKat->trans('nama') : request('kategori') }}</strong>
                     @endif
                     @if(request('q'))
                         untuk "<strong>{{ request('q') }}</strong>"
@@ -701,7 +702,7 @@
                         @endif
                     </div>
                     <div class="produk-card-body">
-                        <span class="produk-card-category">{{ $item->kategori }}</span>
+                        <span class="produk-card-category">{{ $kategoris->firstWhere('nama', $item->kategori)?->trans('nama') ?? $item->kategori }}</span>
                         <h3 class="produk-card-name">{{ $item->nama }}</h3>
                         <p class="produk-card-desc">{{ $item->deskripsi }}</p>
                         <div class="produk-card-footer">

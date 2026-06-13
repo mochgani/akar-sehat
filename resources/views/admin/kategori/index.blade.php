@@ -30,28 +30,19 @@
     <div class="kpi-icon" style="background:var(--cpl)">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cp)" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
     </div>
-    <div>
-      <div class="kpi-val">{{ $kategoris->count() }}</div>
-      <div class="kpi-label">Total Kategori</div>
-    </div>
+    <div><div class="kpi-val">{{ $kategoris->count() }}</div><div class="kpi-label">Total Kategori</div></div>
   </div>
   <div class="kpi">
     <div class="kpi-icon" style="background:rgba(34,197,94,.1)">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
     </div>
-    <div>
-      <div class="kpi-val">{{ $kategoris->where('aktif', true)->count() }}</div>
-      <div class="kpi-label">Kategori Aktif</div>
-    </div>
+    <div><div class="kpi-val">{{ $kategoris->where('aktif', true)->count() }}</div><div class="kpi-label">Kategori Aktif</div></div>
   </div>
   <div class="kpi">
     <div class="kpi-icon" style="background:rgba(59,130,246,.1)">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
     </div>
-    <div>
-      <div class="kpi-val">{{ $kategoris->sum('products_count') }}</div>
-      <div class="kpi-label">Total Produk Terkategori</div>
-    </div>
+    <div><div class="kpi-val">{{ $kategoris->sum('products_count') }}</div><div class="kpi-label">Total Produk</div></div>
   </div>
 </div>
 
@@ -73,8 +64,8 @@
         <thead>
           <tr>
             <th style="width:48px">Urutan</th>
-            <th>Nama Kategori</th>
-            <th>Slug</th>
+            <th>Nama (ID)</th>
+            @foreach($languages as $lang)@if($lang->code !== 'id')<th>{{ $lang->flag }} {{ $lang->native_name }}</th>@endif@endforeach
             <th style="width:100px;text-align:center">Jml Produk</th>
             <th style="width:80px;text-align:center">Status</th>
             <th style="width:90px;text-align:right">Aksi</th>
@@ -84,15 +75,17 @@
           @foreach($kategoris as $kat)
           <tr id="row-{{ $kat->id }}">
             <td style="text-align:center;font-weight:600;color:var(--cmt)">{{ $kat->urutan }}</td>
-            <td>
-              <span style="font-weight:600;color:var(--ctm)">{{ $kat->nama }}</span>
+            <td><span style="font-weight:600;color:var(--ctm)">{{ $kat->nama }}</span><div style="font-size:11px;color:var(--cmt);font-family:monospace">{{ $kat->slug }}</div></td>
+            @foreach($languages as $lang)
+            @if($lang->code !== 'id')
+            <td style="font-size:12.5px;color:var(--cmt)">
+              {{ ($kat->translations[$lang->code]['nama'] ?? '') ?: '—' }}
             </td>
-            <td style="font-size:12px;color:var(--cmt);font-family:monospace">{{ $kat->slug }}</td>
+            @endif
+            @endforeach
+            <td style="text-align:center"><span class="badge" style="background:rgba(59,130,246,.1);color:#3b82f6">{{ $kat->products_count }} produk</span></td>
             <td style="text-align:center">
-              <span class="badge" style="background:rgba(59,130,246,.1);color:#3b82f6">{{ $kat->products_count }} produk</span>
-            </td>
-            <td style="text-align:center">
-              <label class="tog" title="{{ $kat->aktif ? 'Klik untuk nonaktifkan' : 'Klik untuk aktifkan' }}">
+              <label class="tog">
                 <input type="checkbox" {{ $kat->aktif ? 'checked' : '' }} onchange="toggleKat({{ $kat->id }}, this)">
                 <span class="tog-sl"></span>
               </label>
@@ -126,24 +119,43 @@
     </div>
     <form onsubmit="submitAdd(event)">
       <div class="modal-body">
+
+        {{-- Nama per bahasa --}}
         <div class="fg">
           <label class="fl">Nama Kategori <span style="color:#ef4444">*</span></label>
-          <input type="text" id="add-nama" class="fc" placeholder="Minuman Herbal" required maxlength="100"
-            oninput="document.getElementById('add-slug-preview').textContent = slugify(this.value)">
+          @if($languages->count() > 1)
+          <div class="lang-tabs" id="add-kat-tabs">
+            @foreach($languages as $lang)
+            <button type="button" class="lang-tab {{ $loop->first ? 'active' : '' }}"
+              onclick="switchLangTab('add-kat', this, '{{ $lang->code }}')">
+              {{ $lang->flag }} {{ $lang->native_name }}
+            </button>
+            @endforeach
+          </div>
+          @endif
+          @foreach($languages as $lang)
+          <div id="add-kat-pane-{{ $lang->code }}" class="lang-pane {{ $loop->first ? 'active' : '' }}">
+            @if($lang->code === 'id')
+            <input type="text" id="add-nama" class="fc" placeholder="Minuman Herbal" {{ $loop->first ? 'required' : '' }} maxlength="100"
+              oninput="document.getElementById('add-slug-preview').textContent = slugify(this.value)">
+            @else
+            <input type="text" id="add-nama-{{ $lang->code }}" class="fc"
+              placeholder="Nama dalam {{ $lang->native_name }}" maxlength="100" dir="{{ $lang->dir ?? 'ltr' }}">
+            @endif
+          </div>
+          @endforeach
           <div style="margin-top:5px;font-size:11.5px;color:var(--cmt)">
             Slug: <span id="add-slug-preview" style="font-family:monospace"></span>
           </div>
         </div>
+
         <div class="frow frow-2">
           <div class="fg">
             <label class="fl">Nomor Urutan</label>
             <input type="number" id="add-urutan" class="fc" placeholder="Otomatis" min="0">
           </div>
           <div class="fg" style="display:flex;align-items:center;gap:10px;padding-top:20px">
-            <label class="tog">
-              <input type="checkbox" id="add-aktif" checked>
-              <span class="tog-sl"></span>
-            </label>
+            <label class="tog"><input type="checkbox" id="add-aktif" checked><span class="tog-sl"></span></label>
             <span style="font-size:13px;color:var(--ctm)">Aktif</span>
           </div>
         </div>
@@ -167,24 +179,44 @@
     <form onsubmit="submitEdit(event)">
       <input type="hidden" id="edit-id">
       <div class="modal-body">
+
+        {{-- Nama per bahasa --}}
         <div class="fg">
           <label class="fl">Nama Kategori <span style="color:#ef4444">*</span></label>
-          <input type="text" id="edit-nama" class="fc" required maxlength="100"
-            oninput="document.getElementById('edit-slug-preview').textContent = slugify(this.value)">
+          @if($languages->count() > 1)
+          <div class="lang-tabs" id="edit-kat-tabs">
+            @foreach($languages as $lang)
+            <button type="button" class="lang-tab {{ $loop->first ? 'active' : '' }}"
+              onclick="switchLangTab('edit-kat', this, '{{ $lang->code }}')">
+              {{ $lang->flag }} {{ $lang->native_name }}
+            </button>
+            @endforeach
+          </div>
+          @endif
+          @foreach($languages as $lang)
+          <div id="edit-kat-pane-{{ $lang->code }}" class="lang-pane {{ $loop->first ? 'active' : '' }}">
+            @if($lang->code === 'id')
+            <input type="text" id="edit-nama" class="fc" required maxlength="100"
+              oninput="document.getElementById('edit-slug-preview').textContent = slugify(this.value);
+                       document.getElementById('edit-rename-warn').style.display = (this.value.trim() !== editOrigNama) ? 'block' : 'none'">
+            @else
+            <input type="text" id="edit-nama-{{ $lang->code }}" class="fc"
+              placeholder="Nama dalam {{ $lang->native_name }}" maxlength="100" dir="{{ $lang->dir ?? 'ltr' }}">
+            @endif
+          </div>
+          @endforeach
           <div style="margin-top:5px;font-size:11.5px;color:var(--cmt)">
             Slug: <span id="edit-slug-preview" style="font-family:monospace"></span>
           </div>
         </div>
+
         <div class="frow frow-2">
           <div class="fg">
             <label class="fl">Nomor Urutan</label>
             <input type="number" id="edit-urutan" class="fc" min="0">
           </div>
           <div class="fg" style="display:flex;align-items:center;gap:10px;padding-top:20px">
-            <label class="tog">
-              <input type="checkbox" id="edit-aktif">
-              <span class="tog-sl"></span>
-            </label>
+            <label class="tog"><input type="checkbox" id="edit-aktif"><span class="tog-sl"></span></label>
             <span style="font-size:13px;color:var(--ctm)">Aktif</span>
           </div>
         </div>
@@ -212,17 +244,46 @@ function slugify(str) {
     .replace(/-+/g, '-');
 }
 
+function switchLangTab(section, btn, locale) {
+  document.querySelectorAll(`#${section}-kat-tabs .lang-tab`).forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll(`[id^="${section}-kat-pane-"]`).forEach(p => p.classList.remove('active'));
+  const pane = document.getElementById(`${section}-kat-pane-${locale}`);
+  if (pane) pane.classList.add('active');
+}
+
+function getTransPayload(prefix) {
+  const trans = {};
+  @foreach($languages as $lang)
+  @if($lang->code !== 'id')
+  const el_{{ $lang->code }} = document.getElementById(`${prefix}-nama-{{ $lang->code }}`);
+  if (el_{{ $lang->code }} && el_{{ $lang->code }}.value.trim()) {
+    trans['{{ $lang->code }}'] = { nama: el_{{ $lang->code }}.value.trim() };
+  }
+  @endif
+  @endforeach
+  return trans;
+}
+
 // ── ADD ──────────────────────────────────────────────────────────────────
 async function submitAdd(e) {
   e.preventDefault();
   const nama = document.getElementById('add-nama').value.trim();
   if (!nama) return;
   setLoading('Menyimpan kategori...');
-  const r = await apiFetch("{{ route('admin.kategori.store') }}", 'POST', {
+  const trans = getTransPayload('add');
+  const payload = {
     nama,
     urutan: document.getElementById('add-urutan').value || null,
     aktif:  document.getElementById('add-aktif').checked ? 1 : 0,
+  };
+  // flatten translations into trans[locale][field]
+  Object.keys(trans).forEach(loc => {
+    Object.keys(trans[loc]).forEach(field => {
+      payload[`trans[${loc}][${field}]`] = trans[loc][field];
+    });
   });
+  const r = await apiFetch("{{ route('admin.kategori.store') }}", 'POST', payload);
   clearLoading();
   if (r.success) { showToast(r.message); closeModal('m-add'); location.reload(); }
   else showToast(r.message || 'Terjadi kesalahan.', 'error');
@@ -241,23 +302,36 @@ function editKat(id) {
   document.getElementById('edit-urutan').value  = k.urutan;
   document.getElementById('edit-aktif').checked = !!k.aktif;
   document.getElementById('edit-rename-warn').style.display = 'none';
+  // Fill translation fields
+  const trans = k.translations || {};
+  @foreach($languages as $lang)
+  @if($lang->code !== 'id')
+  const el_{{ $lang->code }} = document.getElementById('edit-nama-{{ $lang->code }}');
+  if (el_{{ $lang->code }}) el_{{ $lang->code }}.value = (trans['{{ $lang->code }}'] || {}).nama || '';
+  @endif
+  @endforeach
+  // Reset to first tab
+  const firstTab = document.querySelector('#edit-kat-tabs .lang-tab');
+  if (firstTab) switchLangTab('edit', firstTab, '{{ $languages->first()->code ?? "id" }}');
   openModal('m-edit');
 }
-
-document.getElementById('edit-nama').addEventListener('input', function() {
-  const warn = document.getElementById('edit-rename-warn');
-  warn.style.display = (this.value.trim() !== editOrigNama) ? 'block' : 'none';
-});
 
 async function submitEdit(e) {
   e.preventDefault();
   const id = document.getElementById('edit-id').value;
   setLoading('Menyimpan kategori...');
-  const r = await apiFetch(`/admin/kategori/${id}`, 'PUT', {
+  const trans = getTransPayload('edit');
+  const payload = {
     nama:   document.getElementById('edit-nama').value.trim(),
     urutan: document.getElementById('edit-urutan').value || 0,
     aktif:  document.getElementById('edit-aktif').checked ? 1 : 0,
+  };
+  Object.keys(trans).forEach(loc => {
+    Object.keys(trans[loc]).forEach(field => {
+      payload[`trans[${loc}][${field}]`] = trans[loc][field];
+    });
   });
+  const r = await apiFetch(`/admin/kategori/${id}`, 'PUT', payload);
   clearLoading();
   if (r.success) { showToast(r.message); closeModal('m-edit'); location.reload(); }
   else showToast(r.message || 'Terjadi kesalahan.', 'error');
@@ -272,10 +346,7 @@ async function toggleKat(id, checkbox) {
 
 // ── DELETE ───────────────────────────────────────────────────────────────
 async function deleteKat(id, nama, count) {
-  if (count > 0) {
-    showToast(`Tidak bisa dihapus — ada ${count} produk di kategori ini.`, 'error');
-    return;
-  }
+  if (count > 0) { showToast(`Tidak bisa dihapus — ada ${count} produk di kategori ini.`, 'error'); return; }
   if (!confirm(`Hapus kategori "${nama}"?`)) return;
   setLoading('Menghapus...');
   const r = await apiFetch(`/admin/kategori/${id}`, 'DELETE');

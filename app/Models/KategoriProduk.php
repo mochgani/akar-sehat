@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class KategoriProduk extends Model
 {
+    use HasTranslations;
+
     protected $table = 'kategori_produk';
 
-    protected $fillable = ['nama', 'slug', 'urutan', 'aktif'];
+    protected $fillable = ['nama', 'slug', 'urutan', 'aktif', 'translations'];
 
-    protected $casts = ['aktif' => 'boolean'];
+    protected $casts = ['aktif' => 'boolean', 'translations' => 'array'];
 
     public function products()
     {

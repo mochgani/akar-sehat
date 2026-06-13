@@ -913,7 +913,7 @@
                 <!-- RIGHT: Info -->
                 <div class="detail-info-panel">
                     <div class="detail-category-row">
-                        <span class="detail-category-badge">{{ $produk->kategori }}</span>
+                        <span class="detail-category-badge">{{ $kategoriObj ? $kategoriObj->trans('nama') : $produk->kategori }}</span>
                         <span class="detail-stock">{{ $produk->status ?? 'Tersedia' }}</span>
                     </div>
 
@@ -1121,7 +1121,7 @@
                         @endif
                     </div>
                     <div class="produk-card-body">
-                        <span class="produk-card-category">{{ $r->kategori }}</span>
+                        <span class="produk-card-category">{{ $kategoriObj ? $kategoriObj->trans('nama') : $r->kategori }}</span>
                         <h3 class="produk-card-name">{{ $r->nama }}</h3>
                         <div class="produk-card-footer">
                             <span class="produk-card-price">Rp {{ number_format($r->harga, 0, ',', '.') }}</span>
