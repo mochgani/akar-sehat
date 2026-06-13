@@ -211,6 +211,117 @@
         border-color: var(--color-primary);
     }
 
+    /* ---- Sertifikasi Produk ---- */
+    .cert-section {
+        background-color: var(--color-bg-alt);
+        padding: 72px 0;
+    }
+    .cert-header {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto 40px;
+    }
+    .cert-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-dark-bark);
+        margin-bottom: 12px;
+    }
+    .cert-subtitle {
+        font-size: 1rem;
+        color: var(--color-text-muted);
+        line-height: 1.7;
+    }
+    .cert-gallery {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+    .cert-item {
+        background-color: var(--color-white);
+        border: 1.5px solid rgba(56,42,33,0.06);
+        border-radius: var(--border-radius-lg);
+        padding: 16px;
+        cursor: pointer;
+        transition: var(--transition-normal);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        font-family: var(--font-primary);
+    }
+    .cert-item:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+        border-color: rgba(200,106,68,0.2);
+    }
+    .cert-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: contain;
+        background-color: var(--color-soft-ivory);
+        border-radius: var(--border-radius-md);
+    }
+    .cert-item-name {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-dark-bark);
+        text-align: center;
+    }
+    /* Lightbox */
+    .cert-lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        background-color: rgba(20,14,10,0.88);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+    }
+    .cert-lightbox.show { display: flex; }
+    .cert-lightbox-figure {
+        margin: 0;
+        max-width: 90vw;
+        max-height: 88vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+    }
+    .cert-lightbox-figure img {
+        max-width: 100%;
+        max-height: 80vh;
+        object-fit: contain;
+        border-radius: var(--border-radius-md);
+        background-color: var(--color-white);
+    }
+    .cert-lightbox-figure figcaption {
+        color: var(--color-white);
+        font-size: 1rem;
+        font-weight: 500;
+        text-align: center;
+    }
+    .cert-lightbox-close {
+        position: absolute;
+        top: 24px;
+        right: 28px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        background-color: rgba(255,255,255,0.12);
+        color: var(--color-white);
+        font-size: 28px;
+        line-height: 1;
+        cursor: pointer;
+        transition: var(--transition-fast);
+    }
+    .cert-lightbox-close:hover { background-color: rgba(255,255,255,0.25); }
+
+    @media (max-width: 992px) { .cert-gallery { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) { .cert-gallery { grid-template-columns: repeat(2, 1fr); } .cert-title { font-size: 1.625rem; } }
+    @media (max-width: 480px) { .cert-gallery { grid-template-columns: 1fr 1fr; gap: 12px; } .cert-item img { height: 140px; } }
+
     /* ---- Product Section ---- */
     .products-section {
         padding: 48px 0 80px;
@@ -743,6 +854,35 @@
         </div>
     </section>
 
+    <!-- SERTIFIKASI PRODUK -->
+    @if(isset($certifications) && $certifications->count() > 0)
+    <section class="cert-section">
+        <div class="container">
+            <div class="cert-header">
+                <h2 class="cert-title">{{ __('produk.cert_title') }}</h2>
+                <p class="cert-subtitle">{{ __('produk.cert_desc') }}</p>
+            </div>
+            <div class="cert-gallery">
+                @foreach($certifications as $cert)
+                <button type="button" class="cert-item" onclick="openCertLightbox('{{ $cert->gambar_url }}', @js($cert->trans('judul')))" aria-label="{{ $cert->trans('judul') }}">
+                    <img src="{{ $cert->gambar_url }}" alt="{{ $cert->trans('judul') }}" loading="lazy">
+                    <span class="cert-item-name">{{ $cert->trans('judul') }}</span>
+                </button>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- LIGHTBOX -->
+    <div class="cert-lightbox" id="cert-lightbox" onclick="closeCertLightbox(event)">
+        <button type="button" class="cert-lightbox-close" onclick="closeCertLightbox(event, true)" aria-label="Tutup">×</button>
+        <figure class="cert-lightbox-figure" onclick="event.stopPropagation()">
+            <img src="" alt="" id="cert-lightbox-img">
+            <figcaption id="cert-lightbox-cap"></figcaption>
+        </figure>
+    </div>
+    @endif
+
     <!-- CTA BANNER -->
     <div class="container cta-banner-wrapper">
         <div class="cta-banner">
@@ -780,5 +920,27 @@
             }, 500);
         });
     })();
+
+    // Lightbox sertifikasi
+    function openCertLightbox(src, caption) {
+        var box = document.getElementById('cert-lightbox');
+        if (!box) return;
+        document.getElementById('cert-lightbox-img').src = src;
+        document.getElementById('cert-lightbox-img').alt = caption || '';
+        document.getElementById('cert-lightbox-cap').textContent = caption || '';
+        box.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeCertLightbox(e, force) {
+        var box = document.getElementById('cert-lightbox');
+        if (!box) return;
+        if (force || e.target === box) {
+            box.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeCertLightbox(null, true);
+    });
 </script>
 @endpush

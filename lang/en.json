@@ -153,5 +153,7 @@
     "produk.trust4": "active users helped",
     "produk.main_benefits": "Key Benefits",
     "produk.price_per": "Price per",
-    "produk.contents_label": "Contents"
+    "produk.contents_label": "Contents",
+    "produk.cert_title": "Product Certifications",
+    "produk.cert_desc": "Our products are officially licensed and certified."
 }

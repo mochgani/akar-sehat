@@ -153,5 +153,7 @@
     "produk.trust4": "pengguna aktif terbantu",
     "produk.main_benefits": "Manfaat Utama",
     "produk.price_per": "Harga per",
-    "produk.contents_label": "Isi"
+    "produk.contents_label": "Isi",
+    "produk.cert_title": "Sertifikasi Produk",
+    "produk.cert_desc": "Produk kami telah resmi berizin dan memiliki sertifikasi."
 }

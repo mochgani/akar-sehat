@@ -39,8 +39,13 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             $kategoris = collect();
         }
+        try {
+            $certifications = \App\Models\Certification::aktif()->orderBy('urutan')->orderBy('id')->get();
+        } catch (\Exception $e) {
+            $certifications = collect();
+        }
 
-        return view('public.produk.index', compact('produk', 'kategoris', 'siteSettings'));
+        return view('public.produk.index', compact('produk', 'kategoris', 'siteSettings', 'certifications'));
     }
 
     public function show(string $slug)

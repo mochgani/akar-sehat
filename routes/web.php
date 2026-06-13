@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CertificationController;
 use App\Http\Controllers\Admin\KategoriArtikelController;
 use App\Http\Controllers\Admin\KategoriProdukController;
 use Illuminate\Support\Facades\Route;
@@ -65,6 +66,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/kategori/{kategori}',         [KategoriProdukController::class, 'update'])->name('kategori.update');
         Route::delete('/kategori/{kategori}',      [KategoriProdukController::class, 'destroy'])->name('kategori.destroy');
         Route::patch('/kategori/{kategori}/toggle',[KategoriProdukController::class, 'toggle'])->name('kategori.toggle');
+
+        // Sertifikasi Produk
+        Route::get('/sertifikasi',                       [CertificationController::class, 'index'])->name('sertifikasi.index');
+        Route::post('/sertifikasi',                      [CertificationController::class, 'store'])->name('sertifikasi.store');
+        Route::post('/sertifikasi/{certification}',      [CertificationController::class, 'update'])->name('sertifikasi.update');
+        Route::delete('/sertifikasi/{certification}',    [CertificationController::class, 'destroy'])->name('sertifikasi.destroy');
+        Route::patch('/sertifikasi/{certification}/toggle',[CertificationController::class, 'toggle'])->name('sertifikasi.toggle');
 
         // Artikel
         Route::get('/artikel',              [AdminArticleController::class, 'index'])->name('artikel.index');

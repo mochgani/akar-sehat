@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             TentangSeeder::class,
             ProductArticleI18nSeeder::class,
+            CertificationSeeder::class,
             TestimonialSeeder::class,
         ]);
     }
