@@ -280,13 +280,8 @@ async function submitAdd(e) {
     nama,
     urutan: document.getElementById('add-urutan').value || null,
     aktif:  document.getElementById('add-aktif').checked ? 1 : 0,
+    trans,
   };
-  // flatten translations into trans[locale][field]
-  Object.keys(trans).forEach(loc => {
-    Object.keys(trans[loc]).forEach(field => {
-      payload[`trans[${loc}][${field}]`] = trans[loc][field];
-    });
-  });
   const r = await apiFetch("{{ route('admin.kategori.store') }}", 'POST', payload);
   clearLoading();
   if (r.success) { showToast(r.message); closeModal('m-add'); location.reload(); }
@@ -329,12 +324,8 @@ async function submitEdit(e) {
     nama:   document.getElementById('edit-nama').value.trim(),
     urutan: document.getElementById('edit-urutan').value || 0,
     aktif:  document.getElementById('edit-aktif').checked ? 1 : 0,
+    trans,
   };
-  Object.keys(trans).forEach(loc => {
-    Object.keys(trans[loc]).forEach(field => {
-      payload[`trans[${loc}][${field}]`] = trans[loc][field];
-    });
-  });
   const r = await apiFetch(`/admin/kategori/${id}`, 'PUT', payload);
   clearLoading();
   if (r.success) { showToast(r.message); closeModal('m-edit'); location.reload(); }
