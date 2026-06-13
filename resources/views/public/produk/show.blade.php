@@ -562,8 +562,11 @@
     .rich-content h2, .rich-content h3 { font-weight: 700; color: var(--color-dark-bark); margin: 26px 0 12px; line-height: 1.3; }
     .rich-content h2 { font-size: 1.25rem; }
     .rich-content h3 { font-size: 1.0625rem; }
-    .rich-content ul, .rich-content ol { margin: 0 0 18px; padding-inline-start: 22px; }
-    .rich-content li { margin-bottom: 8px; }
+    .rich-content ul, .rich-content ol { margin: 0 0 18px; padding-inline-start: 26px; }
+    .rich-content ul { list-style: disc; }
+    .rich-content ol { list-style: decimal; }
+    .rich-content li { margin-bottom: 8px; display: list-item; }
+    .rich-content li::before { content: none; }
     .rich-content strong { color: var(--color-dark-bark); }
     .rich-content a { color: var(--color-primary); }
     .rich-content table { width: 100%; border-collapse: collapse; margin: 8px 0 20px; font-size: 0.9375rem; }

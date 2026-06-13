@@ -348,8 +348,10 @@
 .rich-area:empty:before{content:attr(data-ph);color:var(--cmt)}
 .rich-area p{margin:0 0 8px}
 .rich-area h3{font-size:15px;font-weight:600;margin:10px 0 6px}
-.rich-area ul,.rich-area ol{margin:0 0 8px;padding-inline-start:22px}
-.rich-area li{margin-bottom:3px}
+.rich-area ul,.rich-area ol{margin:0 0 8px;padding-inline-start:24px}
+.rich-area ul{list-style:disc}
+.rich-area ol{list-style:decimal}
+.rich-area li{margin-bottom:3px;display:list-item}
 .rich-area table{border-collapse:collapse;width:100%;margin:8px 0;font-size:12.5px}
 .rich-area th,.rich-area td{border:1px solid var(--cms);padding:6px 8px;text-align:start;vertical-align:top}
 .rich-area th{background:var(--cbg);font-weight:600}
@@ -360,17 +362,60 @@
 <script>
 /* ═══════════ Editor WYSIWYG sederhana (mendukung tabel) ═══════════ */
 let activeRich = null;
+function richSaveRange() {
+  const sel = window.getSelection();
+  if (activeRich && sel.rangeCount && activeRich.contains(sel.anchorNode)) {
+    activeRich._range = sel.getRangeAt(0).cloneRange();
+  }
+}
+function richRestoreRange() {
+  if (!activeRich) return null;
+  activeRich.focus();
+  const sel = window.getSelection();
+  let range = activeRich._range;
+  if (!range || !activeRich.contains(range.commonAncestorContainer)) {
+    range = document.createRange();
+    range.selectNodeContents(activeRich);
+    range.collapse(false); // akhir konten
+  }
+  sel.removeAllRanges();
+  sel.addRange(range);
+  return range;
+}
 function richExec(cmd, val) {
   if (!activeRich) return;
-  activeRich.focus();
+  richRestoreRange();
   document.execCommand(cmd, false, val || null);
   activeRich.dispatchEvent(new Event('input'));
+  richSaveRange();
+}
+function richInsertHtml(html) {
+  const area = activeRich;
+  if (!area) { alert('Klik dulu di dalam area teks, lalu coba lagi.'); return; }
+  const range = richRestoreRange();
+  range.deleteContents();
+  const tpl = document.createElement('template');
+  tpl.innerHTML = html;
+  const frag = tpl.content;
+  const last = frag.lastChild;
+  range.insertNode(frag);
+  if (last) {
+    const after = document.createRange();
+    after.setStartAfter(last);
+    after.collapse(true);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(after);
+    area._range = after.cloneRange();
+  }
+  area.dispatchEvent(new Event('input'));
 }
 function richInsertTable() {
-  if (!activeRich) return;
+  if (!activeRich) { alert('Klik dulu di dalam area teks, lalu coba lagi.'); return; }
   const cols = Math.max(1, Math.min(8, parseInt(prompt('Jumlah kolom?', '3') || '0', 10)));
+  if (!cols) return;
   const rows = Math.max(1, Math.min(30, parseInt(prompt('Jumlah baris (termasuk header)?', '3') || '0', 10)));
-  if (!cols || !rows) return;
+  if (!rows) return;
   let html = '<table><thead><tr>';
   for (let c = 0; c < cols; c++) html += '<th>Judul</th>';
   html += '</tr></thead><tbody>';
@@ -380,9 +425,7 @@ function richInsertTable() {
     html += '</tr>';
   }
   html += '</tbody></table><p><br></p>';
-  activeRich.focus();
-  document.execCommand('insertHTML', false, html);
-  activeRich.dispatchEvent(new Event('input'));
+  richInsertHtml(html);
 }
 function richTableEdit(action) {
   const sel = window.getSelection();
@@ -448,8 +491,10 @@ function mountRichEditor(ta) {
   ta._richArea = area;
   area._richTa = ta;
   const sync = () => { ta.value = area.innerHTML; };
-  area.addEventListener('input', sync);
-  area.addEventListener('focus', () => { activeRich = area; });
+  area.addEventListener('input', () => { sync(); richSaveRange(); });
+  area.addEventListener('focus', () => { activeRich = area; richSaveRange(); });
+  area.addEventListener('keyup', richSaveRange);
+  area.addEventListener('mouseup', richSaveRange);
 }
 function mountAllRich(scope) {
   (scope || document).querySelectorAll('textarea.js-rich').forEach(mountRichEditor);
