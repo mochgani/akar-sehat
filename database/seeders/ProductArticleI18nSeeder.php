@@ -19,32 +19,32 @@ class ProductArticleI18nSeeder extends Seeder
         // ─────────── PRODUK (key = nama ID) → [en, ar] per field ───────────
         $products = [
             'Jahe Merah Plus' => [
-                'en' => ['nama' => 'Red Ginger Plus', 'deskripsi' => 'Herbal drink made from selected red ginger blended with pure forest honey. Helps boost immunity and warms the body.', 'cara_pakai' => 'Brew 1 sachet with 200ml hot water. Drink twice a day, morning and night.'],
-                'ar' => ['nama' => 'جنزبيل أحمر بلس', 'deskripsi' => 'مشروب عشبي من الزنجبيل الأحمر المنتقى ممزوج بعسل الغابات النقي. يساعد على تعزيز المناعة وتدفئة الجسم.', 'cara_pakai' => 'انقع كيساً واحداً في 200 مل من الماء الساخن. اشرب مرتين يومياً صباحاً ومساءً.'],
+                'en' => ['nama' => 'Red Ginger Plus', 'deskripsi' => 'Herbal drink made from selected red ginger blended with pure forest honey. Helps boost immunity and warms the body.', 'cara_pakai' => 'Brew 1 sachet with 200ml hot water. Drink twice a day, morning and night.', 'kandungan' => ['Red Ginger', 'Forest Honey', 'Cinnamon', 'Clove']],
+                'ar' => ['nama' => 'جنزبيل أحمر بلس', 'deskripsi' => 'مشروب عشبي من الزنجبيل الأحمر المنتقى ممزوج بعسل الغابات النقي. يساعد على تعزيز المناعة وتدفئة الجسم.', 'cara_pakai' => 'انقع كيساً واحداً في 200 مل من الماء الساخن. اشرب مرتين يومياً صباحاً ومساءً.', 'kandungan' => ['زنجبيل أحمر', 'عسل غابات', 'قرفة', 'قرنفل']],
             ],
             'R12 Detox Herbal' => [
-                'en' => ['nama' => 'R12 Herbal Detox', 'deskripsi' => 'Natural detoxification formula to cleanse toxins from the body. Uses 12 selected herbal plants that are traditionally proven.', 'cara_pakai' => 'Take 1 capsule 3 times a day after meals.'],
-                'ar' => ['nama' => 'ديتوكس عشبي R12', 'deskripsi' => 'تركيبة إزالة سموم طبيعية لتنقية الجسم من السموم. تستخدم 12 نبتة عشبية منتقاة ومثبتة تقليدياً.', 'cara_pakai' => 'تناول كبسولة واحدة 3 مرات يومياً بعد الطعام.'],
+                'en' => ['nama' => 'R12 Herbal Detox', 'deskripsi' => 'Natural detoxification formula to cleanse toxins from the body. Uses 12 selected herbal plants that are traditionally proven.', 'cara_pakai' => 'Take 1 capsule 3 times a day after meals.', 'kandungan' => ['Temulawak', 'Turmeric', 'Sambiloto', 'Meniran']],
+                'ar' => ['nama' => 'ديتوكس عشبي R12', 'deskripsi' => 'تركيبة إزالة سموم طبيعية لتنقية الجسم من السموم. تستخدم 12 نبتة عشبية منتقاة ومثبتة تقليدياً.', 'cara_pakai' => 'تناول كبسولة واحدة 3 مرات يومياً بعد الطعام.', 'kandungan' => ['تيمولاواك', 'كركم', 'سامبيلوتو', 'مينيران']],
             ],
             'Madu Hutan Asli' => [
-                'en' => ['nama' => 'Pure Forest Honey', 'deskripsi' => 'Pure forest honey harvested directly from wild bees in the Kalimantan forest. No mixtures, no preservatives.', 'cara_pakai' => 'Consume 1-2 tablespoons per day, directly or mixed with warm water.'],
-                'ar' => ['nama' => 'عسل غابات أصلي', 'deskripsi' => 'عسل غابات أصلي يُجنى مباشرة من النحل البري في غابات كاليمانتان. بدون خلط وبدون مواد حافظة.', 'cara_pakai' => 'تناول 1-2 ملعقة كبيرة يومياً، مباشرة أو ممزوجة بماء دافئ.'],
+                'en' => ['nama' => 'Pure Forest Honey', 'deskripsi' => 'Pure forest honey harvested directly from wild bees in the Kalimantan forest. No mixtures, no preservatives.', 'cara_pakai' => 'Consume 1-2 tablespoons per day, directly or mixed with warm water.', 'kandungan' => ['Pure Forest Honey']],
+                'ar' => ['nama' => 'عسل غابات أصلي', 'deskripsi' => 'عسل غابات أصلي يُجنى مباشرة من النحل البري في غابات كاليمانتان. بدون خلط وبدون مواد حافظة.', 'cara_pakai' => 'تناول 1-2 ملعقة كبيرة يومياً، مباشرة أو ممزوجة بماء دافئ.', 'kandungan' => ['عسل غابات نقي']],
             ],
             'Kapsul Sambiloto' => [
-                'en' => ['nama' => 'Sambiloto Capsules', 'deskripsi' => 'Sambiloto herbal capsules to maintain immunity and help fight mild infections naturally.', 'cara_pakai' => 'Take 2 capsules twice a day after meals.'],
-                'ar' => ['nama' => 'كبسولات سامبيلوتو', 'deskripsi' => 'كبسولات عشبية من سامبيلوتو للحفاظ على المناعة والمساعدة على مكافحة العدوى الخفيفة طبيعياً.', 'cara_pakai' => 'تناول كبسولتين مرتين يومياً بعد الطعام.'],
+                'en' => ['nama' => 'Sambiloto Capsules', 'deskripsi' => 'Sambiloto herbal capsules to maintain immunity and help fight mild infections naturally.', 'cara_pakai' => 'Take 2 capsules twice a day after meals.', 'kandungan' => ['Sambiloto', 'Meniran', 'Soursop Leaf']],
+                'ar' => ['nama' => 'كبسولات سامبيلوتو', 'deskripsi' => 'كبسولات عشبية من سامبيلوتو للحفاظ على المناعة والمساعدة على مكافحة العدوى الخفيفة طبيعياً.', 'cara_pakai' => 'تناول كبسولتين مرتين يومياً بعد الطعام.', 'kandungan' => ['سامبيلوتو', 'مينيران', 'ورق القشطة']],
             ],
             'Teh Herbal Segar' => [
-                'en' => ['nama' => 'Fresh Herbal Tea', 'deskripsi' => 'Herbal tea with a combination of selected spices for relaxation and digestive health.', 'cara_pakai' => 'Brew 1 tea bag with 200ml hot water, let steep 3-5 minutes.'],
-                'ar' => ['nama' => 'شاي عشبي منعش', 'deskripsi' => 'شاي عشبي بمزيج من التوابل المنتقاة للاسترخاء وصحة الجهاز الهضمي.', 'cara_pakai' => 'انقع كيس شاي واحد في 200 مل ماء ساخن، اتركه 3-5 دقائق.'],
+                'en' => ['nama' => 'Fresh Herbal Tea', 'deskripsi' => 'Herbal tea with a combination of selected spices for relaxation and digestive health.', 'cara_pakai' => 'Brew 1 tea bag with 200ml hot water, let steep 3-5 minutes.', 'kandungan' => ['Lemongrass', 'Pandan Leaf', 'Cinnamon', 'Cardamom']],
+                'ar' => ['nama' => 'شاي عشبي منعش', 'deskripsi' => 'شاي عشبي بمزيج من التوابل المنتقاة للاسترخاء وصحة الجهاز الهضمي.', 'cara_pakai' => 'انقع كيس شاي واحد في 200 مل ماء ساخن، اتركه 3-5 دقائق.', 'kandungan' => ['عشبة الليمون', 'ورق الباندان', 'قرفة', 'هيل']],
             ],
             'Minyak Zaitun Herbal' => [
-                'en' => ['nama' => 'Herbal Olive Oil', 'deskripsi' => 'A blend of pure olive oil with black seed and lavender essential oil for relaxing massage and skin health.', 'cara_pakai' => 'Apply to the desired area and massage gently.'],
-                'ar' => ['nama' => 'زيت زيتون عشبي', 'deskripsi' => 'مزيج من زيت الزيتون النقي مع حبة البركة وزيت اللافندر العطري للتدليك المريح وصحة البشرة.', 'cara_pakai' => 'ضعه على المنطقة المطلوبة ودلّك بلطف.'],
+                'en' => ['nama' => 'Herbal Olive Oil', 'deskripsi' => 'A blend of pure olive oil with black seed and lavender essential oil for relaxing massage and skin health.', 'cara_pakai' => 'Apply to the desired area and massage gently.', 'kandungan' => ['Extra Virgin Olive Oil', 'Black Seed', 'Lavender']],
+                'ar' => ['nama' => 'زيت زيتون عشبي', 'deskripsi' => 'مزيج من زيت الزيتون النقي مع حبة البركة وزيت اللافندر العطري للتدليك المريح وصحة البشرة.', 'cara_pakai' => 'ضعه على المنطقة المطلوبة ودلّك بلطف.', 'kandungan' => ['زيت زيتون بكر ممتاز', 'حبة البركة', 'لافندر']],
             ],
             'Serbuk Temulawak' => [
-                'en' => ['nama' => 'Temulawak Powder', 'deskripsi' => 'Pure temulawak (Javanese turmeric) powder to maintain liver health and naturally boost appetite.', 'cara_pakai' => 'Brew 1 teaspoon with hot water, add honey to taste.'],
-                'ar' => ['nama' => 'مسحوق تيمولاواك', 'deskripsi' => 'مسحوق تيمولاواك (الكركم الجاوي) النقي للحفاظ على صحة الكبد وتحفيز الشهية طبيعياً.', 'cara_pakai' => 'انقع ملعقة صغيرة في ماء ساخن، أضف العسل حسب الرغبة.'],
+                'en' => ['nama' => 'Temulawak Powder', 'deskripsi' => 'Pure temulawak (Javanese turmeric) powder to maintain liver health and naturally boost appetite.', 'cara_pakai' => 'Brew 1 teaspoon with hot water, add honey to taste.', 'kandungan' => ['Temulawak', 'White Turmeric', 'Black Pepper']],
+                'ar' => ['nama' => 'مسحوق تيمولاواك', 'deskripsi' => 'مسحوق تيمولاواك (الكركم الجاوي) النقي للحفاظ على صحة الكبد وتحفيز الشهية طبيعياً.', 'cara_pakai' => 'انقع ملعقة صغيرة في ماء ساخن، أضف العسل حسب الرغبة.', 'kandungan' => ['تيمولاواك', 'كركم أبيض', 'فلفل أسود']],
             ],
             'Paket Konsultasi Herbal' => [
                 'en' => ['nama' => 'Herbal Consultation Package', 'deskripsi' => 'A 60-minute direct consultation package with Kang Bahri, including personal herbal recommendations and 1 selected herbal product.', 'cara_pakai' => 'Contact via WhatsApp for scheduling.'],

@@ -59,7 +59,7 @@ class ProductController extends Controller
 
         $data['slug']         = Str::slug($data['nama']);
         $data['is_featured']  = $request->boolean('is_featured');
-        $data['translations'] = $this->extractTranslations($request, ['nama', 'deskripsi', 'cara_pakai']);
+        $data['translations'] = $this->extractTranslations($request, ['nama', 'deskripsi', 'cara_pakai', 'kandungan']);
 
         $uploadedFotos = [];
         if ($request->hasFile('fotos')) {
@@ -93,7 +93,7 @@ class ProductController extends Controller
         ]);
 
         $data['is_featured']  = $request->boolean('is_featured');
-        $data['translations'] = $this->extractTranslations($request, ['nama', 'deskripsi', 'cara_pakai']);
+        $data['translations'] = $this->extractTranslations($request, ['nama', 'deskripsi', 'cara_pakai', 'kandungan']);
 
         // Existing photos to keep (validate paths belong to produk/)
         $existing = array_values(array_filter(

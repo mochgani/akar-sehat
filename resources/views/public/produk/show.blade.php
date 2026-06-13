@@ -937,10 +937,11 @@
 
                     <p class="detail-short-desc">{{ $produk->trans('deskripsi') }}</p>
 
-                    @if($produk->kandungan && count($produk->kandungan) > 0)
+                    @php $kandungan = $produk->trans('kandungan'); $kandungan = is_array($kandungan) ? $kandungan : []; @endphp
+                    @if(count($kandungan) > 0)
                     <div class="detail-benefits-title">{{ __('produk.main_ingredients') }}</div>
                     <ul class="detail-benefits-list">
-                        @foreach($produk->kandungan as $k)
+                        @foreach($kandungan as $k)
                         <li>
                             <span class="benefit-check">
                                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
@@ -1007,13 +1008,14 @@
             <!-- Kandungan -->
             <div class="tab-panel" id="tab-kandungan">
                 <p style="font-size:.9375rem;color:var(--color-text-muted);margin-bottom:24px;">{{ __('produk.ingredients_intro') }}</p>
-                @if($produk->kandungan && count($produk->kandungan) > 0)
+                @php $kandunganTab = $produk->trans('kandungan'); $kandunganTab = is_array($kandunganTab) ? $kandunganTab : []; @endphp
+                @if(count($kandunganTab) > 0)
                 <table class="ingredients-table">
                     <thead>
                         <tr><th>{{ __('produk.ingredients_col1') }}</th><th>{{ __('produk.ingredients_col2') }}</th><th>{{ __('produk.ingredients_col3') }}</th></tr>
                     </thead>
                     <tbody>
-                        @foreach($produk->kandungan as $k)
+                        @foreach($kandunganTab as $k)
                         <tr>
                             @if(is_array($k))
                                 <td>{{ $k['name'] ?? $k['bahan'] ?? '-' }}</td>

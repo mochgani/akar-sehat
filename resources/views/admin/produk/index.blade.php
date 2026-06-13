@@ -162,8 +162,6 @@
           <input type="file" id="add-foto-input" accept="image/*" multiple style="display:none" onchange="handleAddFotos(this)">
           <p style="font-size:11px;color:var(--cmt);margin-top:4px">JPG/PNG/WEBP, maks 2MB per foto</p>
         </div>
-        <div class="fg"><label class="fl">Kandungan <span style="color:var(--cmt);font-weight:400;font-size:11px">(pisahkan koma)</span></label><input type="text" name="kandungan_raw" class="fc" placeholder="Jahe Merah, Madu Hutan" id="add-kandungan"></div>
-
         {{-- Translatable fields with language tabs --}}
         <div class="lang-section">
           <div style="font-size:12px;color:var(--cmt);margin-bottom:10px;font-weight:600">🌐 Konten per Bahasa</div>
@@ -200,6 +198,14 @@
                 <textarea name="cara_pakai" class="fc" rows="2" placeholder="Cara penggunaan..."></textarea>
               @else
                 <textarea name="trans[{{ $loc }}][cara_pakai]" class="fc" rows="2" placeholder="Terjemahan cara pakai (opsional)"></textarea>
+              @endif
+            </div>
+            <div class="fg">
+              <label class="fl">Kandungan <span style="color:var(--cmt);font-weight:400;font-size:11px">(pisahkan koma)</span></label>
+              @if($isId)
+                <input type="text" id="add-kandungan" name="kandungan_raw" class="fc" placeholder="Jahe Merah, Madu Hutan">
+              @else
+                <input type="text" id="add-kandungan-{{ $loc }}" name="trans[{{ $loc }}][kandungan_raw]" class="fc" placeholder="Terjemahan kandungan (opsional)" dir="{{ $lang->dir ?? 'ltr' }}">
               @endif
             </div>
           </div>
@@ -251,8 +257,6 @@
           <input type="file" id="edit-foto-input" accept="image/*" multiple style="display:none" onchange="handleEditFotos(this)">
           <p style="font-size:11px;color:var(--cmt);margin-top:4px">JPG/PNG/WEBP, maks 2MB per foto. Klik × untuk hapus foto lama.</p>
         </div>
-        <div class="fg"><label class="fl">Kandungan</label><input type="text" id="edit-kandungan" name="kandungan_raw" class="fc"></div>
-
         {{-- Translatable fields with language tabs --}}
         <div class="lang-section">
           <div style="font-size:12px;color:var(--cmt);margin-bottom:10px;font-weight:600">🌐 Konten per Bahasa</div>
@@ -289,6 +293,14 @@
                 <textarea id="edit-cara" name="cara_pakai" class="fc" rows="2"></textarea>
               @else
                 <textarea id="edit-cara-{{ $loc }}" name="trans[{{ $loc }}][cara_pakai]" class="fc" rows="2" placeholder="Terjemahan cara pakai (opsional)"></textarea>
+              @endif
+            </div>
+            <div class="fg">
+              <label class="fl">Kandungan <span style="color:var(--cmt);font-weight:400;font-size:11px">(pisahkan koma)</span></label>
+              @if($isId)
+                <input type="text" id="edit-kandungan" name="kandungan_raw" class="fc" placeholder="Jahe Merah, Madu Hutan">
+              @else
+                <input type="text" id="edit-kandungan-{{ $loc }}" name="trans[{{ $loc }}][kandungan_raw]" class="fc" placeholder="Terjemahan kandungan (opsional)" dir="{{ $lang->dir ?? 'ltr' }}">
               @endif
             </div>
           </div>
@@ -399,13 +411,25 @@ document.querySelector('[onclick="openModal(\'m-add\')"]')?.addEventListener('cl
 // Also init on page load
 renderAddGrid();
 
+// Ubah field "kandungan_raw" (string koma) jadi array kandungan[] — termasuk per bahasa
+function applyKandungan(fd) {
+  const toArr = v => (v || '').split(',').map(s => s.trim()).filter(Boolean);
+  const base = fd.get('kandungan_raw') || '';
+  fd.delete('kandungan_raw');
+  toArr(base).forEach(t => fd.append('kandungan[]', t));
+  [...fd.keys()].filter(k => /^trans\[[a-z-]+\]\[kandungan_raw\]$/.test(k)).forEach(k => {
+    const loc = k.match(/^trans\[([a-z-]+)\]/)[1];
+    const val = fd.get(k);
+    fd.delete(k);
+    toArr(val).forEach(t => fd.append(`trans[${loc}][kandungan][]`, t));
+  });
+}
+
 async function submitAdd(e) {
   e.preventDefault();
   setLoading('Menyimpan produk...');
   const fd = new FormData(e.target);
-  const kandRaw = fd.get('kandungan_raw') || '';
-  fd.delete('kandungan_raw');
-  kandRaw.split(',').map(s => s.trim()).filter(Boolean).forEach(t => fd.append('kandungan[]', t));
+  applyKandungan(fd);
   fd.set('is_featured', fd.has('is_featured') ? 1 : 0);
   addFotoFiles.forEach(f => fd.append('fotos[]', f));
 
@@ -493,9 +517,11 @@ function editProduk(id) {
   const fn_{{ $lang->code }} = document.getElementById('edit-nama-{{ $lang->code }}');
   const fd_{{ $lang->code }} = document.getElementById('edit-deskripsi-{{ $lang->code }}');
   const fc_{{ $lang->code }} = document.getElementById('edit-cara-{{ $lang->code }}');
+  const fk_{{ $lang->code }} = document.getElementById('edit-kandungan-{{ $lang->code }}');
   if (fn_{{ $lang->code }}) fn_{{ $lang->code }}.value = td_{{ $lang->code }}.nama || '';
   if (fd_{{ $lang->code }}) fd_{{ $lang->code }}.value = td_{{ $lang->code }}.deskripsi || '';
   if (fc_{{ $lang->code }}) fc_{{ $lang->code }}.value = td_{{ $lang->code }}.cara_pakai || '';
+  if (fk_{{ $lang->code }}) fk_{{ $lang->code }}.value = (td_{{ $lang->code }}.kandungan || []).join(', ');
   @endif
   @endforeach
 
@@ -511,9 +537,7 @@ async function submitEdit(e) {
   setLoading('Menyimpan produk...');
   const id = document.getElementById('edit-id').value;
   const fd = new FormData(e.target);
-  const kandRaw = fd.get('kandungan_raw') || '';
-  fd.delete('kandungan_raw');
-  kandRaw.split(',').map(s => s.trim()).filter(Boolean).forEach(t => fd.append('kandungan[]', t));
+  applyKandungan(fd);
   fd.set('is_featured', fd.has('is_featured') ? 1 : 0);
   fd.set('_method', 'PUT');
   editFotosExisting.forEach(p => fd.append('fotos_existing[]', p));
