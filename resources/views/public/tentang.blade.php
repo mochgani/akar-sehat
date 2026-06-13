@@ -945,6 +945,18 @@
         .timeline-year { font-size: 0.6875rem; }
         .timeline-card { padding: 14px 16px; }
     }
+
+    /* Konten dari editor WYSIWYG (jika admin pakai formatting/list) */
+    .rich-block p { margin-bottom: 12px; }
+    .rich-block p:last-child { margin-bottom: 0; }
+    .rich-block ul, .rich-block ol { margin: 0 0 12px; padding-inline-start: 22px; }
+    .rich-block ul { list-style: disc; }
+    .rich-block ol { list-style: decimal; }
+    .rich-block li { margin-bottom: 6px; display: list-item; }
+    .rich-block h3 { font-weight: 700; color: var(--color-dark-bark); margin: 14px 0 8px; }
+    .rich-block strong { color: var(--color-dark-bark); }
+    .misi-rich, .ckd-rich { color: var(--color-text-muted); line-height: 1.7; }
+    .keahlian-rich { color: var(--color-text-main); }
 </style>
 @endpush
 
@@ -963,7 +975,7 @@
                     {{ $settings['hero_badge'] ?? 'Mengenal Akar Sehat' }}
                 </span>
                 <h1>{{ $settings['hero_title'] ?? '' }}</h1>
-                <p>{{ $settings['hero_desc'] ?? '' }}</p>
+                <p>{!! $settings['hero_desc'] ?? '' !!}</p>
                 <div class="tentang-hero-stats">
                     @foreach([1,2,3,4] as $i)
                     <div class="hero-stat-item">
@@ -986,7 +998,7 @@
                     <span class="section-label">{{ $settings['intro_label'] ?? '' }}</span>
                     <h2>{{ $settings['intro_title'] ?? '' }}</h2>
                     @foreach(['intro_p1','intro_p2','intro_p3'] as $pk)
-                        @if(!empty($settings[$pk]))<p>{{ $settings[$pk] }}</p>@endif
+                        @if(!empty($settings[$pk]))<p>{!! $settings[$pk] !!}</p>@endif
                     @endforeach
                 </div>
                 <div class="tentang-values">
@@ -1005,7 +1017,7 @@
                         </div>
                         <div class="value-text">
                             <h4>{{ $settings["value{$i}_title"] ?? '' }}</h4>
-                            <p>{{ $settings["value{$i}_desc"] ?? '' }}</p>
+                            <p>{!! $settings["value{$i}_desc"] ?? '' !!}</p>
                         </div>
                     </div>
                     @endforeach
@@ -1021,7 +1033,7 @@
         <div class="container">
             <div class="section-header" style="text-align:center;">
                 <h2 class="section-title">{{ $settings['vm_title'] ?? '' }}</h2>
-                <p class="section-desc">{{ $settings['vm_desc'] ?? '' }}</p>
+                <p class="section-desc">{!! $settings['vm_desc'] ?? '' !!}</p>
             </div>
             <div class="visi-misi-grid">
                 <!-- Visi -->
@@ -1032,7 +1044,7 @@
                         </svg>
                         {{ $settings['visi_label'] ?? '' }}
                     </span>
-                    <h3>{{ $settings['visi'] ?? '' }}</h3>
+                    <h3>{!! $settings['visi'] ?? '' !!}</h3>
                 </div>
                 <!-- Misi -->
                 <div class="misi-card">
@@ -1043,15 +1055,19 @@
                         {{ $settings['misi_label'] ?? '' }}
                     </span>
                     <h3>{{ $settings['misi_heading'] ?? '' }}</h3>
+                    @php $misiVal = (string)($settings['misi'] ?? ''); @endphp
+                    @if(str_contains($misiVal, '<'))
+                    <div class="misi-rich rich-block">{!! $misiVal !!}</div>
+                    @else
                     <ul class="misi-list">
-                        @php $misiItems = array_filter(array_map('trim', explode("\n", $settings['misi'] ?? ''))); @endphp
-                        @foreach($misiItems as $idx => $item)
+                        @foreach(array_filter(array_map('trim', explode("\n", $misiVal))) as $idx => $item)
                         <li>
                             <span class="misi-dot">{{ str_pad($idx + 1, 2, '0', STR_PAD_LEFT) }}</span>
                             {{ $item }}
                         </li>
                         @endforeach
                     </ul>
+                    @endif
                 </div>
             </div>
         </div>
@@ -1096,10 +1112,15 @@
                     <h2>{{ $settings['profil_nama'] ?? '' }}</h2>
                     <p class="profil-subtitle">{{ $settings['profil_gelar'] ?? '' }}</p>
 
+                    @php $bioVal = (string)($settings['profil_bio'] ?? ''); @endphp
                     <div class="profil-bio">
-                        @foreach(array_filter(explode("\n\n", $settings['profil_bio'] ?? '')) as $paragraph)
-                            <p>{{ trim($paragraph) }}</p>
-                        @endforeach
+                        @if(str_contains($bioVal, '<'))
+                            {!! $bioVal !!}
+                        @else
+                            @foreach(array_filter(explode("\n\n", $bioVal)) as $paragraph)
+                                <p>{{ trim($paragraph) }}</p>
+                            @endforeach
+                        @endif
                     </div>
 
                     <div class="profil-stats-row">
@@ -1112,12 +1133,16 @@
                     </div>
 
                     <div class="profil-keahlian-title">{{ $settings['keahlian_title'] ?? '' }}</div>
+                    @php $keahlianVal = (string)($settings['keahlian_tags'] ?? ''); @endphp
+                    @if(str_contains($keahlianVal, '<'))
+                    <div class="keahlian-rich rich-block">{!! $keahlianVal !!}</div>
+                    @else
                     <div class="keahlian-tags">
-                        @php $keahlian = array_filter(array_map('trim', explode("\n", $settings['keahlian_tags'] ?? ''))); @endphp
-                        @foreach($keahlian as $tag)
+                        @foreach(array_filter(array_map('trim', explode("\n", $keahlianVal))) as $tag)
                         <span class="keahlian-tag">{{ $tag }}</span>
                         @endforeach
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -1130,7 +1155,7 @@
         <div class="container">
             <div class="section-header" style="text-align:center;">
                 <h2 class="section-title">{{ $settings['journey_title'] ?? '' }}</h2>
-                <p class="section-desc">{{ $settings['journey_desc'] ?? '' }}</p>
+                <p class="section-desc">{!! $settings['journey_desc'] ?? '' !!}</p>
             </div>
 
             @php
@@ -1165,7 +1190,7 @@
                         <div class="timeline-card" @if($last) style="border-color:rgba(200,106,68,0.2);" @endif>
                             <div class="timeline-year">{{ $year }}</div>
                             <h4>{{ $tlTitle }}</h4>
-                            <p>{{ $tlDesc }}</p>
+                            <p>{!! $tlDesc !!}</p>
                         </div>
                     </div>
                 </div>
@@ -1182,7 +1207,7 @@
             <div class="cara-kerja-intro">
                 <span style="display:inline-block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--color-primary);margin-bottom:12px;">{{ $settings['ck_label'] ?? '' }}</span>
                 <h2 class="section-title">{{ $settings['ck_title'] ?? '' }}</h2>
-                <p>{{ $settings['ck_desc'] ?? '' }}</p>
+                <p>{!! $settings['ck_desc'] ?? '' !!}</p>
             </div>
 
             <!-- 5 Steps -->
@@ -1203,7 +1228,7 @@
                         <span class="ck-step-badge">{{ $i }}</span>
                     </div>
                     <h4>{{ $settings["step{$i}_title"] ?? '' }}</h4>
-                    <p>{{ $settings["step{$i}_desc"] ?? '' }}</p>
+                    <p>{!! $settings["step{$i}_desc"] ?? '' !!}</p>
                 </div>
                 @endforeach
             </div>
@@ -1223,12 +1248,17 @@
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">{!! $ckdIcons[$i-1] !!}</svg>
                     </div>
                     <h4>{{ $settings["ckd{$i}_title"] ?? '' }}</h4>
-                    <p>{{ $settings["ckd{$i}_intro"] ?? '' }}</p>
+                    <p>{!! $settings["ckd{$i}_intro"] ?? '' !!}</p>
+                    @php $ckdListVal = (string)($settings["ckd{$i}_list"] ?? ''); @endphp
+                    @if(str_contains($ckdListVal, '<'))
+                    <div class="ckd-rich rich-block">{!! $ckdListVal !!}</div>
+                    @else
                     <ul>
-                        @foreach(array_filter(array_map('trim', explode("\n", $settings["ckd{$i}_list"] ?? ''))) as $li)
+                        @foreach(array_filter(array_map('trim', explode("\n", $ckdListVal))) as $li)
                         <li>{{ $li }}</li>
                         @endforeach
                     </ul>
+                    @endif
                 </div>
                 @endforeach
             </div>
@@ -1244,7 +1274,7 @@
                 <div class="cta-konsultasi-text">
                     <span class="cta-label">{{ $settings['cta_label'] ?? '' }}</span>
                     <h2>{{ $settings['cta_title'] ?? '' }}</h2>
-                    <p>{{ $settings['cta_desc'] ?? '' }}</p>
+                    <p>{!! $settings['cta_desc'] ?? '' !!}</p>
                 </div>
                 <div class="cta-konsultasi-actions">
                     <a href="https://wa.me/{{ $siteSettings['wa_number'] ?? '6281234567890' }}?text=Halo%20Kang%20Bahri%2C%20saya%20ingin%20konsultasi%20kesehatan%20gratis.%20Boleh%20saya%20ceritakan%20keluhan%20saya%3F" target="_blank" class="btn-wa-konsultasi">
@@ -1275,7 +1305,7 @@
                 </div>
                 <div class="produk-banner-text">
                     <h3>{{ $settings['banner_title'] ?? '' }}</h3>
-                    <p>{{ $settings['banner_desc'] ?? '' }}</p>
+                    <p>{!! $settings['banner_desc'] ?? '' !!}</p>
                 </div>
                 <a href="{{ route('produk.index') }}" class="btn btn-primary" style="white-space:nowrap;flex-shrink:0;">
                     {{ $settings['banner_btn'] ?? __('common.see_all_products') }} →
