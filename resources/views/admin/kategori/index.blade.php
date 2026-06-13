@@ -131,7 +131,7 @@
           <div class="lang-tabs" id="add-kat-tabs">
             @foreach($languages as $lang)
             <button type="button" class="lang-tab {{ $loop->first ? 'active' : '' }}"
-              onclick="switchLangTab('add-kat', this, '{{ $lang->code }}')">
+              onclick="switchLangTab('add', this, '{{ $lang->code }}')">
               {{ $lang->flag }} {{ $lang->native_name }}
             </button>
             @endforeach
@@ -191,7 +191,7 @@
           <div class="lang-tabs" id="edit-kat-tabs">
             @foreach($languages as $lang)
             <button type="button" class="lang-tab {{ $loop->first ? 'active' : '' }}"
-              onclick="switchLangTab('edit-kat', this, '{{ $lang->code }}')">
+              onclick="switchLangTab('edit', this, '{{ $lang->code }}')">
               {{ $lang->flag }} {{ $lang->native_name }}
             </button>
             @endforeach
