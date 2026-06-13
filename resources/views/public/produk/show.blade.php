@@ -281,6 +281,34 @@
         padding-bottom: 24px;
         border-bottom: 1px solid rgba(56,42,33,0.08);
     }
+    .detail-short-desc p { margin-bottom: 10px; }
+    .detail-short-desc p:last-child { margin-bottom: 0; }
+
+    /* Manfaat Utama (WYSIWYG -> checkmark list) */
+    .detail-benefits { margin-bottom: 28px; }
+    .detail-benefits p { font-size: 0.9375rem; color: var(--color-text-main); line-height: 1.6; margin-bottom: 10px; }
+    .detail-benefits ul, .detail-benefits ol { list-style: none; margin: 0; padding: 0; }
+    .detail-benefits li {
+        position: relative;
+        padding-left: 30px;
+        font-size: 0.9375rem;
+        color: var(--color-text-main);
+        margin-bottom: 11px;
+        line-height: 1.5;
+    }
+    [dir="rtl"] .detail-benefits li { padding-left: 0; padding-right: 30px; }
+    .detail-benefits li::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 1px;
+        width: 20px; height: 20px;
+        background-color: rgba(200,106,68,0.12);
+        border-radius: 50%;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23C86A44' stroke-width='3'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    [dir="rtl"] .detail-benefits li::before { left: auto; right: 0; }
 
     /* Benefits */
     .detail-benefits-title {
@@ -944,54 +972,36 @@
 
                     <h1 class="detail-product-name">{{ $produk->trans('nama') }}</h1>
 
-                    <div class="detail-rating">
-                        <div class="stars">
-                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                            <span class="star">★</span><span class="star" style="opacity:.5">★</span>
-                        </div>
-                        <span class="rating-count">4.8 ({{ __('produk.buyer_reviews') }})</span>
-                        <span class="rating-divider"></span>
-                        <span class="sold-count">{{ __('produk.sold') }}</span>
-                    </div>
-
                     <div class="detail-price-block">
                         <div class="detail-price-label">{{ __('common.price') }}</div>
                         <div class="detail-price" id="display-price">Rp {{ number_format($produk->harga, 0, ',', '.') }}</div>
-                        <div class="detail-price-note">{{ __('common.price_per_bottle') }}</div>
+                        @php
+                            $satuan = trim((string) $produk->trans('satuan'));
+                            $isiKemasan = trim((string) $produk->trans('isi_kemasan'));
+                        @endphp
+                        @if($satuan !== '' || $isiKemasan !== '')
+                        <div class="detail-price-note">
+                            @if($satuan !== ''){{ __('produk.price_per') }} {{ $satuan }}@endif
+                            @if($satuan !== '' && $isiKemasan !== '') · @endif
+                            @if($isiKemasan !== ''){{ __('produk.contents_label') }} {{ $isiKemasan }}@endif
+                        </div>
+                        @endif
                     </div>
 
-                    <p class="detail-short-desc">{{ \Illuminate\Support\Str::limit(strip_tags($produk->trans('deskripsi')), 160) }}</p>
+                    @php $deskSingkat = trim((string) $produk->trans('deskripsi_singkat')); @endphp
+                    @if($deskSingkat !== '')
+                    <div class="detail-short-desc rich-content">{!! $deskSingkat !!}</div>
+                    @endif
 
-                    @php $kandungan = $produk->trans('kandungan'); $kandungan = is_array($kandungan) ? $kandungan : []; @endphp
-                    @if(count($kandungan) > 0)
-                    <div class="detail-benefits-title">{{ __('produk.main_ingredients') }}</div>
-                    <ul class="detail-benefits-list">
-                        @foreach($kandungan as $k)
-                        <li>
-                            <span class="benefit-check">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"/>
-                                </svg>
-                            </span>
-                            {{ is_array($k) ? ($k['name'] ?? $k) : $k }}
-                        </li>
-                        @endforeach
-                    </ul>
+                    @php $manfaatHtml = trim((string) $produk->trans('manfaat')); @endphp
+                    @if($manfaatHtml !== '')
+                    <div class="detail-benefits-title">{{ __('produk.main_benefits') }}</div>
+                    <div class="detail-benefits">{!! $manfaatHtml !!}</div>
                     @endif
 
                     <!-- Order Block -->
                     <div class="order-block">
-                        <div class="quantity-row">
-                            <span class="quantity-label">{{ __('common.quantity') }}</span>
-                            <div class="quantity-ctrl">
-                                <button class="qty-btn" id="qty-minus" aria-label="Kurangi">−</button>
-                                <div class="qty-value" id="qty-value">1</div>
-                                <button class="qty-btn" id="qty-plus" aria-label="Tambah">+</button>
-                            </div>
-                            <span class="qty-total" id="qty-total">Total: <strong>Rp {{ number_format($produk->harga, 0, ',', '.') }}</strong></span>
-                        </div>
-
-                        <a href="{{ 'https://wa.me/'.($siteSettings['wa_number'] ?? '6281234567890').'?text='.rawurlencode('Halo Kang Bahri, saya ingin memesan: *'.$produk->trans('nama').'* (1 pcs). Mohon info ketersediaan dan cara pembayarannya. Terima kasih 🙏') }}"
+                        <a href="{{ 'https://wa.me/'.($siteSettings['wa_number'] ?? '6281234567890').'?text='.rawurlencode('Halo Kang Bahri, saya ingin memesan: *'.$produk->trans('nama').'*. Mohon info ketersediaan dan cara pembayarannya. Terima kasih 🙏') }}"
                            target="_blank" id="wa-order-btn" class="btn-wa-order">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -1101,7 +1111,7 @@
     <div class="sticky-wa" id="sticky-wa">
         <div class="sticky-wa-inner">
             <div class="sticky-wa-price">
-                <div class="label">Total Harga</div>
+                <div class="label">{{ __('common.price') }}</div>
                 <div class="value" id="sticky-price">Rp {{ number_format($produk->harga, 0, ',', '.') }}</div>
             </div>
             <a href="{{ 'https://wa.me/'.($siteSettings['wa_number'] ?? '6281234567890').'?text='.rawurlencode('Halo Kang Bahri, saya ingin memesan: *'.$produk->trans('nama').'*. Mohon info ketersediaan. Terima kasih!') }}"
@@ -1119,42 +1129,6 @@
 @push('scripts')
 <script>
 (function() {
-    var produkHarga = {{ (int)$produk->harga }};
-    var produkNama  = {!! json_encode($produk->trans('nama'), JSON_HEX_TAG | JSON_HEX_AMP) !!};
-    var waNumber    = "{{ $siteSettings['wa_number'] ?? '6281234567890' }}";
-    var currentQty  = 1;
-
-    function formatPrice(n) {
-        return 'Rp ' + n.toLocaleString('id-ID');
-    }
-
-    function buildWALink(qty) {
-        var total = formatPrice(produkHarga * qty);
-        var msg   = 'Halo Kang Bahri, saya ingin memesan:\n\n*' + produkNama + '*\nJumlah: ' + qty + ' pcs\nTotal: ' + total + '\n\nMohon info ketersediaan dan cara pembayarannya. Terima kasih 🙏';
-        return 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg);
-    }
-
-    function updateQty(delta) {
-        currentQty = Math.max(1, currentQty + delta);
-        var qtyValue  = document.getElementById('qty-value');
-        var qtyTotal  = document.getElementById('qty-total');
-        var waBtn     = document.getElementById('wa-order-btn');
-        var stickyBtn = document.getElementById('sticky-wa-btn');
-        var stickyPr  = document.getElementById('sticky-price');
-
-        if (qtyValue) qtyValue.textContent = currentQty;
-        if (qtyTotal) qtyTotal.innerHTML = 'Total: <strong>' + formatPrice(produkHarga * currentQty) + '</strong>';
-        var link = buildWALink(currentQty);
-        if (waBtn)     waBtn.href     = link;
-        if (stickyBtn) stickyBtn.href = link;
-        if (stickyPr)  stickyPr.textContent = formatPrice(produkHarga * currentQty);
-    }
-
-    var minusBtn = document.getElementById('qty-minus');
-    var plusBtn  = document.getElementById('qty-plus');
-    if (minusBtn) minusBtn.addEventListener('click', function() { updateQty(-1); });
-    if (plusBtn)  plusBtn.addEventListener('click',  function() { updateQty(+1); });
-
     // Sticky WA — show when order block scrolls out
     var stickyEl = document.getElementById('sticky-wa');
     if (stickyEl) {

@@ -704,7 +704,7 @@
                     <div class="produk-card-body">
                         <span class="produk-card-category">{{ $kategoris->firstWhere('nama', $item->kategori)?->trans('nama') ?? $item->kategori }}</span>
                         <h3 class="produk-card-name">{{ $item->trans('nama') }}</h3>
-                        <p class="produk-card-desc">{{ $item->trans('deskripsi') }}</p>
+                        <p class="produk-card-desc">{{ \Illuminate\Support\Str::limit(strip_tags($item->trans('deskripsi_singkat') ?: $item->trans('deskripsi')), 100) }}</p>
                         <div class="produk-card-footer">
                             <div class="produk-card-price">
                                 Rp {{ number_format($item->harga, 0, ',', '.') }}

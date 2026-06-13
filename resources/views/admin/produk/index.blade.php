@@ -185,12 +185,46 @@
               @endif
             </div>
             <div class="fg">
-              <label class="fl">Deskripsi</label>
+              <label class="fl">Deskripsi Singkat <span style="color:var(--cmt);font-weight:400;font-size:11px">(tampil di bawah harga & kartu produk)</span></label>
+              @if($isId)
+                <textarea name="deskripsi_singkat" class="js-rich" data-min="90"></textarea>
+              @else
+                <textarea name="trans[{{ $loc }}][deskripsi_singkat]" class="js-rich" data-min="90"></textarea>
+              @endif
+            </div>
+            <div class="fg">
+              <label class="fl">Deskripsi Lengkap</label>
               @if($isId)
                 <textarea name="deskripsi" class="js-rich" data-min="120"></textarea>
               @else
                 <textarea name="trans[{{ $loc }}][deskripsi]" class="js-rich" data-min="120"></textarea>
               @endif
+            </div>
+            <div class="fg">
+              <label class="fl">Manfaat Utama <span style="color:var(--cmt);font-weight:400;font-size:11px">(disarankan berupa list)</span></label>
+              @if($isId)
+                <textarea name="manfaat" class="js-rich" data-min="120"></textarea>
+              @else
+                <textarea name="trans[{{ $loc }}][manfaat]" class="js-rich" data-min="120"></textarea>
+              @endif
+            </div>
+            <div class="frow frow-2">
+              <div class="fg">
+                <label class="fl">Satuan <span style="color:var(--cmt);font-weight:400;font-size:11px">(mis. botol)</span></label>
+                @if($isId)
+                  <input type="text" name="satuan" class="fc" placeholder="botol">
+                @else
+                  <input type="text" name="trans[{{ $loc }}][satuan]" class="fc" placeholder="Terjemahan satuan" dir="{{ $lang->dir ?? 'ltr' }}">
+                @endif
+              </div>
+              <div class="fg">
+                <label class="fl">Isi Kemasan <span style="color:var(--cmt);font-weight:400;font-size:11px">(mis. 60 kapsul / botol)</span></label>
+                @if($isId)
+                  <input type="text" name="isi_kemasan" class="fc" placeholder="60 kapsul / botol">
+                @else
+                  <input type="text" name="trans[{{ $loc }}][isi_kemasan]" class="fc" placeholder="Terjemahan isi kemasan" dir="{{ $lang->dir ?? 'ltr' }}">
+                @endif
+              </div>
             </div>
             <div class="fg">
               <label class="fl">Cara Pakai</label>
@@ -280,12 +314,46 @@
               @endif
             </div>
             <div class="fg">
-              <label class="fl">Deskripsi</label>
+              <label class="fl">Deskripsi Singkat <span style="color:var(--cmt);font-weight:400;font-size:11px">(tampil di bawah harga & kartu produk)</span></label>
+              @if($isId)
+                <textarea id="edit-dsingkat" name="deskripsi_singkat" class="js-rich" data-min="90"></textarea>
+              @else
+                <textarea id="edit-dsingkat-{{ $loc }}" name="trans[{{ $loc }}][deskripsi_singkat]" class="js-rich" data-min="90"></textarea>
+              @endif
+            </div>
+            <div class="fg">
+              <label class="fl">Deskripsi Lengkap</label>
               @if($isId)
                 <textarea id="edit-deskripsi" name="deskripsi" class="js-rich" data-min="120"></textarea>
               @else
                 <textarea id="edit-deskripsi-{{ $loc }}" name="trans[{{ $loc }}][deskripsi]" class="js-rich" data-min="120"></textarea>
               @endif
+            </div>
+            <div class="fg">
+              <label class="fl">Manfaat Utama <span style="color:var(--cmt);font-weight:400;font-size:11px">(disarankan berupa list)</span></label>
+              @if($isId)
+                <textarea id="edit-manfaat" name="manfaat" class="js-rich" data-min="120"></textarea>
+              @else
+                <textarea id="edit-manfaat-{{ $loc }}" name="trans[{{ $loc }}][manfaat]" class="js-rich" data-min="120"></textarea>
+              @endif
+            </div>
+            <div class="frow frow-2">
+              <div class="fg">
+                <label class="fl">Satuan <span style="color:var(--cmt);font-weight:400;font-size:11px">(mis. botol)</span></label>
+                @if($isId)
+                  <input type="text" id="edit-satuan" name="satuan" class="fc" placeholder="botol">
+                @else
+                  <input type="text" id="edit-satuan-{{ $loc }}" name="trans[{{ $loc }}][satuan]" class="fc" placeholder="Terjemahan satuan" dir="{{ $lang->dir ?? 'ltr' }}">
+                @endif
+              </div>
+              <div class="fg">
+                <label class="fl">Isi Kemasan <span style="color:var(--cmt);font-weight:400;font-size:11px">(mis. 60 kapsul / botol)</span></label>
+                @if($isId)
+                  <input type="text" id="edit-isi" name="isi_kemasan" class="fc" placeholder="60 kapsul / botol">
+                @else
+                  <input type="text" id="edit-isi-{{ $loc }}" name="trans[{{ $loc }}][isi_kemasan]" class="fc" placeholder="Terjemahan isi kemasan" dir="{{ $lang->dir ?? 'ltr' }}">
+                @endif
+              </div>
             </div>
             <div class="fg">
               <label class="fl">Cara Pakai</label>
@@ -662,7 +730,11 @@ function editProduk(id) {
 
   // Fill ID (base) fields
   document.getElementById('edit-nama').value = p.nama || '';
+  document.getElementById('edit-dsingkat').value = p.deskripsi_singkat || '';
   document.getElementById('edit-deskripsi').value = p.deskripsi || '';
+  document.getElementById('edit-manfaat').value = p.manfaat || '';
+  document.getElementById('edit-satuan').value = p.satuan || '';
+  document.getElementById('edit-isi').value = p.isi_kemasan || '';
   document.getElementById('edit-cara').value = p.cara_pakai || '';
 
   // Fill translation fields per non-ID locale
@@ -671,11 +743,19 @@ function editProduk(id) {
   @if($lang->code !== 'id')
   const td_{{ $lang->code }} = trans['{{ $lang->code }}'] || {};
   const fn_{{ $lang->code }} = document.getElementById('edit-nama-{{ $lang->code }}');
+  const fds_{{ $lang->code }} = document.getElementById('edit-dsingkat-{{ $lang->code }}');
   const fd_{{ $lang->code }} = document.getElementById('edit-deskripsi-{{ $lang->code }}');
+  const fmf_{{ $lang->code }} = document.getElementById('edit-manfaat-{{ $lang->code }}');
+  const fst_{{ $lang->code }} = document.getElementById('edit-satuan-{{ $lang->code }}');
+  const fis_{{ $lang->code }} = document.getElementById('edit-isi-{{ $lang->code }}');
   const fc_{{ $lang->code }} = document.getElementById('edit-cara-{{ $lang->code }}');
   const fk_{{ $lang->code }} = document.getElementById('edit-kandungan-{{ $lang->code }}');
   if (fn_{{ $lang->code }}) fn_{{ $lang->code }}.value = td_{{ $lang->code }}.nama || '';
+  if (fds_{{ $lang->code }}) fds_{{ $lang->code }}.value = td_{{ $lang->code }}.deskripsi_singkat || '';
   if (fd_{{ $lang->code }}) fd_{{ $lang->code }}.value = td_{{ $lang->code }}.deskripsi || '';
+  if (fmf_{{ $lang->code }}) fmf_{{ $lang->code }}.value = td_{{ $lang->code }}.manfaat || '';
+  if (fst_{{ $lang->code }}) fst_{{ $lang->code }}.value = td_{{ $lang->code }}.satuan || '';
+  if (fis_{{ $lang->code }}) fis_{{ $lang->code }}.value = td_{{ $lang->code }}.isi_kemasan || '';
   if (fc_{{ $lang->code }}) fc_{{ $lang->code }}.value = td_{{ $lang->code }}.cara_pakai || '';
   if (fk_{{ $lang->code }}) fk_{{ $lang->code }}.value = td_{{ $lang->code }}.kandungan || '';
   @endif

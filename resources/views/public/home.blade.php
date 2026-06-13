@@ -363,7 +363,7 @@
                         <div class="product-info">
                             <span class="product-brand">{{ __('common.brand') }}</span>
                             <h3>{{ $produk->trans('nama') }}</h3>
-                            <p class="product-desc">{{ $produk->trans('deskripsi') }}</p>
+                            <p class="product-desc">{{ \Illuminate\Support\Str::limit(strip_tags($produk->trans('deskripsi_singkat') ?: $produk->trans('deskripsi')), 90) }}</p>
                             <hr class="product-divider">
                             <a href="{{ route('produk.show', $produk->slug) }}" class="product-cta-btn">{{ __('common.product_detail') }}</a>
                         </div>

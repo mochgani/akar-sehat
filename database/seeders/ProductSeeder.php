@@ -116,8 +116,26 @@ class ProductSeeder extends Seeder
             ],
         ];
 
+        // Field tambahan per SKU (deskripsi singkat, manfaat, satuan, isi kemasan)
+        $extra = [
+            'AS-001' => ['satuan' => 'sachet', 'isi' => '10 sachet / box', 'singkat' => 'Minuman jahe merah dan madu hutan untuk meningkatkan daya tahan tubuh dan menghangatkan badan.', 'manfaat' => ['Meningkatkan daya tahan tubuh', 'Menghangatkan badan secara alami', 'Membantu meredakan masuk angin']],
+            'AS-002' => ['satuan' => 'botol', 'isi' => '60 kapsul / botol', 'singkat' => 'Formula detoksifikasi alami dari 12 herbal pilihan untuk membersihkan racun dalam tubuh.', 'manfaat' => ['Membantu detoksifikasi alami', 'Mendukung fungsi hati & ginjal', 'Cocok untuk program detoks 14–30 hari']],
+            'AS-003' => ['satuan' => 'botol', 'isi' => '250 ml / botol', 'singkat' => 'Madu hutan asli dari lebah liar Kalimantan, tanpa campuran dan tanpa pengawet.', 'manfaat' => ['100% madu hutan murni', 'Sumber energi & antioksidan alami', 'Tanpa gula tambahan']],
+            'AS-004' => ['satuan' => 'botol', 'isi' => '50 kapsul / botol', 'singkat' => 'Kapsul sambiloto untuk menjaga daya tahan tubuh dan membantu mengatasi infeksi ringan.', 'manfaat' => ['Mendukung sistem imun', 'Membantu meredakan infeksi ringan', 'Bahan herbal alami']],
+            'AS-005' => ['satuan' => 'box', 'isi' => '20 kantong / box', 'singkat' => 'Teh herbal rempah pilihan untuk relaksasi dan menjaga kesehatan pencernaan.', 'manfaat' => ['Membantu relaksasi tubuh', 'Menjaga kesehatan pencernaan', 'Aroma rempah yang menenangkan']],
+            'AS-006' => ['satuan' => 'botol', 'isi' => '100 ml / botol', 'singkat' => 'Minyak zaitun dengan habbatussauda dan lavender untuk pijat relaksasi dan kesehatan kulit.', 'manfaat' => ['Melembapkan & menyehatkan kulit', 'Cocok untuk pijat relaksasi', 'Aroma lavender menenangkan']],
+            'AS-007' => ['satuan' => 'pouch', 'isi' => '200 gram / pouch', 'singkat' => 'Serbuk temulawak murni untuk menjaga kesehatan hati dan meningkatkan nafsu makan.', 'manfaat' => ['Menjaga kesehatan hati', 'Meningkatkan nafsu makan', '100% temulawak murni']],
+            'AS-008' => ['satuan' => 'sesi', 'isi' => '1 sesi 60 menit', 'singkat' => 'Konsultasi personal 60 menit bersama Kang Bahri plus rekomendasi herbal dan 1 produk pilihan.', 'manfaat' => ['Konsultasi personal 60 menit', 'Rekomendasi herbal sesuai kebutuhan', 'Termasuk 1 produk herbal pilihan']],
+        ];
+
         foreach ($products as $data) {
             $data['kandungan'] = $this->kandunganHtml($data['kandungan']);
+            if ($e = $extra[$data['sku']] ?? null) {
+                $data['satuan']            = $e['satuan'];
+                $data['isi_kemasan']       = $e['isi'];
+                $data['deskripsi_singkat'] = '<p>' . e($e['singkat']) . '</p>';
+                $data['manfaat']           = '<ul>' . implode('', array_map(fn ($x) => '<li>' . e($x) . '</li>', $e['manfaat'])) . '</ul>';
+            }
             Product::updateOrCreate(['sku' => $data['sku']], $data);
         }
     }

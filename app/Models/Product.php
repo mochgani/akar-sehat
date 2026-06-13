@@ -12,7 +12,8 @@ class Product extends Model
 
     protected $fillable = [
         'nama', 'slug', 'sku', 'kategori', 'harga', 'stok',
-        'status', 'kandungan', 'deskripsi', 'cara_pakai',
+        'status', 'kandungan', 'deskripsi', 'deskripsi_singkat',
+        'manfaat', 'satuan', 'isi_kemasan', 'cara_pakai',
         'foto', 'is_featured', 'urutan', 'translations',
     ];
 

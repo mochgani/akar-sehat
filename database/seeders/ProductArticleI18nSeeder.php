@@ -69,6 +69,51 @@ class ProductArticleI18nSeeder extends Seeder
         }
         unset($trans, $fields);
 
+        // Field baru (deskripsi singkat, manfaat, satuan, isi kemasan) — terjemahan en/ar
+        $extra = [
+            'Jahe Merah Plus' => [
+                'en' => ['singkat' => 'Red ginger and forest honey drink to boost immunity and warm the body.', 'manfaat' => ['Boosts immunity', 'Naturally warms the body', 'Helps relieve colds'], 'satuan' => 'sachet', 'isi' => '10 sachets / box'],
+                'ar' => ['singkat' => 'مشروب الزنجبيل الأحمر وعسل الغابات لتعزيز المناعة وتدفئة الجسم.', 'manfaat' => ['يعزّز المناعة', 'يدفّئ الجسم طبيعياً', 'يساعد على تخفيف نزلات البرد'], 'satuan' => 'كيس', 'isi' => '10 أكياس / علبة'],
+            ],
+            'R12 Detox Herbal' => [
+                'en' => ['singkat' => 'A natural detox formula from 12 selected herbs to cleanse toxins from the body.', 'manfaat' => ['Supports natural detox', 'Supports liver & kidney function', 'Ideal for a 14–30 day detox program'], 'satuan' => 'bottle', 'isi' => '60 capsules / bottle'],
+                'ar' => ['singkat' => 'تركيبة إزالة سموم طبيعية من 12 عشبة منتقاة لتنقية الجسم من السموم.', 'manfaat' => ['يدعم إزالة السموم الطبيعية', 'يدعم وظائف الكبد والكلى', 'مناسب لبرنامج ديتوكس 14–30 يوماً'], 'satuan' => 'زجاجة', 'isi' => '60 كبسولة / زجاجة'],
+            ],
+            'Madu Hutan Asli' => [
+                'en' => ['singkat' => 'Pure forest honey from wild Kalimantan bees, with no mixtures or preservatives.', 'manfaat' => ['100% pure forest honey', 'Natural source of energy & antioxidants', 'No added sugar'], 'satuan' => 'bottle', 'isi' => '250 ml / bottle'],
+                'ar' => ['singkat' => 'عسل غابات أصلي من النحل البري في كاليمانتان، بدون خلط أو مواد حافظة.', 'manfaat' => ['عسل غابات نقي 100%', 'مصدر طبيعي للطاقة ومضادات الأكسدة', 'بدون سكر مضاف'], 'satuan' => 'زجاجة', 'isi' => '250 مل / زجاجة'],
+            ],
+            'Kapsul Sambiloto' => [
+                'en' => ['singkat' => 'Sambiloto capsules to maintain immunity and help fight mild infections.', 'manfaat' => ['Supports the immune system', 'Helps relieve mild infections', 'Natural herbal ingredients'], 'satuan' => 'bottle', 'isi' => '50 capsules / bottle'],
+                'ar' => ['singkat' => 'كبسولات سامبيلوتو للحفاظ على المناعة والمساعدة على مكافحة العدوى الخفيفة.', 'manfaat' => ['يدعم الجهاز المناعي', 'يساعد على تخفيف العدوى الخفيفة', 'مكونات عشبية طبيعية'], 'satuan' => 'زجاجة', 'isi' => '50 كبسولة / زجاجة'],
+            ],
+            'Teh Herbal Segar' => [
+                'en' => ['singkat' => 'Herbal spice tea for relaxation and digestive health.', 'manfaat' => ['Helps the body relax', 'Maintains digestive health', 'Soothing spice aroma'], 'satuan' => 'box', 'isi' => '20 tea bags / box'],
+                'ar' => ['singkat' => 'شاي أعشاب بالتوابل للاسترخاء وصحة الجهاز الهضمي.', 'manfaat' => ['يساعد الجسم على الاسترخاء', 'يحافظ على صحة الجهاز الهضمي', 'رائحة توابل مهدّئة'], 'satuan' => 'علبة', 'isi' => '20 كيس شاي / علبة'],
+            ],
+            'Minyak Zaitun Herbal' => [
+                'en' => ['singkat' => 'Olive oil with black seed and lavender for relaxing massage and skin health.', 'manfaat' => ['Moisturizes & nourishes skin', 'Great for relaxing massage', 'Calming lavender aroma'], 'satuan' => 'bottle', 'isi' => '100 ml / bottle'],
+                'ar' => ['singkat' => 'زيت زيتون مع حبة البركة واللافندر للتدليك المريح وصحة البشرة.', 'manfaat' => ['يرطّب البشرة ويغذّيها', 'مثالي للتدليك المريح', 'رائحة لافندر مهدّئة'], 'satuan' => 'زجاجة', 'isi' => '100 مل / زجاجة'],
+            ],
+            'Serbuk Temulawak' => [
+                'en' => ['singkat' => 'Pure temulawak powder to maintain liver health and boost appetite.', 'manfaat' => ['Maintains liver health', 'Boosts appetite', '100% pure temulawak'], 'satuan' => 'pouch', 'isi' => '200 g / pouch'],
+                'ar' => ['singkat' => 'مسحوق تيمولاواك نقي للحفاظ على صحة الكبد وزيادة الشهية.', 'manfaat' => ['يحافظ على صحة الكبد', 'يزيد الشهية', 'تيمولاواك نقي 100%'], 'satuan' => 'كيس', 'isi' => '200 غرام / كيس'],
+            ],
+            'Paket Konsultasi Herbal' => [
+                'en' => ['singkat' => 'A 60-minute personal consultation with Kang Bahri plus herbal recommendations and 1 selected product.', 'manfaat' => ['60-minute personal consultation', 'Herbal recommendations for your needs', 'Includes 1 selected herbal product'], 'satuan' => 'session', 'isi' => '1 session of 60 minutes'],
+                'ar' => ['singkat' => 'استشارة شخصية لمدة 60 دقيقة مع كانغ باهري مع توصيات عشبية ومنتج واحد منتقى.', 'manfaat' => ['استشارة شخصية 60 دقيقة', 'توصيات عشبية حسب احتياجك', 'تشمل منتجاً عشبياً واحداً منتقى'], 'satuan' => 'جلسة', 'isi' => 'جلسة واحدة 60 دقيقة'],
+            ],
+        ];
+        foreach ($extra as $nama => $locs) {
+            if (!isset($products[$nama])) $products[$nama] = [];
+            foreach ($locs as $loc => $v) {
+                $products[$nama][$loc]['deskripsi_singkat'] = '<p>' . e($v['singkat']) . '</p>';
+                $products[$nama][$loc]['manfaat']           = '<ul>' . implode('', array_map(fn ($x) => '<li>' . e($x) . '</li>', $v['manfaat'])) . '</ul>';
+                $products[$nama][$loc]['satuan']            = $v['satuan'];
+                $products[$nama][$loc]['isi_kemasan']       = $v['isi'];
+            }
+        }
+
         foreach ($products as $nama => $trans) {
             $p = Product::where('nama', $nama)->first();
             if ($p) $this->mergeTranslations($p, $trans);
