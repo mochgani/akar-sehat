@@ -2,11 +2,9 @@
     "nav.about": "عن الموقع",
     "nav.education": "التعليم",
     "nav.products": "المنتجات",
-
     "footer.navigation": "التنقل",
     "footer.contact_us": "اتصل بنا",
     "footer.language": "Bahasa / Language",
-
     "common.all": "الكل",
     "common.search_product": "ابحث عن اسم المنتج...",
     "common.search_article": "ابحث في المقالات الصحية...",
@@ -49,7 +47,6 @@
     "common.not_found_article": "لم يتم العثور على مقالات",
     "common.not_found_try": "حاول تعديل الفلتر أو كلمات البحث.",
     "common.not_found_article_try": "جرّب كلمات مفتاحية أو فئات مختلفة.",
-
     "home.page_title": "أكار سيهات - افهم جسدك، تعافَ من الجذور",
     "home.why_title": "لماذا أكار سيهات؟",
     "home.why_desc": "نساعدك على فهم جسمك بشكل شامل من خلال نهج منهجي وطبيعي ومستدام.",
@@ -76,7 +73,6 @@
     "home.insight_desc": "مقالات موثوقة لتعميق فهمك الصحي اليومي.",
     "home.products_title": "منتجات دعم الصحة",
     "home.products_desc": "مكملات عشبية مختارة بمعايير عالية لتحسين عملية التعافي الطبيعية.",
-
     "produk.page_title": "المنتجات الصحية - أكار سيهات",
     "produk.hero_label": "متجر المنتجات",
     "produk.hero_title": "مكملات",
@@ -114,7 +110,6 @@
     "produk.related_desc": "منتجات أخرى قد تساعد في دعم تعافيك.",
     "produk.buyer_reviews": "مراجعة المشتري",
     "produk.sold": "بيع المئات+",
-
     "edukasi.page_title": "التعليم الصحي - أكار سيهات",
     "edukasi.hero_label": "مكتبة التعليم",
     "edukasi.hero_title": "مقالات صحية",
@@ -129,7 +124,6 @@
     "edukasi.prev": "← المقال السابق",
     "edukasi.next": "المقال التالي →",
     "edukasi.breadcrumb": "التعليم",
-
     "tentang.page_title": "عن الموقع - أكار سيهات",
     "tentang.about_label": "عن الموقع",
     "tentang.visi_label": "الرؤية",
@@ -143,5 +137,9 @@
     "tentang.experience_label": "سنوات من الخبرة كمعالج",
     "tentang.experience_label2": "سنوات من خبرة العلاج بالأعشاب",
     "tentang.cta_desc": "استشارتك الأولى مع كانغ باهري مجانية تماماً وبدون أي التزام. فقط تواصل عبر واتساب وأخبره بما تشعر.",
-    "tentang.cta_btn": "استشارة مجانية الآن"
+    "tentang.cta_btn": "استشارة مجانية الآن",
+    "edukasi.sort_label": "ترتيب المقالات",
+    "edukasi.sort_newest": "الأحدث",
+    "edukasi.sort_popular": "الأكثر شعبية",
+    "edukasi.sort_az": "أ–ي"
 }

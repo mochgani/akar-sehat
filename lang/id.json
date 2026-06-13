@@ -2,11 +2,9 @@
     "nav.about": "Tentang",
     "nav.education": "Edukasi",
     "nav.products": "Produk",
-
     "footer.navigation": "Navigasi",
     "footer.contact_us": "Hubungi Kami",
     "footer.language": "Bahasa / Language",
-
     "common.all": "Semua",
     "common.search_product": "Cari nama produk...",
     "common.search_article": "Cari artikel kesehatan...",
@@ -49,7 +47,6 @@
     "common.not_found_article": "Artikel tidak ditemukan",
     "common.not_found_try": "Coba ubah filter atau kata kunci pencarian Anda.",
     "common.not_found_article_try": "Coba kata kunci atau kategori yang berbeda.",
-
     "home.page_title": "Akar Sehat - Pahami Tubuh, Sehat dari Akar",
     "home.why_title": "Mengapa Akar Sehat?",
     "home.why_desc": "Kami membantu Anda memahami tubuh secara menyeluruh dengan pendekatan yang sistematis, alami, dan berkelanjutan.",
@@ -76,7 +73,6 @@
     "home.insight_desc": "Artikel terpercaya untuk meningkatkan pemahaman dan kesadaran kesehatan harian Anda.",
     "home.products_title": "Produk Pendukung Kesehatan",
     "home.products_desc": "Suplemen herbal pilihan berstandar tinggi untuk mengoptimalkan proses pemulihan alami.",
-
     "produk.page_title": "Produk Kesehatan - Akar Sehat",
     "produk.hero_label": "Toko Produk",
     "produk.hero_title": "Suplemen",
@@ -114,7 +110,6 @@
     "produk.related_desc": "Produk lain yang mungkin cocok untuk mendukung pemulihan Anda.",
     "produk.buyer_reviews": "ulasan pembeli",
     "produk.sold": "Terjual ratusan+",
-
     "edukasi.page_title": "Edukasi Kesehatan - Akar Sehat",
     "edukasi.hero_label": "Perpustakaan Edukasi",
     "edukasi.hero_title": "Artikel Kesehatan",
@@ -129,7 +124,6 @@
     "edukasi.prev": "← Artikel Sebelumnya",
     "edukasi.next": "Artikel Selanjutnya →",
     "edukasi.breadcrumb": "Edukasi",
-
     "tentang.page_title": "Tentang Kami - Akar Sehat",
     "tentang.about_label": "Tentang Kami",
     "tentang.visi_label": "Visi",
@@ -143,5 +137,9 @@
     "tentang.experience_label": "Tahun pengalaman sebagai terapis",
     "tentang.experience_label2": "Tahun pengalaman terapi herbal",
     "tentang.cta_desc": "Konsultasi pertama dengan Kang Bahri sepenuhnya gratis dan tanpa komitmen apa pun. Cukup hubungi via WhatsApp dan ceritakan apa yang Anda rasakan.",
-    "tentang.cta_btn": "Konsultasi Gratis Sekarang"
+    "tentang.cta_btn": "Konsultasi Gratis Sekarang",
+    "edukasi.sort_label": "Urutkan artikel",
+    "edukasi.sort_newest": "Terbaru",
+    "edukasi.sort_popular": "Terpopuler",
+    "edukasi.sort_az": "A–Z"
 }

@@ -531,10 +531,10 @@
                         @foreach(request()->except('sort') as $key => $value)
                             <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                         @endforeach
-                        <select name="sort" class="sort-select" aria-label="Urutkan artikel" onchange="this.form.submit()">
-                            <option value="terbaru" {{ request('sort', 'terbaru') === 'terbaru' ? 'selected' : '' }}>Terbaru</option>
-                            <option value="terpopuler" {{ request('sort') === 'terpopuler' ? 'selected' : '' }}>Terpopuler</option>
-                            <option value="az" {{ request('sort') === 'az' ? 'selected' : '' }}>A–Z</option>
+                        <select name="sort" class="sort-select" aria-label="{{ __('edukasi.sort_label') }}" onchange="this.form.submit()">
+                            <option value="terbaru" {{ request('sort', 'terbaru') === 'terbaru' ? 'selected' : '' }}>{{ __('edukasi.sort_newest') }}</option>
+                            <option value="terpopuler" {{ request('sort') === 'terpopuler' ? 'selected' : '' }}>{{ __('edukasi.sort_popular') }}</option>
+                            <option value="az" {{ request('sort') === 'az' ? 'selected' : '' }}>{{ __('edukasi.sort_az') }}</option>
                         </select>
                     </form>
                 </div>

@@ -2,11 +2,9 @@
     "nav.about": "About",
     "nav.education": "Education",
     "nav.products": "Products",
-
     "footer.navigation": "Navigation",
     "footer.contact_us": "Contact Us",
     "footer.language": "Bahasa / Language",
-
     "common.all": "All",
     "common.search_product": "Search product name...",
     "common.search_article": "Search health articles...",
@@ -49,7 +47,6 @@
     "common.not_found_article": "No articles found",
     "common.not_found_try": "Try adjusting your filter or search keywords.",
     "common.not_found_article_try": "Try different keywords or categories.",
-
     "home.page_title": "Akar Sehat - Understand Your Body, Heal from the Root",
     "home.why_title": "Why Akar Sehat?",
     "home.why_desc": "We help you understand your body holistically with a systematic, natural, and sustainable approach.",
@@ -76,7 +73,6 @@
     "home.insight_desc": "Trusted articles to increase your daily health understanding and awareness.",
     "home.products_title": "Health Support Products",
     "home.products_desc": "Premium herbal supplements to optimize your natural recovery process.",
-
     "produk.page_title": "Health Products - Akar Sehat",
     "produk.hero_label": "Product Store",
     "produk.hero_title": "Herbal",
@@ -114,7 +110,6 @@
     "produk.related_desc": "Other products that may help support your recovery.",
     "produk.buyer_reviews": "buyer reviews",
     "produk.sold": "Hundreds sold+",
-
     "edukasi.page_title": "Health Education - Akar Sehat",
     "edukasi.hero_label": "Education Library",
     "edukasi.hero_title": "Health Articles",
@@ -129,7 +124,6 @@
     "edukasi.prev": "← Previous Article",
     "edukasi.next": "Next Article →",
     "edukasi.breadcrumb": "Education",
-
     "tentang.page_title": "About Us - Akar Sehat",
     "tentang.about_label": "About Us",
     "tentang.visi_label": "Vision",
@@ -143,5 +137,9 @@
     "tentang.experience_label": "Years of experience as a therapist",
     "tentang.experience_label2": "Years of herbal therapy experience",
     "tentang.cta_desc": "Your first consultation with Kang Bahri is completely free and with no commitment. Simply contact via WhatsApp and share what you're feeling.",
-    "tentang.cta_btn": "Free Consultation Now"
+    "tentang.cta_btn": "Free Consultation Now",
+    "edukasi.sort_label": "Sort articles",
+    "edukasi.sort_newest": "Newest",
+    "edukasi.sort_popular": "Most Popular",
+    "edukasi.sort_az": "A–Z"
 }
