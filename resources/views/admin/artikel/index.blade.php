@@ -150,6 +150,14 @@
                       @endforeach
                       <button type="button" onclick="fmtId('formatBlock','<h2>')" style="padding:0 8px;height:28px;border:1px solid var(--cms);background:var(--cw);border-radius:4px;cursor:pointer;font-size:12px">H2</button>
                       <button type="button" onclick="fmtId('insertUnorderedList')" style="padding:0 8px;height:28px;border:1px solid var(--cms);background:var(--cw);border-radius:4px;cursor:pointer;font-size:12px">List</button>
+                      <button type="button" onclick="fmtId('insertOrderedList')" style="padding:0 8px;height:28px;border:1px solid var(--cms);background:var(--cw);border-radius:4px;cursor:pointer;font-size:12px">1.</button>
+                      <span style="width:1px;background:var(--cms);margin:2px 3px"></span>
+                      @foreach([['Left','3,6,21,6 3,12,13,12 3,18,17,18'],['Center','3,6,21,6 6,12,18,12 5,18,19,18'],['Right','3,6,21,6 9,12,21,12 7,18,21,18'],['Full','3,6,21,6 3,12,21,12 3,18,21,18']] as $al)
+                      @php [$dir,$pts]=$al; $lines=array_map(fn($l)=>explode(',',$l), explode(' ',$pts)); @endphp
+                      <button type="button" onclick="alignId('{{ $dir }}')" title="Rata {{ ['Left'=>'kiri','Center'=>'tengah','Right'=>'kanan','Full'=>'kiri-kanan'][$dir] }}" style="width:28px;height:28px;border:1px solid var(--cms);background:var(--cw);border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">@foreach($lines as $ln)<line x1="{{ $ln[0] }}" y1="{{ $ln[1] }}" x2="{{ $ln[2] }}" y2="{{ $ln[3] }}"/>@endforeach</svg>
+                      </button>
+                      @endforeach
                     </div>
                     <div id="editor" contenteditable="true" style="padding:14px;min-height:200px;font-size:14px;outline:none;line-height:1.7" oninput="syncEditor()"></div>
                   </div>
@@ -256,6 +264,13 @@ function switchLangTab(section, btn, locale) {
 }
 
 function fmtId(cmd, val) { document.execCommand(cmd, false, val || null); }
+function alignId(dir) {
+  document.getElementById('editor').focus();
+  document.execCommand('styleWithCSS', false, true);
+  document.execCommand('justify' + dir, false, null);
+  document.execCommand('styleWithCSS', false, false);
+  syncEditor();
+}
 function syncEditor() {
   document.getElementById('a-konten').value = document.getElementById('editor').innerHTML;
 }

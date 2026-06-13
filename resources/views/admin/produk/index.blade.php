@@ -553,6 +553,14 @@ function richTableEdit(action) {
   }
   if (activeRich) activeRich.dispatchEvent(new Event('input'));
 }
+function richAlign(dir) {
+  if (!activeRich) return;
+  richRestoreRange();
+  document.execCommand('styleWithCSS', false, true);
+  document.execCommand('justify' + dir, false, null);
+  document.execCommand('styleWithCSS', false, false);
+  activeRich.dispatchEvent(new Event('input')); richSaveRange();
+}
 function buildRichToolbar() {
   const btn = (label, title, fn) => `<button type="button" title="${title}" onmousedown="event.preventDefault()" onclick="${fn}">${label}</button>`;
   return '<div class="rich-tb">'
@@ -570,6 +578,11 @@ function buildRichToolbar() {
     + btn('+Kolom', 'Tambah kolom', "richTableEdit('addCol')")
     + btn('−Baris', 'Hapus baris', "richTableEdit('delRow')")
     + btn('−Kolom', 'Hapus kolom', "richTableEdit('delCol')")
+    + '<span class="sep"></span>'
+    + btn('<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="13" y2="12"/><line x1="3" y1="18" x2="17" y2="18"/></svg>', 'Rata kiri', "richAlign('Left')")
+    + btn('<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="5" y1="18" x2="19" y2="18"/></svg>', 'Rata tengah', "richAlign('Center')")
+    + btn('<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="7" y1="18" x2="21" y2="18"/></svg>', 'Rata kanan', "richAlign('Right')")
+    + btn('<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>', 'Rata kiri-kanan (justify)', "richAlign('Full')")
     + '</div>';
 }
 function mountRichEditor(ta) {

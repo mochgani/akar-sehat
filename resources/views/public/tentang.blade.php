@@ -975,7 +975,7 @@
                     {{ $settings['hero_badge'] ?? 'Mengenal Akar Sehat' }}
                 </span>
                 <h1>{{ $settings['hero_title'] ?? '' }}</h1>
-                <p>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings['hero_desc'] ?? '') !!}</p>
+                @include('partials.rich', ['html' => $settings['hero_desc'] ?? ''])
                 <div class="tentang-hero-stats">
                     @foreach([1,2,3,4] as $i)
                     <div class="hero-stat-item">
@@ -998,7 +998,7 @@
                     <span class="section-label">{{ $settings['intro_label'] ?? '' }}</span>
                     <h2>{{ $settings['intro_title'] ?? '' }}</h2>
                     @foreach(['intro_p1','intro_p2','intro_p3'] as $pk)
-                        @if(!empty($settings[$pk]))<p>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings[$pk]) !!}</p>@endif
+                        @include('partials.rich', ['html' => $settings[$pk]])
                     @endforeach
                 </div>
                 <div class="tentang-values">
@@ -1017,7 +1017,7 @@
                         </div>
                         <div class="value-text">
                             <h4>{{ $settings["value{$i}_title"] ?? '' }}</h4>
-                            <p>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings["value{$i}_desc"] ?? '') !!}</p>
+                            @include('partials.rich', ['html' => $settings["value{$i}_desc"] ?? ''])
                         </div>
                     </div>
                     @endforeach
@@ -1033,7 +1033,7 @@
         <div class="container">
             <div class="section-header" style="text-align:center;">
                 <h2 class="section-title">{{ $settings['vm_title'] ?? '' }}</h2>
-                <p class="section-desc">{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings['vm_desc'] ?? '') !!}</p>
+                @include('partials.rich', ['html' => $settings['vm_desc'] ?? '', 'class' => 'section-desc'])
             </div>
             <div class="visi-misi-grid">
                 <!-- Visi -->
@@ -1044,7 +1044,7 @@
                         </svg>
                         {{ $settings['visi_label'] ?? '' }}
                     </span>
-                    <h3>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings['visi'] ?? '') !!}</h3>
+                    @include('partials.rich', ['html' => $settings['visi'] ?? '', 'tag' => 'h3'])
                 </div>
                 <!-- Misi -->
                 <div class="misi-card">
@@ -1155,7 +1155,7 @@
         <div class="container">
             <div class="section-header" style="text-align:center;">
                 <h2 class="section-title">{{ $settings['journey_title'] ?? '' }}</h2>
-                <p class="section-desc">{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings['journey_desc'] ?? '') !!}</p>
+                @include('partials.rich', ['html' => $settings['journey_desc'] ?? '', 'class' => 'section-desc'])
             </div>
 
             @php
@@ -1190,7 +1190,7 @@
                         <div class="timeline-card" @if($last) style="border-color:rgba(200,106,68,0.2);" @endif>
                             <div class="timeline-year">{{ $year }}</div>
                             <h4>{{ $tlTitle }}</h4>
-                            <p>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $tlDesc) !!}</p>
+                            @include('partials.rich', ['html' => $tlDesc])
                         </div>
                     </div>
                 </div>
@@ -1207,7 +1207,7 @@
             <div class="cara-kerja-intro">
                 <span style="display:inline-block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--color-primary);margin-bottom:12px;">{{ $settings['ck_label'] ?? '' }}</span>
                 <h2 class="section-title">{{ $settings['ck_title'] ?? '' }}</h2>
-                <p>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings['ck_desc'] ?? '') !!}</p>
+                @include('partials.rich', ['html' => $settings['ck_desc'] ?? ''])
             </div>
 
             <!-- 5 Steps -->
@@ -1228,7 +1228,7 @@
                         <span class="ck-step-badge">{{ $i }}</span>
                     </div>
                     <h4>{{ $settings["step{$i}_title"] ?? '' }}</h4>
-                    <p>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings["step{$i}_desc"] ?? '') !!}</p>
+                    @include('partials.rich', ['html' => $settings["step{$i}_desc"] ?? ''])
                 </div>
                 @endforeach
             </div>
@@ -1248,7 +1248,7 @@
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">{!! $ckdIcons[$i-1] !!}</svg>
                     </div>
                     <h4>{{ $settings["ckd{$i}_title"] ?? '' }}</h4>
-                    <p>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings["ckd{$i}_intro"] ?? '') !!}</p>
+                    @include('partials.rich', ['html' => $settings["ckd{$i}_intro"] ?? ''])
                     @php $ckdListVal = (string)($settings["ckd{$i}_list"] ?? ''); @endphp
                     @if(str_contains($ckdListVal, '<'))
                     <div class="ckd-rich rich-block">{!! $ckdListVal !!}</div>
@@ -1274,7 +1274,7 @@
                 <div class="cta-konsultasi-text">
                     <span class="cta-label">{{ $settings['cta_label'] ?? '' }}</span>
                     <h2>{{ $settings['cta_title'] ?? '' }}</h2>
-                    <p>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings['cta_desc'] ?? '') !!}</p>
+                    @include('partials.rich', ['html' => $settings['cta_desc'] ?? ''])
                 </div>
                 <div class="cta-konsultasi-actions">
                     <a href="https://wa.me/{{ $siteSettings['wa_number'] ?? '6281234567890' }}?text=Halo%20Kang%20Bahri%2C%20saya%20ingin%20konsultasi%20kesehatan%20gratis.%20Boleh%20saya%20ceritakan%20keluhan%20saya%3F" target="_blank" class="btn-wa-konsultasi">
@@ -1305,7 +1305,7 @@
                 </div>
                 <div class="produk-banner-text">
                     <h3>{{ $settings['banner_title'] ?? '' }}</h3>
-                    <p>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings['banner_desc'] ?? '') !!}</p>
+                    @include('partials.rich', ['html' => $settings['banner_desc'] ?? ''])
                 </div>
                 <a href="{{ route('produk.index') }}" class="btn btn-primary" style="white-space:nowrap;flex-shrink:0;">
                     {{ $settings['banner_btn'] ?? __('common.see_all_products') }} →

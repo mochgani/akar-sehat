@@ -19,7 +19,7 @@
                     <h1>{{ $settings['hero_title1'] ?? 'Pahami Tubuh.' }}<br>
                         <span class="text-primary">{{ $settings['hero_title2'] ?? 'Sehat dari Akar.' }}</span>
                     </h1>
-                    <p>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings['hero_desc'] ?? 'Akar Sehat menyediakan edukasi dan pendampingan kesehatan untuk membantu Anda memahami penyakit secara menyeluruh sampai ke akarnya.') !!}</p>
+                    @include('partials.rich', ['html' => $settings['hero_desc'] ?? 'Akar Sehat menyediakan edukasi dan pendampingan kesehatan untuk membantu Anda memahami penyakit secara menyeluruh sampai ke akarnya.'])
                     <div class="hero-buttons">
                         <a href="{{ route('tentang') }}" class="btn btn-primary">{{ $settings['hero_btn_text'] ?? 'Selengkapnya' }}</a>
                     </div>
@@ -117,7 +117,7 @@
                 <div class="mentor-content">
                     <span class="mentor-tag">{{ $settings['mentor_tag'] ?? 'Dibimbing Oleh' }}</span>
                     <h2>{{ $settings['mentor_nama'] ?? 'Kang Bahri' }}</h2>
-                    <p class="mentor-bio">{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings['mentor_bio'] ?? 'Kang Bahri membantu masyarakat memahami tubuh melalui edukasi, konsultasi, dan panduan kesehatan alami yang mudah diterapkan dalam kehidupan sehari-hari secara fleksibel dan bertahap.') !!}</p>
+                    @include('partials.rich', ['html' => $settings['mentor_bio'] ?? 'Kang Bahri membantu masyarakat memahami tubuh melalui edukasi, konsultasi, dan panduan kesehatan alami yang mudah diterapkan dalam kehidupan sehari-hari secara fleksibel dan bertahap.', 'class' => 'mentor-bio'])
                     <div class="mentor-stats">
                         @php
                             $mentorStats = isset($settings['mentor_stats']) && is_string($settings['mentor_stats'])
@@ -415,7 +415,7 @@
                     </svg>
                 </div>
                 <h2>{{ $settings['konsul_title'] ?? 'Butuh Arahan yang Lebih Personal?' }}</h2>
-                <p>{!! preg_replace('/^\s*<p>(.*)<\/p>\s*$/is', '$1', $settings['konsul_desc'] ?? 'Konsultasi manual bersama Kang Bahri untuk memahami kondisi fungsional tubuh Anda secara spesifik dan menentukan langkah pemulihan alami yang paling tepat.') !!}</p>
+                @include('partials.rich', ['html' => $settings['konsul_desc'] ?? 'Konsultasi manual bersama Kang Bahri untuk memahami kondisi fungsional tubuh Anda secara spesifik dan menentukan langkah pemulihan alami yang paling tepat.'])
                 <a href="https://wa.me/{{ $siteSettings['wa_number'] ?? '6281234567890' }}" target="_blank" class="btn btn-primary btn--large">
                     {{ $settings['konsul_btn'] ?? 'Konsultasi via WhatsApp' }}</a>
             </div>

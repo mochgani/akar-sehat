@@ -326,6 +326,14 @@ function richExec(cmd, val) {
   document.execCommand(cmd, false, val || null);
   activeRich.dispatchEvent(new Event('input')); richSaveRange();
 }
+function richAlign(dir) {
+  if (!activeRich) return;
+  richRestoreRange();
+  document.execCommand('styleWithCSS', false, true);
+  document.execCommand('justify' + dir, false, null);
+  document.execCommand('styleWithCSS', false, false);
+  activeRich.dispatchEvent(new Event('input')); richSaveRange();
+}
 function buildRichToolbar() {
   const b = (l, t, fn) => `<button type="button" title="${t}" onmousedown="event.preventDefault()" onclick="${fn}">${l}</button>`;
   return '<div class="rich-tb">'
@@ -337,6 +345,11 @@ function buildRichToolbar() {
     + b('¶', 'Paragraf', "richExec('formatBlock','<p>')")
     + b('•', 'Daftar', "richExec('insertUnorderedList')")
     + b('1.', 'Daftar nomor', "richExec('insertOrderedList')")
+    + '<span class="sep"></span>'
+    + b('<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="13" y2="12"/><line x1="3" y1="18" x2="17" y2="18"/></svg>', 'Rata kiri', "richAlign('Left')")
+    + b('<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="5" y1="18" x2="19" y2="18"/></svg>', 'Rata tengah', "richAlign('Center')")
+    + b('<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="7" y1="18" x2="21" y2="18"/></svg>', 'Rata kanan', "richAlign('Right')")
+    + b('<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>', 'Rata kiri-kanan (justify)', "richAlign('Full')")
     + '</div>';
 }
 function mountRichEditor(ta) {
