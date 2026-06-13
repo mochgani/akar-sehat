@@ -294,14 +294,14 @@
                     <div class="insight-card">
                         <div class="article-img-box">
                             @if($artikel->thumbnail)
-                            <img src="{{ asset('storage/'.$artikel->thumbnail) }}" alt="{{ $artikel->judul }}" class="article-img-box-img">
+                            <img src="{{ asset('storage/'.$artikel->thumbnail) }}" alt="{{ $artikel->trans('judul') }}" class="article-img-box-img">
                             @else
-                            <img src="{{ asset('asset/artikel/default.png') }}" alt="{{ $artikel->judul }}" class="article-img-box-img">
+                            <img src="{{ asset('asset/artikel/default.png') }}" alt="{{ $artikel->trans('judul') }}" class="article-img-box-img">
                             @endif
                             <span class="article-tag">{{ strtoupper($artikel->kategori ?? 'ARTIKEL') }}</span>
                         </div>
                         <div class="article-content">
-                            <h3 class="article-title">{{ $artikel->judul }}</h3>
+                            <h3 class="article-title">{{ $artikel->trans('judul') }}</h3>
                             <a href="{{ route('edukasi.show', $artikel->slug) }}" class="article-link">{{ __('common.read_more') }} →</a>
                         </div>
                     </div>
@@ -356,14 +356,14 @@
                     <div class="product-card">
                         <div class="product-img-box">
                             @if($produk->fotos)
-                            <img src="{{ asset('storage/'.($produk->fotos[0] ?? '')) }}" alt="{{ $produk->nama }}"
+                            <img src="{{ asset('storage/'.($produk->fotos[0] ?? '')) }}" alt="{{ $produk->trans('nama') }}"
                                 class="product-img-box-img">
                             @endif
                         </div>
                         <div class="product-info">
                             <span class="product-brand">{{ __('common.brand') }}</span>
-                            <h3>{{ $produk->nama }}</h3>
-                            <p class="product-desc">{{ $produk->deskripsi }}</p>
+                            <h3>{{ $produk->trans('nama') }}</h3>
+                            <p class="product-desc">{{ $produk->trans('deskripsi') }}</p>
                             <hr class="product-divider">
                             <a href="{{ route('produk.show', $produk->slug) }}" class="product-cta-btn">{{ __('common.product_detail') }}</a>
                         </div>

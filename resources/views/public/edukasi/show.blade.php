@@ -915,7 +915,7 @@
                     @if(isset($prev) && $prev)
                     <a href="{{ route('edukasi.show', $prev->slug) }}" class="article-nav-btn prev">
                         <span class="nav-btn-label">{{ __('edukasi.prev') }}</span>
-                        <span class="nav-btn-title">{{ $prev->judul }}</span>
+                        <span class="nav-btn-title">{{ $prev->trans('judul') }}</span>
                     </a>
                     @else
                     <div class="article-nav-btn prev disabled">
@@ -927,7 +927,7 @@
                     @if(isset($next) && $next)
                     <a href="{{ route('edukasi.show', $next->slug) }}" class="article-nav-btn next">
                         <span class="nav-btn-label">{{ __('edukasi.next') }}</span>
-                        <span class="nav-btn-title">{{ $next->judul }}</span>
+                        <span class="nav-btn-title">{{ $next->trans('judul') }}</span>
                     </a>
                     @else
                     <div class="article-nav-btn next disabled">
@@ -954,7 +954,7 @@
                 <a href="{{ route('edukasi.show', $r->slug) }}" class="edu-article-card">
                     <div class="edu-article-img-box {{ $r->thumbnail ? '' : 'no-img' }}">
                         @if($r->thumbnail)
-                            <img src="{{ asset('storage/'.$r->thumbnail) }}" alt="{{ $r->judul }}" loading="lazy">
+                            <img src="{{ asset('storage/'.$r->thumbnail) }}" alt="{{ $r->trans('judul') }}" loading="lazy">
                         @else
                             <svg class="placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8">
                                 <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -973,7 +973,7 @@
                             <span class="edu-article-read-time">{{ $r->read_time ?? $r->readTime }} menit</span>
                             @endif
                         </div>
-                        <h3 class="edu-article-title">{{ $r->judul }}</h3>
+                        <h3 class="edu-article-title">{{ $r->trans('judul') }}</h3>
                         <span class="edu-article-link">
                             {{ __('common.read') }}
                         </span>

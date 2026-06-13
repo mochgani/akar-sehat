@@ -1110,7 +1110,7 @@
                 <a href="{{ route('produk.show', $r->slug) }}" class="produk-card">
                     <div class="produk-card-img-wrap {{ $r->fotos ? '' : 'no-img' }}">
                         @if($r->fotos)
-                            <img class="produk-card-img" src="{{ asset('storage/'.($r->fotos[0] ?? '')) }}" alt="{{ $r->nama }}" loading="lazy">
+                            <img class="produk-card-img" src="{{ asset('storage/'.($r->fotos[0] ?? '')) }}" alt="{{ $r->trans('nama') }}" loading="lazy">
                         @else
                             <svg class="produk-placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                         @endif
@@ -1122,7 +1122,7 @@
                     </div>
                     <div class="produk-card-body">
                         <span class="produk-card-category">{{ $kategoriObj ? $kategoriObj->trans('nama') : $r->kategori }}</span>
-                        <h3 class="produk-card-name">{{ $r->nama }}</h3>
+                        <h3 class="produk-card-name">{{ $r->trans('nama') }}</h3>
                         <div class="produk-card-footer">
                             <span class="produk-card-price">Rp {{ number_format($r->harga, 0, ',', '.') }}</span>
                             <span class="produk-card-btn">{{ __('common.view_detail') }} →</span>

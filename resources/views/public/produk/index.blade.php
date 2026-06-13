@@ -688,7 +688,7 @@
                 <div class="produk-card">
                     <div class="produk-card-img-wrap {{ $item->fotos ? '' : 'no-img' }}">
                         @if($item->fotos)
-                            <img class="produk-card-img" src="{{ asset('storage/'.($item->fotos[0] ?? '')) }}" alt="{{ $item->nama }}" loading="lazy">
+                            <img class="produk-card-img" src="{{ asset('storage/'.($item->fotos[0] ?? '')) }}" alt="{{ $item->trans('nama') }}" loading="lazy">
                         @else
                             <svg class="produk-placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8">
                                 <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
@@ -703,8 +703,8 @@
                     </div>
                     <div class="produk-card-body">
                         <span class="produk-card-category">{{ $kategoris->firstWhere('nama', $item->kategori)?->trans('nama') ?? $item->kategori }}</span>
-                        <h3 class="produk-card-name">{{ $item->nama }}</h3>
-                        <p class="produk-card-desc">{{ $item->deskripsi }}</p>
+                        <h3 class="produk-card-name">{{ $item->trans('nama') }}</h3>
+                        <p class="produk-card-desc">{{ $item->trans('deskripsi') }}</p>
                         <div class="produk-card-footer">
                             <div class="produk-card-price">
                                 Rp {{ number_format($item->harga, 0, ',', '.') }}

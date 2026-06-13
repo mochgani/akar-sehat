@@ -543,7 +543,7 @@
                     <article class="edu-article-card">
                         <div class="edu-article-img-box {{ $item->thumbnail ? '' : 'no-img' }}">
                             @if($item->thumbnail)
-                                <img src="{{ asset('storage/'.$item->thumbnail) }}" alt="{{ $item->judul }}" loading="lazy">
+                                <img src="{{ asset('storage/'.$item->thumbnail) }}" alt="{{ $item->trans('judul') }}" loading="lazy">
                             @else
                                 <svg class="placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8">
                                     <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -562,8 +562,8 @@
                                 <span class="edu-article-read-time">{{ $item->read_time ?? $item->readTime }} {{ __('common.min_read') }}</span>
                                 @endif
                             </div>
-                            <h2 class="edu-article-title">{{ $item->judul }}</h2>
-                            <p class="edu-article-excerpt">{{ \Illuminate\Support\Str::limit(strip_tags($item->konten ?? $item->excerpt ?? $item->judul), 120) }}</p>
+                            <h2 class="edu-article-title">{{ $item->trans('judul') }}</h2>
+                            <p class="edu-article-excerpt">{{ \Illuminate\Support\Str::limit(strip_tags($item->trans('konten') ?: $item->trans('judul')), 120) }}</p>
                             <a href="{{ route('edukasi.show', $item->slug) }}" class="edu-article-link">
                                 {{ __('common.read_more') }}
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
