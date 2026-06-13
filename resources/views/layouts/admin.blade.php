@@ -420,7 +420,7 @@
         method,
         headers,
         body: isFormData ? body : (body ? JSON.stringify(body) : undefined),
-      }).then(r => r.json());
+      }).then(r => r.json()).catch(() => ({ success: false, message: 'Koneksi gagal atau sesi habis.' }));
     }
   </script>
   @stack('scripts')
