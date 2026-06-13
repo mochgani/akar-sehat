@@ -46,14 +46,16 @@ class ArticleController extends Controller
             'kategori'   => 'nullable|string|max:100',
             'penulis'    => 'nullable|string|max:100',
             'konten'     => 'nullable|string',
-            'keywords'   => 'nullable|array',
+            'keywords'   => 'nullable|string|max:500',
             'meta_title' => 'nullable|string|max:70',
             'meta_desc'  => 'nullable|string|max:160',
             'thumbnail'  => 'nullable|image|max:2048',
         ]);
 
         $data['slug']         = Str::slug($data['judul']);
+        $data['keywords']     = $this->parseKeywords($request->input('keywords'));
         $data['translations'] = $this->extractTranslations($request, ['judul', 'konten', 'meta_title', 'meta_desc']);
+        $this->mergeKeywordTranslations($request, $data['translations']);
 
         if ($request->hasFile('thumbnail')) {
             $data['thumbnail'] = $request->file('thumbnail')->store('artikel', 'public');
@@ -71,13 +73,15 @@ class ArticleController extends Controller
             'kategori'   => 'nullable|string|max:100',
             'penulis'    => 'nullable|string|max:100',
             'konten'     => 'nullable|string',
-            'keywords'   => 'nullable|array',
+            'keywords'   => 'nullable|string|max:500',
             'meta_title' => 'nullable|string|max:70',
             'meta_desc'  => 'nullable|string|max:160',
             'thumbnail'  => 'nullable|image|max:2048',
         ]);
 
+        $data['keywords']     = $this->parseKeywords($request->input('keywords'));
         $data['translations'] = $this->extractTranslations($request, ['judul', 'konten', 'meta_title', 'meta_desc']);
+        $this->mergeKeywordTranslations($request, $data['translations']);
 
         if ($request->hasFile('thumbnail')) {
             if ($article->thumbnail) Storage::disk('public')->delete($article->thumbnail);
@@ -86,6 +90,31 @@ class ArticleController extends Controller
 
         $article->update($data);
         return response()->json(['success' => true, 'message' => 'Artikel berhasil diperbarui.']);
+    }
+
+    /** Ubah string "a, b, c" (atau array) menjadi array tag bersih. */
+    private function parseKeywords($val): array
+    {
+        if (is_array($val)) {
+            $items = $val;
+        } elseif (is_string($val) && $val !== '') {
+            $items = explode(',', $val);
+        } else {
+            return [];
+        }
+        return array_values(array_filter(array_map('trim', $items), fn ($v) => $v !== ''));
+    }
+
+    /** Tambahkan keywords per-locale (non-id) ke array translations. */
+    private function mergeKeywordTranslations(Request $request, array &$translations): void
+    {
+        $locales = Language::aktif()->where('code', '!=', 'id')->pluck('code');
+        foreach ($locales as $locale) {
+            $kw = $this->parseKeywords($request->input("trans.{$locale}.keywords"));
+            if (!empty($kw)) {
+                $translations[$locale]['keywords'] = $kw;
+            }
+        }
     }
 
     private function extractTranslations(Request $request, array $fields): array

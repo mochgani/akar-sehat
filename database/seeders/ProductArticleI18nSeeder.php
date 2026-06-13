@@ -61,47 +61,55 @@ class ProductArticleI18nSeeder extends Seeder
         $articles = [
             'Manfaat Jahe Merah untuk Daya Tahan Tubuh' => [
                 'en' => [
-                    'judul'  => 'The Benefits of Red Ginger for Immunity',
-                    'konten' => '<p>Red ginger (<em>Zingiber officinale var. rubrum</em>) has long been used in Indonesian traditional medicine as one of the most beneficial herbal plants.</p><h2>Active Compounds of Red Ginger</h2><p>Red ginger contains gingerol and shogaol in higher concentrations than ordinary ginger. Both compounds have strong anti-inflammatory and antioxidant properties.</p><h2>Benefits for Immunity</h2><p>Regular consumption of red ginger can help increase immune cell production, reduce chronic inflammation, and protect the body from viral and bacterial infections.</p><p>Research shows that red ginger extract can inhibit the growth of several pathogenic bacteria in vitro.</p><h2>The Right Way to Consume</h2><p>For optimal benefits, red ginger should be consumed regularly every day. It can be in the form of a warm drink, capsules, or added to cooking.</p>',
+                    'judul'    => 'The Benefits of Red Ginger for Immunity',
+                    'keywords' => ['red ginger', 'immunity', 'herbal'],
+                    'konten'   => '<p>Red ginger (<em>Zingiber officinale var. rubrum</em>) has long been used in Indonesian traditional medicine as one of the most beneficial herbal plants.</p><h2>Active Compounds of Red Ginger</h2><p>Red ginger contains gingerol and shogaol in higher concentrations than ordinary ginger. Both compounds have strong anti-inflammatory and antioxidant properties.</p><h2>Benefits for Immunity</h2><p>Regular consumption of red ginger can help increase immune cell production, reduce chronic inflammation, and protect the body from viral and bacterial infections.</p><p>Research shows that red ginger extract can inhibit the growth of several pathogenic bacteria in vitro.</p><h2>The Right Way to Consume</h2><p>For optimal benefits, red ginger should be consumed regularly every day. It can be in the form of a warm drink, capsules, or added to cooking.</p>',
                 ],
                 'ar' => [
-                    'judul'  => 'فوائد الزنجبيل الأحمر لتعزيز المناعة',
-                    'konten' => '<p>الزنجبيل الأحمر (<em>Zingiber officinale var. rubrum</em>) استُخدم منذ زمن طويل في الطب التقليدي الإندونيسي كأحد أكثر النباتات العشبية فائدة.</p><h2>المركبات الفعالة في الزنجبيل الأحمر</h2><p>يحتوي الزنجبيل الأحمر على الجنجرول والشوغاول بتركيزات أعلى من الزنجبيل العادي. ولكلا المركبين خصائص قوية مضادة للالتهابات ومضادة للأكسدة.</p><h2>الفوائد للمناعة</h2><p>يمكن أن يساعد تناول الزنجبيل الأحمر بانتظام على زيادة إنتاج الخلايا المناعية، وتقليل الالتهاب المزمن، وحماية الجسم من العدوى الفيروسية والبكتيرية.</p><p>تُظهر الأبحاث أن مستخلص الزنجبيل الأحمر يمكن أن يثبّط نمو عدة أنواع من البكتيريا المُمرضة في المختبر.</p><h2>الطريقة الصحيحة للتناول</h2><p>للحصول على فوائد مثلى، يُفضّل تناول الزنجبيل الأحمر بانتظام كل يوم. يمكن أن يكون في شكل مشروب دافئ أو كبسولات أو مضافاً إلى الطعام.</p>',
+                    'judul'    => 'فوائد الزنجبيل الأحمر لتعزيز المناعة',
+                    'keywords' => ['زنجبيل أحمر', 'مناعة', 'أعشاب'],
+                    'konten'   => '<p>الزنجبيل الأحمر (<em>Zingiber officinale var. rubrum</em>) استُخدم منذ زمن طويل في الطب التقليدي الإندونيسي كأحد أكثر النباتات العشبية فائدة.</p><h2>المركبات الفعالة في الزنجبيل الأحمر</h2><p>يحتوي الزنجبيل الأحمر على الجنجرول والشوغاول بتركيزات أعلى من الزنجبيل العادي. ولكلا المركبين خصائص قوية مضادة للالتهابات ومضادة للأكسدة.</p><h2>الفوائد للمناعة</h2><p>يمكن أن يساعد تناول الزنجبيل الأحمر بانتظام على زيادة إنتاج الخلايا المناعية، وتقليل الالتهاب المزمن، وحماية الجسم من العدوى الفيروسية والبكتيرية.</p><p>تُظهر الأبحاث أن مستخلص الزنجبيل الأحمر يمكن أن يثبّط نمو عدة أنواع من البكتيريا المُمرضة في المختبر.</p><h2>الطريقة الصحيحة للتناول</h2><p>للحصول على فوائد مثلى، يُفضّل تناول الزنجبيل الأحمر بانتظام كل يوم. يمكن أن يكون في شكل مشروب دافئ أو كبسولات أو مضافاً إلى الطعام.</p>',
                 ],
             ],
             'Detoksifikasi Alami: Membersihkan Tubuh dengan Herbal' => [
                 'en' => [
-                    'judul'  => 'Natural Detoxification: Cleansing the Body with Herbs',
+                    'judul'    => 'Natural Detoxification: Cleansing the Body with Herbs',
+                    'keywords' => ['detox', 'detoxification', 'temulawak', 'turmeric'],
                     'konten' => '<p>Detoxification is the process of cleansing toxins that accumulate in the body due to an unhealthy diet, pollution, and stress.</p><h2>Herbal Plants for Detox</h2><p>Several herbal plants are proven to have good detoxification ability:</p><ul><li><strong>Temulawak</strong> — protects the liver from toxin damage</li><li><strong>Turmeric</strong> — anti-inflammatory and supports liver function</li><li><strong>Sambiloto</strong> — helps the immune system and detox</li><li><strong>Meniran</strong> — supports kidney function</li></ul><h2>7-Day Detox Program</h2><p>A simple herbal detox program that can be done at home with ingredients easily found at traditional markets.</p>',
                 ],
                 'ar' => [
-                    'judul'  => 'إزالة السموم الطبيعية: تنقية الجسم بالأعشاب',
+                    'judul'    => 'إزالة السموم الطبيعية: تنقية الجسم بالأعشاب',
+                    'keywords' => ['ديتوكس', 'إزالة السموم', 'تيمولاواك', 'كركم'],
                     'konten' => '<p>إزالة السموم هي عملية تنقية السموم المتراكمة في الجسم نتيجة النظام الغذائي غير الصحي والتلوث والتوتر.</p><h2>نباتات عشبية لإزالة السموم</h2><p>أثبتت عدة نباتات عشبية قدرتها الجيدة على إزالة السموم:</p><ul><li><strong>تيمولاواك</strong> — يحمي الكبد من ضرر السموم</li><li><strong>الكركم</strong> — مضاد للالتهابات ويدعم وظيفة الكبد</li><li><strong>سامبيلوتو</strong> — يساعد الجهاز المناعي وإزالة السموم</li><li><strong>مينيران</strong> — يدعم وظيفة الكلى</li></ul><h2>برنامج إزالة السموم لـ7 أيام</h2><p>برنامج بسيط لإزالة السموم بالأعشاب يمكن تنفيذه في المنزل بمكونات تتوفر بسهولة في الأسواق التقليدية.</p>',
                 ],
             ],
             'Menjaga Kesehatan Pencernaan dengan Rempah Tradisional' => [
                 'en' => [
-                    'judul'  => 'Maintaining Digestive Health with Traditional Spices',
+                    'judul'    => 'Maintaining Digestive Health with Traditional Spices',
+                    'keywords' => ['digestion', 'spices', 'turmeric', 'temulawak'],
                     'konten' => '<p>A healthy digestive system is the foundation of overall body health. Indonesia\'s traditional spices hold a wealth of benefits for maintaining digestive health.</p><h2>Spices That Befriend Digestion</h2><p>Ginger, turmeric, cinnamon, and cardamom are some spices traditionally used to address digestive problems such as bloating, nausea, and stomach discomfort.</p>',
                 ],
                 'ar' => [
-                    'judul'  => 'الحفاظ على صحة الجهاز الهضمي بالتوابل التقليدية',
+                    'judul'    => 'الحفاظ على صحة الجهاز الهضمي بالتوابل التقليدية',
+                    'keywords' => ['هضم', 'توابل', 'كركم', 'تيمولاواك'],
                     'konten' => '<p>الجهاز الهضمي الصحي هو أساس صحة الجسم بشكل عام. تحمل التوابل التقليدية الإندونيسية ثروة من الفوائد للحفاظ على صحة الجهاز الهضمي.</p><h2>توابل صديقة للهضم</h2><p>الزنجبيل والكركم والقرفة والهيل بعض التوابل المستخدمة تقليدياً لمعالجة مشاكل الهضم مثل الانتفاخ والغثيان وعدم راحة المعدة.</p>',
                 ],
             ],
             'Antioksidan dari Alam: Melawan Radikal Bebas' => [
                 'en' => [
-                    'judul'  => 'Antioxidants from Nature: Fighting Free Radicals',
+                    'judul'    => 'Antioxidants from Nature: Fighting Free Radicals',
+                    'keywords' => ['antioxidant', 'free radicals', 'herbal'],
                     'konten' => '<p>Free radicals are unstable molecules that can damage body cells and contribute to premature aging and various degenerative diseases.</p><h2>Herbal Antioxidant Sources</h2><p>Indonesia\'s nature provides many easily accessible natural antioxidant sources, from kitchen spices to wild plants growing around us.</p>',
                 ],
                 'ar' => [
-                    'judul'  => 'مضادات الأكسدة من الطبيعة: محاربة الجذور الحرة',
+                    'judul'    => 'مضادات الأكسدة من الطبيعة: محاربة الجذور الحرة',
+                    'keywords' => ['مضادات الأكسدة', 'الجذور الحرة', 'أعشاب'],
                     'konten' => '<p>الجذور الحرة جزيئات غير مستقرة يمكن أن تتلف خلايا الجسم وتسهم في الشيخوخة المبكرة وأمراض تنكسية متنوعة.</p><h2>مصادر مضادات الأكسدة العشبية</h2><p>توفّر طبيعة إندونيسيا العديد من مصادر مضادات الأكسدة الطبيعية سهلة الوصول، من توابل المطبخ إلى النباتات البرية التي تنمو حولنا.</p>',
                 ],
             ],
             'Panduan Memilih Suplemen Herbal yang Tepat' => [
-                'en' => ['judul' => 'A Guide to Choosing the Right Herbal Supplement', 'konten' => '<p>Article in progress.</p>'],
-                'ar' => ['judul' => 'دليل اختيار المكمل العشبي المناسب', 'konten' => '<p>المقال قيد الكتابة.</p>'],
+                'en' => ['judul' => 'A Guide to Choosing the Right Herbal Supplement', 'keywords' => ['supplement', 'herbal', 'guide'], 'konten' => '<p>Article in progress.</p>'],
+                'ar' => ['judul' => 'دليل اختيار المكمل العشبي المناسب', 'keywords' => ['مكمل', 'أعشاب', 'دليل'], 'konten' => '<p>المقال قيد الكتابة.</p>'],
             ],
         ];
 

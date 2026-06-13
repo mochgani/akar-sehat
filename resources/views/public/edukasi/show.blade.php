@@ -884,10 +884,11 @@
                 </div>
 
                 <!-- Tags -->
-                @if(($artikel->keywords ?? $artikel->tags ?? false) && count($artikel->keywords ?? $artikel->tags ?? []) > 0)
+                @php $tags = $artikel->trans('keywords'); $tags = is_array($tags) ? $tags : []; @endphp
+                @if(count($tags) > 0)
                 <div class="article-tags-row">
                     <span class="tags-label">{{ __('edukasi.tags_label') }}</span>
-                    @foreach($artikel->keywords ?? $artikel->tags ?? [] as $tag)
+                    @foreach($tags as $tag)
                     <a href="{{ route('edukasi.index', ['q' => $tag]) }}" class="article-tag-pill">{{ $tag }}</a>
                     @endforeach
                 </div>

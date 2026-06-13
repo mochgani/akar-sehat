@@ -158,6 +158,14 @@
                   <textarea id="a-konten-{{ $loc }}" name="trans[{{ $loc }}][konten]" class="fc" rows="10" placeholder="Terjemahan konten HTML (opsional)"></textarea>
                   @endif
                 </div>
+                <div class="fg">
+                  <label class="fl">Kata Kunci / Tag <span style="font-size:11px;color:var(--cmt);font-weight:400">(pisahkan dengan koma)</span></label>
+                  @if($isId)
+                  <input type="text" id="a-keywords" class="fc" placeholder="jahe merah, imunitas, herbal">
+                  @else
+                  <input type="text" id="a-keywords-{{ $loc }}" class="fc" placeholder="Terjemahan tag (opsional)" dir="{{ $lang->dir ?? 'ltr' }}">
+                  @endif
+                </div>
                 @if(!$isId)
                 <div class="frow frow-2">
                   <div class="fg">
@@ -272,6 +280,7 @@ async function saveArtikel(status) {
   fd.append('penulis',    document.getElementById('a-penulis').value);
   fd.append('meta_title', document.getElementById('a-metatitle').value);
   fd.append('meta_desc',  document.getElementById('a-metadesc').value);
+  fd.append('keywords',   document.getElementById('a-keywords').value);
   // Append translation fields for non-ID locales
   @foreach($languages as $lang)
   @if($lang->code !== 'id')
@@ -279,10 +288,12 @@ async function saveArtikel(status) {
   const ak_{{ $lang->code }} = document.getElementById('a-konten-{{ $lang->code }}');
   const am_{{ $lang->code }} = document.getElementById('a-metatitle-{{ $lang->code }}');
   const ad_{{ $lang->code }} = document.getElementById('a-metadesc-{{ $lang->code }}');
+  const aw_{{ $lang->code }} = document.getElementById('a-keywords-{{ $lang->code }}');
   if (ae_{{ $lang->code }}) fd.append('trans[{{ $lang->code }}][judul]',      ae_{{ $lang->code }}.value);
   if (ak_{{ $lang->code }}) fd.append('trans[{{ $lang->code }}][konten]',     ak_{{ $lang->code }}.value);
   if (am_{{ $lang->code }}) fd.append('trans[{{ $lang->code }}][meta_title]', am_{{ $lang->code }}.value);
   if (ad_{{ $lang->code }}) fd.append('trans[{{ $lang->code }}][meta_desc]',  ad_{{ $lang->code }}.value);
+  if (aw_{{ $lang->code }}) fd.append('trans[{{ $lang->code }}][keywords]',   aw_{{ $lang->code }}.value);
   @endif
   @endforeach
   // Lampirkan thumbnail jika ada file baru (compress dulu)
@@ -327,6 +338,7 @@ function editArtikel(id) {
   document.getElementById('a-judul').value = a.judul;
   document.getElementById('a-metatitle').value = a.meta_title || '';
   document.getElementById('a-metadesc').value = a.meta_desc || '';
+  document.getElementById('a-keywords').value = (a.keywords || []).join(', ');
   document.getElementById('editor').innerHTML = a.konten || '';
   document.getElementById('a-konten').value = a.konten || '';
 
@@ -339,10 +351,12 @@ function editArtikel(id) {
   const fk_{{ $lang->code }} = document.getElementById('a-konten-{{ $lang->code }}');
   const fm_{{ $lang->code }} = document.getElementById('a-metatitle-{{ $lang->code }}');
   const fd_{{ $lang->code }} = document.getElementById('a-metadesc-{{ $lang->code }}');
+  const fw_{{ $lang->code }} = document.getElementById('a-keywords-{{ $lang->code }}');
   if (fj_{{ $lang->code }}) fj_{{ $lang->code }}.value = ta_{{ $lang->code }}.judul || '';
   if (fk_{{ $lang->code }}) fk_{{ $lang->code }}.value = ta_{{ $lang->code }}.konten || '';
   if (fm_{{ $lang->code }}) fm_{{ $lang->code }}.value = ta_{{ $lang->code }}.meta_title || '';
   if (fd_{{ $lang->code }}) fd_{{ $lang->code }}.value = ta_{{ $lang->code }}.meta_desc || '';
+  if (fw_{{ $lang->code }}) fw_{{ $lang->code }}.value = (ta_{{ $lang->code }}.keywords || []).join(', ');
   @endif
   @endforeach
 
