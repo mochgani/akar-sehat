@@ -65,7 +65,11 @@
           <tr>
             <th style="width:48px">Urutan</th>
             <th>Nama (ID)</th>
-            @foreach($languages as $lang)@if($lang->code !== 'id')<th>{{ $lang->flag }} {{ $lang->native_name }}</th>@endif@endforeach
+            @foreach($languages as $lang)
+            @if($lang->code !== 'id')
+            <th>{{ $lang->flag }} {{ $lang->native_name }}</th>
+            @endif
+            @endforeach
             <th style="width:100px;text-align:center">Jml Produk</th>
             <th style="width:80px;text-align:center">Status</th>
             <th style="width:90px;text-align:right">Aksi</th>
