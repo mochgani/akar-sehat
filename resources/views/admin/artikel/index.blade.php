@@ -194,7 +194,13 @@
                 <option value="arsip">Arsip</option>
               </select>
             </div>
-            <div class="fg"><label class="fl">Kategori</label><input type="text" id="a-kategori" name="kategori" class="fc" placeholder="Tanaman Herbal" list="kat-list"><datalist id="kat-list">@foreach($kategoris as $k)<option value="{{ $k }}">@endforeach</datalist></div>
+            <div class="fg"><label class="fl">Kategori</label>
+              <select id="a-kategori" name="kategori" class="fc">
+                <option value="">Pilih kategori...</option>
+                @foreach($kategoris as $k)<option value="{{ $k }}">{{ $k }}</option>@endforeach
+              </select>
+              <p style="font-size:11px;color:var(--cmt);margin-top:4px">Kelola daftar kategori di <a href="{{ route('admin.kategori-artikel.index') }}" style="color:var(--cp)">Kategori Artikel</a>.</p>
+            </div>
             <div class="fg"><label class="fl">Penulis</label><input type="text" id="a-penulis" name="penulis" class="fc" value="{{ auth()->user()->name }}"></div>
             <div class="fg">
               <label class="fl">Thumbnail <span style="font-size:11px;color:var(--cmt);font-weight:400">(semua bahasa)</span></label>
@@ -323,7 +329,12 @@ function editArtikel(id) {
   document.getElementById('modal-title').textContent = 'Edit Artikel';
   document.getElementById('a-id').value = id;
   document.getElementById('a-slug').value = a.slug;
-  document.getElementById('a-kategori').value = a.kategori || '';
+  const katSel = document.getElementById('a-kategori');
+  // Jika kategori artikel tidak ada di daftar master (mis. nonaktif/lama), tambahkan sementara agar tetap terpilih
+  if (a.kategori && ![...katSel.options].some(o => o.value === a.kategori)) {
+    katSel.add(new Option(a.kategori + ' (tidak aktif)', a.kategori));
+  }
+  katSel.value = a.kategori || '';
   document.getElementById('a-penulis').value = a.penulis || '';
   document.getElementById('a-thumb').value = '';
   const prev = document.getElementById('thumb-preview');
