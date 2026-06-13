@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             ConsultationSeeder::class,
             LanguageSeeder::class,
             SettingSeeder::class,
+            TentangSeeder::class,
             TestimonialSeeder::class,
         ]);
     }

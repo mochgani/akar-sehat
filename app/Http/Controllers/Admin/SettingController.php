@@ -142,7 +142,39 @@ class SettingController extends Controller
         ]);
 
         $locales  = \App\Models\Language::aktif()->pluck('code')->toArray();
-        $textKeys = ['hero_badge', 'hero_title', 'hero_desc', 'profil_nama', 'profil_gelar', 'profil_bio', 'visi', 'misi'];
+        $textKeys = [
+            // Hero
+            'hero_badge', 'hero_title', 'hero_desc',
+            'hero_stat1_val', 'hero_stat1_label', 'hero_stat2_val', 'hero_stat2_label',
+            'hero_stat3_val', 'hero_stat3_label', 'hero_stat4_val', 'hero_stat4_label',
+            // Siapa Kami
+            'intro_label', 'intro_title', 'intro_p1', 'intro_p2', 'intro_p3',
+            'value1_title', 'value1_desc', 'value2_title', 'value2_desc',
+            'value3_title', 'value3_desc', 'value4_title', 'value4_desc',
+            // Visi & Misi
+            'vm_title', 'vm_desc', 'visi_label', 'visi', 'misi_label', 'misi_heading', 'misi',
+            // Profil
+            'profil_section_label', 'profil_section_title', 'profil_inner_label',
+            'profil_nama', 'profil_gelar', 'profil_bio',
+            'cert1', 'cert2', 'cert3',
+            'profil_stat1_val', 'profil_stat1_label', 'profil_stat2_val', 'profil_stat2_label',
+            'profil_stat3_val', 'profil_stat3_label', 'keahlian_title', 'keahlian_tags',
+            // Perjalanan
+            'journey_title', 'journey_desc',
+            'tl1_year', 'tl1_title', 'tl1_desc', 'tl2_year', 'tl2_title', 'tl2_desc',
+            'tl3_year', 'tl3_title', 'tl3_desc', 'tl4_year', 'tl4_title', 'tl4_desc',
+            'tl5_year', 'tl5_title', 'tl5_desc', 'tl6_year', 'tl6_title', 'tl6_desc',
+            'tl7_year', 'tl7_title', 'tl7_desc',
+            // Proses Pendampingan
+            'ck_label', 'ck_title', 'ck_desc',
+            'step1_title', 'step1_desc', 'step2_title', 'step2_desc', 'step3_title', 'step3_desc',
+            'step4_title', 'step4_desc', 'step5_title', 'step5_desc',
+            'ckd1_title', 'ckd1_intro', 'ckd1_list', 'ckd2_title', 'ckd2_intro', 'ckd2_list',
+            'ckd3_title', 'ckd3_intro', 'ckd3_list',
+            // CTA & Banner
+            'cta_label', 'cta_title', 'cta_desc', 'cta_btn', 'cta_note',
+            'banner_title', 'banner_desc', 'banner_btn',
+        ];
 
         foreach ($locales as $locale) {
             foreach ($textKeys as $key) {

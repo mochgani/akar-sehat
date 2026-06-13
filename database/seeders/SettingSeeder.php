@@ -77,20 +77,9 @@ class SettingSeeder extends Seeder
             'homepage.konsul_desc'  => 'Konsultasi manual bersama Kang Bahri untuk memahami kondisi fungsional tubuh Anda secara spesifik dan menentukan langkah pemulihan alami yang paling tepat.',
             'homepage.konsul_btn'   => 'Konsultasi via WhatsApp',
 
-            // Halaman Tentang — Hero
-            'tentang.hero_badge'  => 'Mengenal Akar Sehat',
-            'tentang.hero_title'  => 'Kesehatan yang Dimulai dari Akar Permasalahannya',
-            'tentang.hero_desc'   => 'Kami bukan sekadar platform suplemen herbal. Akar Sehat adalah gerakan untuk mengembalikan masyarakat pada pemahaman bahwa tubuh memiliki kecerdasan alaminya sendiri — dan tugas kita adalah mendukungnya, bukan melawannya.',
-
-            // Halaman Tentang — Profil
+            // NB: Semua konten Halaman Tentang ada di TentangSeeder (3 bahasa).
+            // Hanya foto profil (locale-independent) yang disimpan di sini.
             'tentang.profil_foto'  => '',
-            'tentang.profil_nama'  => 'Bahri, S.Kes.',
-            'tentang.profil_gelar' => 'Terapis Herbal · Konsultan Kesehatan Holistik · Pendiri Akar Sehat',
-            'tentang.profil_bio'   => "Kang Bahri adalah seorang terapis herbal dan konsultan kesehatan holistik yang telah mengabdikan lebih dari satu setengah dekade hidupnya untuk mempelajari, mempraktikkan, dan menyebarluaskan pengetahuan tentang pengobatan herbal Nusantara dan pendekatan kesehatan integratif.\n\nLahir dan besar di lingkungan yang akrab dengan tanaman obat, Kang Bahri mewarisi kecintaan pada herbal dari sang nenek yang dikenal sebagai dukun beranak di desanya. Keingintahuan masa kecil ini kemudian tumbuh menjadi dedikasi seumur hidup.\n\nKang Bahri menempuh pendidikan formal di bidang kesehatan sambil terus belajar dari berbagai guru dan maestro pengobatan tradisional di Jawa, Sumatera, hingga Kalimantan.\n\nHari ini, Kang Bahri melayani konsultasi kesehatan secara personal dan mendirikan Akar Sehat sebagai platform untuk menjangkau lebih banyak masyarakat.",
-
-            // Halaman Tentang — Visi Misi
-            'tentang.visi' => 'Menjadi platform edukasi dan pendampingan kesehatan herbal terpercaya yang mengembalikan masyarakat Indonesia pada kearifan alami untuk hidup sehat, seimbang, dan berdaya dari dalam.',
-            'tentang.misi' => "Memberikan edukasi kesehatan holistik yang akurat, mudah dipahami, dan dapat langsung dipraktikkan oleh masyarakat luas.\nMembantu setiap individu menemukan akar masalah kesehatannya melalui pendampingan personal yang empatik dan terstruktur.\nMenyediakan produk herbal berkualitas tinggi yang bahan bakunya dapat ditelusuri, formulasinya terbukti, dan dampaknya nyata.\nMembangun komunitas yang saling mendukung dalam perjalanan menuju kesehatan optimal berbasis alam dan gaya hidup seimbang.",
         ];
 
         foreach ($settings as $key => $value) {

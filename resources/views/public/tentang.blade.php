@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('title', __('tentang.page_title'))
-@section('meta_desc', 'Kenali lebih dalam tentang Akar Sehat, visi misi kami, profil dan perjalanan Kang Bahri sebagai terapis herbal, serta cara kami membantu Anda menemukan akar masalah kesehatan.')
+@section('meta_desc', $settings['hero_desc'] ?? __('tentang.page_title'))
 
 @push('styles')
 <style>
@@ -962,25 +962,15 @@
                     </svg>
                     {{ $settings['hero_badge'] ?? 'Mengenal Akar Sehat' }}
                 </span>
-                <h1>{{ $settings['hero_title'] ?? 'Kesehatan yang Dimulai dari Akar Permasalahannya' }}</h1>
-                <p>{{ $settings['hero_desc'] ?? 'Kami bukan sekadar platform suplemen herbal. Akar Sehat adalah gerakan untuk mengembalikan masyarakat pada pemahaman bahwa tubuh memiliki kecerdasan alaminya sendiri — dan tugas kita adalah mendukungnya, bukan melawannya.' }}</p>
+                <h1>{{ $settings['hero_title'] ?? '' }}</h1>
+                <p>{{ $settings['hero_desc'] ?? '' }}</p>
                 <div class="tentang-hero-stats">
+                    @foreach([1,2,3,4] as $i)
                     <div class="hero-stat-item">
-                        <div class="hero-stat-value">500<span>+</span></div>
-                        <div class="hero-stat-label">Pengguna yang<br>terbantu</div>
+                        <div class="hero-stat-value">{!! preg_replace('/\+$/', '<span>+</span>', e($settings["hero_stat{$i}_val"] ?? '')) !!}</div>
+                        <div class="hero-stat-label">{{ $settings["hero_stat{$i}_label"] ?? '' }}</div>
                     </div>
-                    <div class="hero-stat-item">
-                        <div class="hero-stat-value">15<span>+</span></div>
-                        <div class="hero-stat-label">{{ __('tentang.experience_label2') }}</div>
-                    </div>
-                    <div class="hero-stat-item">
-                        <div class="hero-stat-value">8</div>
-                        <div class="hero-stat-label">Produk herbal<br>pilihan</div>
-                    </div>
-                    <div class="hero-stat-item">
-                        <div class="hero-stat-value">0</div>
-                        <div class="hero-stat-label">Biaya konsultasi<br>awal</div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -993,58 +983,32 @@
         <div class="container">
             <div class="tentang-intro-grid">
                 <div class="tentang-intro-text">
-                    <span class="section-label">Siapa Kami</span>
-                    <h2>Platform Kesehatan Holistik yang Berpihak pada Alam</h2>
-                    <p>Akar Sehat lahir dari keyakinan sederhana: bahwa sebagian besar keluhan kesehatan modern bukan sekadar masalah organ yang rusak, melainkan sinyal dari ketidakseimbangan yang lebih dalam — dalam pola makan, gaya hidup, pikiran, dan hubungan kita dengan alam.</p>
-                    <p>Kami mengintegrasikan kearifan pengobatan herbal Nusantara yang telah teruji selama berabad-abad dengan pemahaman fisiologi modern, untuk membantu setiap pengguna menemukan <em>akar masalah</em> di balik gejala yang mereka rasakan — bukan sekadar meredam gejalanya.</p>
-                    <p>Didampingi langsung oleh Kang Bahri, setiap pengguna mendapatkan pendekatan yang personal, bukan protokol generik. Karena setiap tubuh berbeda, setiap solusi pun harus berbeda.</p>
+                    <span class="section-label">{{ $settings['intro_label'] ?? '' }}</span>
+                    <h2>{{ $settings['intro_title'] ?? '' }}</h2>
+                    @foreach(['intro_p1','intro_p2','intro_p3'] as $pk)
+                        @if(!empty($settings[$pk]))<p>{{ $settings[$pk] }}</p>@endif
+                    @endforeach
                 </div>
                 <div class="tentang-values">
+                    @php
+                        $valueIcons = [
+                            '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+                            '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+                            '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+                            '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+                        ];
+                    @endphp
+                    @foreach([1,2,3,4] as $i)
                     <div class="value-card">
                         <div class="value-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                            </svg>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">{!! $valueIcons[$i-1] !!}</svg>
                         </div>
                         <div class="value-text">
-                            <h4>Pendekatan Akar, Bukan Gejala</h4>
-                            <p>Kami tidak berhenti di permukaan. Setiap sesi konsultasi bertujuan menemukan penyebab utama di balik keluhan, bukan sekadar menghilangkan rasa sakitnya.</p>
+                            <h4>{{ $settings["value{$i}_title"] ?? '' }}</h4>
+                            <p>{{ $settings["value{$i}_desc"] ?? '' }}</p>
                         </div>
                     </div>
-                    <div class="value-card">
-                        <div class="value-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                            </svg>
-                        </div>
-                        <div class="value-text">
-                            <h4>Personal & Manusiawi</h4>
-                            <p>Tidak ada protokol satu ukuran untuk semua. Kami memperlakukan setiap pengguna sebagai individu unik dengan konteks kehidupan yang berbeda-beda.</p>
-                        </div>
-                    </div>
-                    <div class="value-card">
-                        <div class="value-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            </svg>
-                        </div>
-                        <div class="value-text">
-                            <h4>Transparansi & Kepercayaan</h4>
-                            <p>Kami berbagi pengetahuan secara terbuka melalui edukasi. Anda berhak memahami mengapa sebuah pendekatan direkomendasikan untuk kondisi Anda.</p>
-                        </div>
-                    </div>
-                    <div class="value-card">
-                        <div class="value-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                            </svg>
-                        </div>
-                        <div class="value-text">
-                            <h4>Berbasis Bukti & Pengalaman</h4>
-                            <p>Rekomendasi kami didukung oleh pengalaman lapangan bertahun-tahun serta pemahaman mekanisme herbal yang terus diperbarui.</p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -1056,8 +1020,8 @@
     <section class="visi-misi">
         <div class="container">
             <div class="section-header" style="text-align:center;">
-                <h2 class="section-title">{{ __('tentang.visi_misi_title') }}</h2>
-                <p class="section-desc">Landasan yang memandu setiap langkah kami dalam melayani dan mendidik masyarakat tentang kesehatan holistik.</p>
+                <h2 class="section-title">{{ $settings['vm_title'] ?? '' }}</h2>
+                <p class="section-desc">{{ $settings['vm_desc'] ?? '' }}</p>
             </div>
             <div class="visi-misi-grid">
                 <!-- Visi -->
@@ -1066,9 +1030,9 @@
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                         </svg>
-                        {{ __('tentang.visi_label') }}
+                        {{ $settings['visi_label'] ?? '' }}
                     </span>
-                    <h3>{{ $settings['visi'] ?? 'Menjadi platform edukasi dan pendampingan kesehatan herbal terpercaya yang mengembalikan masyarakat Indonesia pada kearifan alami untuk hidup sehat, seimbang, dan berdaya dari dalam.' }}</h3>
+                    <h3>{{ $settings['visi'] ?? '' }}</h3>
                 </div>
                 <!-- Misi -->
                 <div class="misi-card">
@@ -1076,24 +1040,17 @@
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <polyline points="20 6 9 17 4 12"/>
                         </svg>
-                        {{ __('tentang.misi_label') }}
+                        {{ $settings['misi_label'] ?? '' }}
                     </span>
-                    <h3>{{ __('tentang.how_works_subtitle') }}</h3>
+                    <h3>{{ $settings['misi_heading'] ?? '' }}</h3>
                     <ul class="misi-list">
-                        @if(!empty($settings['misi']))
-                            @php $misiItems = array_filter(array_map('trim', explode("\n", $settings['misi']))); @endphp
-                            @foreach($misiItems as $idx => $item)
-                            <li>
-                                <span class="misi-dot">{{ str_pad($idx + 1, 2, '0', STR_PAD_LEFT) }}</span>
-                                {{ $item }}
-                            </li>
-                            @endforeach
-                        @else
-                            <li><span class="misi-dot">01</span>Memberikan edukasi kesehatan holistik yang akurat, mudah dipahami, dan dapat langsung dipraktikkan oleh masyarakat luas.</li>
-                            <li><span class="misi-dot">02</span>Membantu setiap individu menemukan akar masalah kesehatannya melalui pendampingan personal yang empatik dan terstruktur.</li>
-                            <li><span class="misi-dot">03</span>Menyediakan produk herbal berkualitas tinggi yang bahan bakunya dapat ditelusuri, formulasinya terbukti, dan dampaknya nyata.</li>
-                            <li><span class="misi-dot">04</span>Membangun komunitas yang saling mendukung dalam perjalanan menuju kesehatan optimal berbasis alam dan gaya hidup seimbang.</li>
-                        @endif
+                        @php $misiItems = array_filter(array_map('trim', explode("\n", $settings['misi'] ?? ''))); @endphp
+                        @foreach($misiItems as $idx => $item)
+                        <li>
+                            <span class="misi-dot">{{ str_pad($idx + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                            {{ $item }}
+                        </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -1106,8 +1063,8 @@
     <section class="profil-section">
         <div class="container">
             <div class="section-header">
-                <span style="display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--color-primary);margin-bottom:10px;">{{ __('tentang.founder_label') }}</span>
-                <h2 class="section-title">Mengenal Kang Bahri</h2>
+                <span style="display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--color-primary);margin-bottom:10px;">{{ $settings['profil_section_label'] ?? '' }}</span>
+                <h2 class="section-title">{{ $settings['profil_section_title'] ?? '' }}</h2>
             </div>
             <div class="profil-grid">
                 <!-- Image col -->
@@ -1122,62 +1079,44 @@
                         @endif
                     </div>
                     <div class="profil-cert-strip" style="margin-top:16px;">
+                        @foreach(['cert1','cert2','cert3'] as $ck)
+                        @if(!empty($settings[$ck]))
                         <span class="profil-cert">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-                            Terapis Herbal Bersertifikat
+                            {{ $settings[$ck] }}
                         </span>
-                        <span class="profil-cert">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-                            Konsultan Kesehatan Holistik
-                        </span>
-                        <span class="profil-cert">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-                            Praktisi Jamu Nusantara
-                        </span>
+                        @endif
+                        @endforeach
                     </div>
                 </div>
 
                 <!-- Info col -->
                 <div class="profil-info-col">
-                    <span class="section-label">Profil Lengkap</span>
-                    <h2>{{ $settings['profil_nama'] ?? 'Bahri, S.Kes.' }}</h2>
-                    <p class="profil-subtitle">{{ $settings['profil_gelar'] ?? 'Terapis Herbal · Konsultan Kesehatan Holistik · Pendiri Akar Sehat' }}</p>
+                    <span class="section-label">{{ $settings['profil_inner_label'] ?? '' }}</span>
+                    <h2>{{ $settings['profil_nama'] ?? '' }}</h2>
+                    <p class="profil-subtitle">{{ $settings['profil_gelar'] ?? '' }}</p>
 
                     <div class="profil-bio">
-                        @if(!empty($settings['profil_bio']))
-                            @foreach(array_filter(explode("\n\n", $settings['profil_bio'])) as $paragraph)
-                                <p>{{ trim($paragraph) }}</p>
-                            @endforeach
-                        @else
-                            <p>Kang Bahri adalah seorang terapis herbal dan konsultan kesehatan holistik yang telah mengabdikan lebih dari satu setengah dekade hidupnya untuk mempelajari, mempraktikkan, dan menyebarluaskan pengetahuan tentang pengobatan herbal Nusantara.</p>
-                        @endif
+                        @foreach(array_filter(explode("\n\n", $settings['profil_bio'] ?? '')) as $paragraph)
+                            <p>{{ trim($paragraph) }}</p>
+                        @endforeach
                     </div>
 
                     <div class="profil-stats-row">
+                        @foreach([1,2,3] as $i)
                         <div class="profil-stat">
-                            <div class="profil-stat-value">15<span>+</span></div>
-                            <div class="profil-stat-label">{{ __('tentang.experience_label') }}</div>
+                            <div class="profil-stat-value">{!! preg_replace('/\+$/', '<span>+</span>', e($settings["profil_stat{$i}_val"] ?? '')) !!}</div>
+                            <div class="profil-stat-label">{{ $settings["profil_stat{$i}_label"] ?? '' }}</div>
                         </div>
-                        <div class="profil-stat">
-                            <div class="profil-stat-value">500<span>+</span></div>
-                            <div class="profil-stat-label">Klien yang ditangani secara personal</div>
-                        </div>
-                        <div class="profil-stat">
-                            <div class="profil-stat-value">200<span>+</span></div>
-                            <div class="profil-stat-label">Jenis tanaman herbal yang dikuasai</div>
-                        </div>
+                        @endforeach
                     </div>
 
-                    <div class="profil-keahlian-title">Area Keahlian</div>
+                    <div class="profil-keahlian-title">{{ $settings['keahlian_title'] ?? '' }}</div>
                     <div class="keahlian-tags">
-                        <span class="keahlian-tag">Detoksifikasi Tubuh</span>
-                        <span class="keahlian-tag">Kesehatan Pencernaan</span>
-                        <span class="keahlian-tag">Manajemen Imunitas</span>
-                        <span class="keahlian-tag">Herbal Anti-Inflamasi</span>
-                        <span class="keahlian-tag">Pengelolaan Stres Kronis</span>
-                        <span class="keahlian-tag">Nutrisi Fungsional</span>
-                        <span class="keahlian-tag">Fitomedicine Modern</span>
-                        <span class="keahlian-tag">Jamu Nusantara</span>
+                        @php $keahlian = array_filter(array_map('trim', explode("\n", $settings['keahlian_tags'] ?? ''))); @endphp
+                        @foreach($keahlian as $tag)
+                        <span class="keahlian-tag">{{ $tag }}</span>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -1190,145 +1129,47 @@
     <section class="journey-section">
         <div class="container">
             <div class="section-header" style="text-align:center;">
-                <h2 class="section-title">{{ __('tentang.journey_title') }}</h2>
-                <p class="section-desc">Dari keingintahuan masa kecil di kebun nenek hingga mendampingi ratusan orang menemukan jalan sehatnya.</p>
+                <h2 class="section-title">{{ $settings['journey_title'] ?? '' }}</h2>
+                <p class="section-desc">{{ $settings['journey_desc'] ?? '' }}</p>
             </div>
 
+            @php
+                $tlIcons = [
+                    '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+                    '<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
+                    '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>',
+                    '<circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>',
+                    '<circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>',
+                    '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+                    '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+                ];
+            @endphp
             <div class="timeline">
-
-                <!-- 2005 -->
-                <div class="timeline-item right">
+                @foreach([1,2,3,4,5,6,7] as $i)
+                @php
+                    $side  = $i % 2 === 1 ? 'right' : 'left';
+                    $last  = $i === 7;
+                    $year  = $settings["tl{$i}_year"] ?? '';
+                    $tlTitle = $settings["tl{$i}_title"] ?? '';
+                    $tlDesc  = $settings["tl{$i}_desc"] ?? '';
+                @endphp
+                @continue($year === '' && $tlTitle === '' && $tlDesc === '')
+                <div class="timeline-item {{ $side }}">
                     <div class="timeline-content-left"></div>
                     <div class="timeline-node-col">
-                        <div class="timeline-node">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            </svg>
+                        <div class="timeline-node" @if($last) style="background:linear-gradient(135deg,var(--color-primary),var(--color-primary-dark));" @endif>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">{!! $tlIcons[$i-1] !!}</svg>
                         </div>
                     </div>
                     <div class="timeline-content-right">
-                        <div class="timeline-card">
-                            <div class="timeline-year">2005 — Titik Awal</div>
-                            <h4>Penyembuhan Keluarga yang Mengubah Pandangan</h4>
-                            <p>Anggota keluarga terdekat didiagnosis dengan kondisi kronis yang divonis sulit disembuhkan secara medis konvensional. Kang Bahri, yang saat itu masih muda, memutuskan untuk mendalami jalur herbal dan holistik. Dalam 8 bulan dengan pendampingan terapis tradisional, kondisi tersebut membaik signifikan — pengalaman yang menjadi benih dari seluruh perjalanan ini.</p>
+                        <div class="timeline-card" @if($last) style="border-color:rgba(200,106,68,0.2);" @endif>
+                            <div class="timeline-year">{{ $year }}</div>
+                            <h4>{{ $tlTitle }}</h4>
+                            <p>{{ $tlDesc }}</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- 2007 -->
-                <div class="timeline-item left">
-                    <div class="timeline-content-right">
-                        <div class="timeline-card">
-                            <div class="timeline-year">2007 — Pendidikan Formal</div>
-                            <h4>Studi Kesehatan & Berguru pada Para Maestro</h4>
-                            <p>Melanjutkan studi formal di bidang kesehatan sambil secara paralel berguru langsung kepada ahli jamu dan terapis tradisional terkemuka di Jawa Tengah. Belajar membaca gejala tubuh secara holistik — bukan hanya dari kacamata patologi, tapi juga dari perspektif keseimbangan energi dan pola hidup.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-node-col">
-                        <div class="timeline-node">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="timeline-content-left"></div>
-                </div>
-
-                <!-- 2010 -->
-                <div class="timeline-item right">
-                    <div class="timeline-content-left"></div>
-                    <div class="timeline-node-col">
-                        <div class="timeline-node">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="timeline-content-right">
-                        <div class="timeline-card">
-                            <div class="timeline-year">2010 — Praktik Pertama</div>
-                            <h4>Membuka Praktik Terapi Herbal dari Rumah</h4>
-                            <p>Mulai menerima klien secara personal dari lingkungan sekitar. Meskipun masih sangat sederhana, antusiasme dari mulut ke mulut tumbuh pesat. Dalam dua tahun pertama, sudah melayani lebih dari 50 klien dengan berbagai keluhan — dari masalah pencernaan, kelelahan kronis, hingga pemulihan pasca sakit berat.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2014 -->
-                <div class="timeline-item left">
-                    <div class="timeline-content-right">
-                        <div class="timeline-card">
-                            <div class="timeline-year">2014 — Ekspansi Pengetahuan</div>
-                            <h4>Riset Mendalam & Sertifikasi Profesional</h4>
-                            <p>Menempuh sertifikasi sebagai Terapis Herbal Bersertifikat dan Konsultan Kesehatan Holistik. Secara aktif mengikuti seminar fitomedicine dan ethnobotany, termasuk workshop dari praktisi herbalis internasional. Mengembangkan metode analisis keluhan yang lebih terstruktur dengan mengintegrasikan pendekatan tradisional dan ilmiah.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-node-col">
-                        <div class="timeline-node">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="timeline-content-left"></div>
-                </div>
-
-                <!-- 2018 -->
-                <div class="timeline-item right">
-                    <div class="timeline-content-left"></div>
-                    <div class="timeline-node-col">
-                        <div class="timeline-node">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="timeline-content-right">
-                        <div class="timeline-card">
-                            <div class="timeline-year">2018 — Lahirnya Akar Sehat</div>
-                            <h4>Mendirikan Brand & Komunitas Akar Sehat</h4>
-                            <p>Melihat kebutuhan yang semakin besar dan keterbatasan layanan tatap muka, Kang Bahri mendirikan Akar Sehat sebagai platform yang memungkinkan lebih banyak orang mendapatkan pendampingan kesehatan holistik. Brand ini lahir dari tekad untuk mendemokratisasi akses terhadap pengetahuan herbal yang selama ini hanya tersedia bagi sebagian orang.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2021 -->
-                <div class="timeline-item left">
-                    <div class="timeline-content-right">
-                        <div class="timeline-card">
-                            <div class="timeline-year">2021 — Platform Digital</div>
-                            <h4>Edukasi & Konsultasi Online untuk Semua</h4>
-                            <p>Mengembangkan platform digital Akar Sehat untuk menjangkau pengguna di seluruh Indonesia. Membuka layanan konsultasi online via WhatsApp dan menghadirkan konten edukasi kesehatan yang dapat diakses gratis oleh siapa saja. Dalam setahun, jumlah pengguna yang terjangkau tumbuh lima kali lipat dibanding era praktik tatap muka saja.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-node-col">
-                        <div class="timeline-node">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="timeline-content-left"></div>
-                </div>
-
-                <!-- 2024 -->
-                <div class="timeline-item right">
-                    <div class="timeline-content-left"></div>
-                    <div class="timeline-node-col">
-                        <div class="timeline-node" style="background:linear-gradient(135deg,var(--color-primary),var(--color-primary-dark));">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="timeline-content-right">
-                        <div class="timeline-card" style="border-color:rgba(200,106,68,0.2);">
-                            <div class="timeline-year">2024 — Hari Ini</div>
-                            <h4>500+ Pengguna, Satu Tujuan yang Sama</h4>
-                            <p>Akar Sehat kini melayani ratusan pengguna aktif dari seluruh Indonesia — dari Sabang sampai Merauke. Dengan 8 produk herbal unggulan, platform edukasi, dan layanan konsultasi personal yang tetap gratis untuk sesi pertama, Kang Bahri terus menjalankan misi yang sama sejak hari pertama: membantu setiap orang menemukan jalan sehatnya sendiri, dari akarnya.</p>
-                        </div>
-                    </div>
-                </div>
-
+                @endforeach
             </div>
         </div>
     </section>
@@ -1339,116 +1180,57 @@
     <section class="cara-kerja">
         <div class="container">
             <div class="cara-kerja-intro">
-                <span style="display:inline-block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--color-primary);margin-bottom:12px;">Proses Pendampingan</span>
-                <h2 class="section-title">Bagaimana Akar Sehat Bekerja?</h2>
-                <p>Kami tidak menebak-nebak. Ada proses yang terstruktur di balik setiap rekomendasi — dari saat Anda pertama kali menghubungi kami hingga tubuh Anda merespons dengan membaik.</p>
+                <span style="display:inline-block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--color-primary);margin-bottom:12px;">{{ $settings['ck_label'] ?? '' }}</span>
+                <h2 class="section-title">{{ $settings['ck_title'] ?? '' }}</h2>
+                <p>{{ $settings['ck_desc'] ?? '' }}</p>
             </div>
 
             <!-- 5 Steps -->
+            @php
+                $stepIcons = [
+                    '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+                    '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+                    '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+                    '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+                    '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+                ];
+            @endphp
             <div class="cara-kerja-steps">
+                @foreach([1,2,3,4,5] as $i)
                 <div class="ck-step">
                     <div class="ck-step-num">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                        </svg>
-                        <span class="ck-step-badge">1</span>
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">{!! $stepIcons[$i-1] !!}</svg>
+                        <span class="ck-step-badge">{{ $i }}</span>
                     </div>
-                    <h4>Konsultasi Awal</h4>
-                    <p>Anda cerita, kami mendengar. Tanpa terburu-buru, tanpa penghakiman.</p>
+                    <h4>{{ $settings["step{$i}_title"] ?? '' }}</h4>
+                    <p>{{ $settings["step{$i}_desc"] ?? '' }}</p>
                 </div>
-                <div class="ck-step">
-                    <div class="ck-step-num">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                        </svg>
-                        <span class="ck-step-badge">2</span>
-                    </div>
-                    <h4>Analisis Pola Gejala</h4>
-                    <p>Kang Bahri memetakan pola keluhan dan kaitannya dengan gaya hidup Anda.</p>
-                </div>
-                <div class="ck-step">
-                    <div class="ck-step-num">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
-                        <span class="ck-step-badge">3</span>
-                    </div>
-                    <h4>Identifikasi Akar Masalah</h4>
-                    <p>Menemukan penyebab yang sesungguhnya — bukan sekadar label diagnosisnya.</p>
-                </div>
-                <div class="ck-step">
-                    <div class="ck-step-num">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-                        </svg>
-                        <span class="ck-step-badge">4</span>
-                    </div>
-                    <h4>Program Personal</h4>
-                    <p>Rekomendasi herbal, pola makan, dan gaya hidup yang dibuat khusus untuk Anda.</p>
-                </div>
-                <div class="ck-step">
-                    <div class="ck-step-num">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                        </svg>
-                        <span class="ck-step-badge">5</span>
-                    </div>
-                    <h4>Pendampingan Berkelanjutan</h4>
-                    <p>Kami pantau perkembangan dan sesuaikan program sesuai respons tubuh Anda.</p>
-                </div>
+                @endforeach
             </div>
 
             <!-- Detail cards -->
+            @php
+                $ckdIcons = [
+                    '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+                    '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+                    '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+                ];
+            @endphp
             <div class="cara-kerja-detail">
+                @foreach([1,2,3] as $i)
                 <div class="ck-detail-card">
                     <div class="ck-detail-icon">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                        </svg>
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">{!! $ckdIcons[$i-1] !!}</svg>
                     </div>
-                    <h4>Apa yang Kami Gali saat Konsultasi</h4>
-                    <p>Kami tidak hanya bertanya tentang gejala saat ini. Kami membangun gambaran lengkap:</p>
+                    <h4>{{ $settings["ckd{$i}_title"] ?? '' }}</h4>
+                    <p>{{ $settings["ckd{$i}_intro"] ?? '' }}</p>
                     <ul>
-                        <li>Riwayat kesehatan dan keluhan sejak kapan muncul</li>
-                        <li>Pola makan harian — waktu makan, jenis, porsi</li>
-                        <li>Kualitas dan durasi tidur rata-rata</li>
-                        <li>Tingkat dan sumber stres dalam kehidupan sehari-hari</li>
-                        <li>Riwayat pengobatan — baik konvensional maupun alternatif</li>
-                        <li>Aktivitas fisik dan paparan lingkungan</li>
+                        @foreach(array_filter(array_map('trim', explode("\n", $settings["ckd{$i}_list"] ?? ''))) as $li)
+                        <li>{{ $li }}</li>
+                        @endforeach
                     </ul>
                 </div>
-                <div class="ck-detail-card">
-                    <div class="ck-detail-icon">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
-                    </div>
-                    <h4>Bagaimana Kami Mengidentifikasi Akar Masalah</h4>
-                    <p>Kang Bahri menggunakan pendekatan berlapis yang menggabungkan beberapa sudut pandang:</p>
-                    <ul>
-                        <li>Pemetaan organ yang berpotensi terdampak berdasarkan gejala</li>
-                        <li>Analisis ketidakseimbangan sistem (pencernaan, imun, hormonal)</li>
-                        <li>Identifikasi faktor pemicu eksternal (toksin, pola makan, stres)</li>
-                        <li>Pengecekan silang dengan pengetahuan fitomedicine dan jamu</li>
-                        <li>Konfirmasi bersama klien — apakah analisis resonan dengan pengalaman mereka</li>
-                    </ul>
-                </div>
-                <div class="ck-detail-card">
-                    <div class="ck-detail-icon">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                        </svg>
-                    </div>
-                    <h4>Pendampingan Setelah Program Dimulai</h4>
-                    <p>Program bukan hanya diserahkan lalu ditinggal. Kang Bahri memastikan Anda tidak berjalan sendirian:</p>
-                    <ul>
-                        <li>Check-in berkala via WhatsApp untuk memantau perkembangan</li>
-                        <li>Penyesuaian rekomendasi berdasarkan respons tubuh nyata</li>
-                        <li>Edukasi kontekstual — mengapa tubuh Anda bereaksi seperti itu</li>
-                        <li>Dukungan motivasi untuk menjaga konsistensi program</li>
-                        <li>Eskalasi ke tenaga medis jika diperlukan, tanpa ragu</li>
-                    </ul>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -1460,19 +1242,19 @@
         <div class="container">
             <div class="cta-konsultasi-inner">
                 <div class="cta-konsultasi-text">
-                    <span class="cta-label">Siap Memulai?</span>
-                    <h2>Ceritakan Keluhanmu,<br>Kami Bantu Temukan <em>Akarnya</em></h2>
-                    <p>{{ __('tentang.cta_desc') }}</p>
+                    <span class="cta-label">{{ $settings['cta_label'] ?? '' }}</span>
+                    <h2>{{ $settings['cta_title'] ?? '' }}</h2>
+                    <p>{{ $settings['cta_desc'] ?? '' }}</p>
                 </div>
                 <div class="cta-konsultasi-actions">
                     <a href="https://wa.me/{{ $siteSettings['wa_number'] ?? '6281234567890' }}?text=Halo%20Kang%20Bahri%2C%20saya%20ingin%20konsultasi%20kesehatan%20gratis.%20Boleh%20saya%20ceritakan%20keluhan%20saya%3F" target="_blank" class="btn-wa-konsultasi">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                         </svg>
-                        {{ __('tentang.cta_btn') }}
+                        {{ $settings['cta_btn'] ?? '' }}
                     </a>
 
-                    <p class="cta-konsultasi-note">Gratis · Tanpa komitmen · Respon dalam 1×24 jam</p>
+                    <p class="cta-konsultasi-note">{{ $settings['cta_note'] ?? '' }}</p>
                 </div>
             </div>
         </div>
@@ -1492,11 +1274,11 @@
                     </svg>
                 </div>
                 <div class="produk-banner-text">
-                    <h3>Jelajahi Produk Herbal Pilihan Kang Bahri</h3>
-                    <p>Setiap produk yang tersedia di Akar Sehat telah dipilih sendiri oleh Kang Bahri berdasarkan pengalaman klinis bertahun-tahun. Mulai dari detoksifikasi, antioksidan, imunitas, hingga kesehatan pencernaan — semua tersedia untuk mendukung program kesehatan personal Anda.</p>
+                    <h3>{{ $settings['banner_title'] ?? '' }}</h3>
+                    <p>{{ $settings['banner_desc'] ?? '' }}</p>
                 </div>
                 <a href="{{ route('produk.index') }}" class="btn btn-primary" style="white-space:nowrap;flex-shrink:0;">
-                    {{ __('common.see_all_products') }} →
+                    {{ $settings['banner_btn'] ?? __('common.see_all_products') }} →
                 </a>
             </div>
         </div>
