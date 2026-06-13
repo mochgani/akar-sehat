@@ -11,31 +11,49 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $site = Setting::getGroup('site');
-        return view('admin.pengaturan.index', compact('site'));
+        $site      = Setting::getGroup('site');
+        $siteAll   = Setting::getGroupAllLocales('site');
+        $languages = \App\Models\Language::aktif()->get();
+        return view('admin.pengaturan.index', compact('site', 'siteAll', 'languages'));
     }
 
     public function saveSite(Request $request)
     {
-        $data = $request->validate([
-            'name'        => 'required|string|max:100',
-            'tagline'     => 'nullable|string|max:200',
-            'wa_number'   => 'nullable|string|max:20',
-            'wa_number_2' => 'nullable|string|max:20',
-            'email'       => 'nullable|email',
-            'instagram'   => 'nullable|string|max:100',
-            'logo'        => 'nullable|image|max:512',
-            'favicon'     => 'nullable|image|max:128',
-            'address'     => 'nullable|string|max:200',
-            'footer_desc' => 'nullable|string|max:300',
-            'copyright'   => 'nullable|string|max:200',
-            'fb_url'      => 'nullable|url|max:255',
-            'ig_url'      => 'nullable|url|max:255',
-            'yt_url'      => 'nullable|url|max:255',
-            'tiktok_url'  => 'nullable|url|max:255',
+        $request->validate([
+            'name'          => 'required|string|max:100',
+            'tagline'       => 'nullable|array',
+            'tagline.*'     => 'nullable|string|max:200',
+            'wa_number'     => 'nullable|string|max:20',
+            'wa_number_2'   => 'nullable|string|max:20',
+            'email'         => 'nullable|email',
+            'instagram'     => 'nullable|string|max:100',
+            'logo'          => 'nullable|image|max:512',
+            'favicon'       => 'nullable|image|max:128',
+            'address'       => 'nullable|string|max:200',
+            'footer_desc'   => 'nullable|array',
+            'footer_desc.*' => 'nullable|string|max:300',
+            'copyright'     => 'nullable|string|max:200',
+            'fb_url'        => 'nullable|url|max:255',
+            'ig_url'        => 'nullable|url|max:255',
+            'yt_url'        => 'nullable|url|max:255',
+            'tiktok_url'    => 'nullable|url|max:255',
         ]);
 
-        foreach (['name','tagline','wa_number','wa_number_2','email','instagram','address','footer_desc','copyright','fb_url','ig_url','yt_url','tiktok_url'] as $key) {
+        // Field multi-bahasa (per locale)
+        $locales = \App\Models\Language::aktif()->pluck('code')->toArray();
+        foreach ($locales as $locale) {
+            foreach (['tagline', 'footer_desc'] as $key) {
+                $val = is_array($request->input($key))
+                    ? $request->input("{$key}.{$locale}", '')
+                    : ($locale === 'id' ? $request->input($key, '') : '');
+                if ($locale === 'id' || $val !== '') {
+                    Setting::set("site.{$key}", $val, $locale);
+                }
+            }
+        }
+
+        // Field tunggal (locale-independent, disimpan di 'id')
+        foreach (['name','wa_number','wa_number_2','email','instagram','address','copyright','fb_url','ig_url','yt_url','tiktok_url'] as $key) {
             Setting::set("site.{$key}", $request->input($key, ''));
         }
 

@@ -85,5 +85,22 @@ class SettingSeeder extends Seeder
         foreach ($settings as $key => $value) {
             Setting::updateOrCreate(['key' => $key, 'locale' => 'id'], ['value' => $value]);
         }
+
+        // Field site yang multi-bahasa — terjemahan en & ar
+        $siteTrans = [
+            'site.tagline' => [
+                'en' => 'Trusted Traditional Herbs',
+                'ar' => 'أعشاب تقليدية موثوقة',
+            ],
+            'site.footer_desc' => [
+                'en' => 'A modern health education and mentoring platform that helps people understand their body from the root of the problem, naturally.',
+                'ar' => 'منصة حديثة للتثقيف والإرشاد الصحي تساعد الناس على فهم أجسادهم من جذر المشكلة بشكل طبيعي.',
+            ],
+        ];
+        foreach ($siteTrans as $key => $locales) {
+            foreach ($locales as $loc => $val) {
+                Setting::updateOrCreate(['key' => $key, 'locale' => $loc], ['value' => $val]);
+            }
+        }
     }
 }

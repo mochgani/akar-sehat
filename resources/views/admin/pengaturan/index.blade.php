@@ -5,6 +5,17 @@
   <span class="cur">Pengaturan</span>
 @endsection
 
+@push('styles')
+<style>
+.lang-tabs { display:flex; gap:4px; border-bottom:2px solid var(--cms); margin-bottom:14px; flex-wrap:wrap; }
+.lang-tab { padding:7px 16px; font-size:13px; font-weight:600; cursor:pointer; border:none; background:none; color:var(--cmt); border-bottom:2px solid transparent; margin-bottom:-2px; border-radius:4px 4px 0 0; transition:all .15s; }
+.lang-tab:hover { color:var(--ctm); background:var(--cbg); }
+.lang-tab.active { color:var(--cp); border-bottom-color:var(--cp); background:var(--cpl); }
+.lang-pane { display:none; }
+.lang-pane.active { display:block; }
+</style>
+@endpush
+
 @section('content')
 <div class="pg-hd">
   <div><h1>Pengaturan Sistem</h1><p>Kelola identitas website dan konfigurasi halaman</p></div>
@@ -39,20 +50,36 @@
   <div class="card-body">
     <form method="POST" action="{{ route('admin.pengaturan.site') }}" enctype="multipart/form-data">
       @csrf
-      <div class="frow frow-2">
-        <div class="fg"><label class="fl">Nama Website</label><input type="text" name="name" class="fc" value="{{ $site['name'] ?? 'Akar Sehat' }}"></div>
-        <div class="fg"><label class="fl">Tagline</label><input type="text" name="tagline" class="fc" value="{{ $site['tagline'] ?? '' }}"></div>
+      <div class="fg"><label class="fl">Nama Website</label><input type="text" name="name" class="fc" value="{{ $site['name'] ?? 'Akar Sehat' }}"></div>
+
+      {{-- Tagline & Deskripsi Footer (multi-bahasa) --}}
+      <div style="border:1px solid var(--cms);border-radius:var(--r2);padding:14px;margin:4px 0 16px;background:var(--csi)">
+        <div class="lang-tabs" id="site-tabs">
+          @foreach($languages as $lang)
+          <button type="button" class="lang-tab {{ $loop->first ? 'active' : '' }}" onclick="switchTab('site',this,'{{ $lang->code }}')">
+            {{ $lang->flag }} {{ $lang->native_name }}
+          </button>
+          @endforeach
+        </div>
+        @foreach($languages as $lang)
+        @php $loc = $lang->code; $d = $siteAll[$loc] ?? []; $dId = $siteAll['id'] ?? []; @endphp
+        <div class="lang-pane {{ $loop->first ? 'active' : '' }}" id="site-pane-{{ $loc }}" dir="{{ $lang->dir }}">
+          <div class="fg"><label class="fl">Tagline</label>
+            <input type="text" name="tagline[{{ $loc }}]" class="fc" value="{{ $d['tagline'] ?? ($dId['tagline'] ?? '') }}">
+          </div>
+          <div class="fg"><label class="fl">Deskripsi Footer</label>
+            <textarea name="footer_desc[{{ $loc }}]" class="fc" rows="2" placeholder="Deskripsi singkat di footer website...">{{ $d['footer_desc'] ?? ($dId['footer_desc'] ?? '') }}</textarea>
+          </div>
+        </div>
+        @endforeach
       </div>
+
       <div class="frow frow-3">
         <div class="fg"><label class="fl">Nomor WhatsApp 1</label><input type="text" name="wa_number" class="fc" value="{{ $site['wa_number'] ?? '' }}" placeholder="6281234567890"></div>
         <div class="fg"><label class="fl">Nomor WhatsApp 2 (Arab)</label><input type="text" name="wa_number_2" class="fc" value="{{ $site['wa_number_2'] ?? '' }}" placeholder="966XXXXXXXXX"></div>
         <div class="fg"><label class="fl">Email</label><input type="email" name="email" class="fc" value="{{ $site['email'] ?? '' }}"></div>
       </div>
 
-      {{-- FOOTER --}}
-      <div class="fg"><label class="fl">Deskripsi Footer</label>
-        <textarea name="footer_desc" class="fc" rows="2" placeholder="Deskripsi singkat di footer website...">{{ $site['footer_desc'] ?? '' }}</textarea>
-      </div>
       <div class="frow frow-2">
         <div class="fg"><label class="fl">Alamat</label><input type="text" name="address" class="fc" value="{{ $site['address'] ?? '' }}" placeholder="Bandung, Jawa Barat"></div>
         <div class="fg"><label class="fl">Teks Copyright</label><input type="text" name="copyright" class="fc" value="{{ $site['copyright'] ?? '' }}" placeholder="© 2026 Akar Sehat. All rights reserved."></div>
@@ -119,6 +146,14 @@
 
 @push('scripts')
 <script>
+function switchTab(section, btn, locale) {
+  document.querySelectorAll(`#${section}-tabs .lang-tab`).forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll(`[id^="${section}-pane-"]`).forEach(p => p.classList.remove('active'));
+  const pane = document.getElementById(`${section}-pane-${locale}`);
+  if (pane) pane.classList.add('active');
+}
+
 async function previewImg(input, previewId) {
   if (!input.files || !input.files[0]) return;
   setLoading('Mengompresi gambar...');
