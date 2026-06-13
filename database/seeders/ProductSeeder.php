@@ -31,7 +31,7 @@ class ProductSeeder extends Seeder
                 'stok'        => 28,
                 'kandungan'   => ['Temulawak', 'Kunyit', 'Sambiloto', 'Meniran'],
                 'deskripsi'   => 'Formula detoksifikasi alami untuk membersihkan racun dalam tubuh. Menggunakan 12 tanaman herbal pilihan yang telah terbukti secara tradisional.',
-                'cara_pakai'  => 'Minum 1 kapsul 3x sehari setelah makan.',
+                'cara_pakai'  => '<ol><li><strong>Waktu Konsumsi</strong>Konsumsi 1 kapsul pagi setelah sarapan dan 1 kapsul malam setelah makan.</li><li><strong>Durasi Program</strong>Program intensif: 30 hari. Setelah itu lanjutkan dengan R12 Detoksifikasi standar untuk pemeliharaan.</li><li><strong>Hidrasi</strong>Perbanyak konsumsi air putih selama program — minimal 2,5 liter per hari untuk mendukung pembuangan racun.</li><li><strong>Penyimpanan</strong>Simpan di tempat sejuk dan kering, jauhkan dari jangkauan anak-anak.</li></ol>',
                 'foto'        => 'r12-detox.png',
                 'is_featured' => true,
                 'urutan'      => 2,

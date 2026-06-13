@@ -602,6 +602,43 @@
     .rich-content thead th { background-color: var(--color-bg-alt); font-weight: 700; color: var(--color-dark-bark); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
     .rich-content tbody tr:nth-child(even) { background-color: rgba(56,42,33,0.02); }
 
+    /* Cara Pakai: ordered list -> langkah bernomor dalam lingkaran */
+    #tab-cara-pakai .rich-content ol {
+        list-style: none;
+        counter-reset: step;
+        margin: 0;
+        padding: 0;
+    }
+    #tab-cara-pakai .rich-content ol > li {
+        counter-increment: step;
+        position: relative;
+        padding-left: 52px;
+        min-height: 36px;
+        margin-bottom: 22px;
+        line-height: 1.7;
+        display: block;
+    }
+    [dir="rtl"] #tab-cara-pakai .rich-content ol > li { padding-left: 0; padding-right: 52px; }
+    #tab-cara-pakai .rich-content ol > li:last-child { margin-bottom: 0; }
+    #tab-cara-pakai .rich-content ol > li::before {
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 36px;
+        height: 36px;
+        background-color: var(--color-primary);
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.875rem;
+    }
+    [dir="rtl"] #tab-cara-pakai .rich-content ol > li::before { left: auto; right: 0; }
+    #tab-cara-pakai .rich-content ol > li strong { display: block; color: var(--color-dark-bark); margin-bottom: 2px; }
+
     /* Kandungan table */
     .ingredients-table {
         width: 100%;
