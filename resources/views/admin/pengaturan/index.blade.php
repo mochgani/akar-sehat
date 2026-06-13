@@ -13,6 +13,20 @@
 .lang-tab.active { color:var(--cp); border-bottom-color:var(--cp); background:var(--cpl); }
 .lang-pane { display:none; }
 .lang-pane.active { display:block; }
+
+/* Editor WYSIWYG */
+.rich-wrap { border:1px solid var(--cms); border-radius:var(--r1); overflow:hidden; background:var(--cw); }
+.rich-tb { display:flex; gap:2px; flex-wrap:wrap; padding:6px; background:var(--cbg); border-bottom:1px solid var(--cms); }
+.rich-tb button { height:26px; min-width:26px; padding:0 7px; border:1px solid var(--cms); background:var(--cw); border-radius:4px; cursor:pointer; font-size:12px; color:var(--ctm); display:inline-flex; align-items:center; justify-content:center; }
+.rich-tb button:hover { background:var(--cpl); border-color:var(--cp); color:var(--cp); }
+.rich-tb .sep { width:1px; background:var(--cms); margin:2px 3px; }
+.rich-area { padding:10px 12px; min-height:70px; font-size:13.5px; line-height:1.7; outline:none; color:var(--ctm); }
+.rich-area[dir="rtl"] { text-align:right; }
+.rich-area:empty:before { content:attr(data-ph); color:var(--cmt); }
+.rich-area p { margin:0 0 8px; }
+.rich-area ul, .rich-area ol { margin:0 0 8px; padding-inline-start:24px; }
+.rich-area ul { list-style:disc; } .rich-area ol { list-style:decimal; }
+.rich-area li { margin-bottom:3px; display:list-item; }
 </style>
 @endpush
 
@@ -69,7 +83,7 @@
             <input type="text" name="tagline[{{ $loc }}]" class="fc" value="{{ $d['tagline'] ?? ($dId['tagline'] ?? '') }}">
           </div>
           <div class="fg"><label class="fl">Deskripsi Footer</label>
-            <textarea name="footer_desc[{{ $loc }}]" class="fc" rows="2" placeholder="Deskripsi singkat di footer website...">{{ $d['footer_desc'] ?? ($dId['footer_desc'] ?? '') }}</textarea>
+            <textarea name="footer_desc[{{ $loc }}]" class="js-rich" data-min="70" dir="{{ $lang->dir ?? 'ltr' }}">{{ $d['footer_desc'] ?? ($dId['footer_desc'] ?? '') }}</textarea>
           </div>
           <div class="frow frow-2">
             <div class="fg"><label class="fl">Alamat</label>
@@ -171,6 +185,70 @@ async function previewImg(input, previewId) {
   };
   reader.readAsDataURL(input.files[0]);
 }
+
+/* ── Editor WYSIWYG ── */
+let activeRich = null;
+function richSaveRange() {
+  const sel = window.getSelection();
+  if (activeRich && sel.rangeCount && activeRich.contains(sel.anchorNode)) activeRich._range = sel.getRangeAt(0).cloneRange();
+}
+function richRestoreRange() {
+  if (!activeRich) return null;
+  activeRich.focus();
+  const sel = window.getSelection();
+  let range = activeRich._range;
+  if (!range || !activeRich.contains(range.commonAncestorContainer)) {
+    range = document.createRange(); range.selectNodeContents(activeRich); range.collapse(false);
+  }
+  sel.removeAllRanges(); sel.addRange(range); return range;
+}
+function richExec(cmd, val) {
+  if (!activeRich) return;
+  richRestoreRange();
+  document.execCommand(cmd, false, val || null);
+  activeRich.dispatchEvent(new Event('input')); richSaveRange();
+}
+function buildRichToolbar() {
+  const b = (l, t, fn) => `<button type="button" title="${t}" onmousedown="event.preventDefault()" onclick="${fn}">${l}</button>`;
+  return '<div class="rich-tb">'
+    + b('<b>B</b>', 'Tebal', "richExec('bold')")
+    + b('<i>I</i>', 'Miring', "richExec('italic')")
+    + b('<u>U</u>', 'Garis bawah', "richExec('underline')")
+    + '<span class="sep"></span>'
+    + b('•', 'Daftar', "richExec('insertUnorderedList')")
+    + b('1.', 'Daftar nomor', "richExec('insertOrderedList')")
+    + '</div>';
+}
+function mountRichEditor(ta) {
+  if (ta.dataset.richMounted) return;
+  ta.dataset.richMounted = '1';
+  ta.style.display = 'none';
+  const wrap = document.createElement('div');
+  wrap.className = 'rich-wrap';
+  wrap.innerHTML = buildRichToolbar();
+  const area = document.createElement('div');
+  area.className = 'rich-area';
+  area.contentEditable = 'true';
+  area.style.minHeight = (ta.dataset.min || 70) + 'px';
+  if (ta.getAttribute('dir')) area.setAttribute('dir', ta.getAttribute('dir'));
+  area.dataset.ph = 'Tulis di sini…';
+  area.innerHTML = ta.value || '';
+  wrap.appendChild(area);
+  ta.parentNode.insertBefore(wrap, ta.nextSibling);
+  ta._richArea = area;
+  const sync = () => { ta.value = area.innerHTML; };
+  area.addEventListener('input', () => { sync(); richSaveRange(); });
+  area.addEventListener('focus', () => { activeRich = area; richSaveRange(); });
+  area.addEventListener('keyup', richSaveRange);
+  area.addEventListener('mouseup', richSaveRange);
+}
+function syncAllRich() {
+  document.querySelectorAll('textarea.js-rich').forEach(ta => { if (ta._richArea) ta.value = ta._richArea.innerHTML; });
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('textarea.js-rich').forEach(mountRichEditor);
+  document.querySelectorAll('form[action*="pengaturan/site"]').forEach(f => f.addEventListener('submit', syncAllRich));
+});
 </script>
 @endpush
 @endsection
