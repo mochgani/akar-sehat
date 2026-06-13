@@ -50,10 +50,8 @@
   <div class="card-body">
     <form method="POST" action="{{ route('admin.pengaturan.site') }}" enctype="multipart/form-data">
       @csrf
-      <div class="fg"><label class="fl">Nama Website</label><input type="text" name="name" class="fc" value="{{ $site['name'] ?? 'Akar Sehat' }}"></div>
-
-      {{-- Tagline & Deskripsi Footer (multi-bahasa) --}}
-      <div style="border:1px solid var(--cms);border-radius:var(--r2);padding:14px;margin:4px 0 16px;background:var(--csi)">
+      {{-- Nama Website, Tagline, Deskripsi Footer, Alamat & Copyright (multi-bahasa) --}}
+      <div style="border:1px solid var(--cms);border-radius:var(--r2);padding:14px;margin:0 0 16px;background:var(--csi)">
         <div class="lang-tabs" id="site-tabs">
           @foreach($languages as $lang)
           <button type="button" class="lang-tab {{ $loop->first ? 'active' : '' }}" onclick="switchTab('site',this,'{{ $lang->code }}')">
@@ -64,6 +62,9 @@
         @foreach($languages as $lang)
         @php $loc = $lang->code; $d = $siteAll[$loc] ?? []; $dId = $siteAll['id'] ?? []; @endphp
         <div class="lang-pane {{ $loop->first ? 'active' : '' }}" id="site-pane-{{ $loc }}" dir="{{ $lang->dir }}">
+          <div class="fg"><label class="fl">Nama Website @if($loc==='id')<span style="color:#ef4444">*</span>@endif</label>
+            <input type="text" name="name[{{ $loc }}]" class="fc" value="{{ $d['name'] ?? ($dId['name'] ?? '') }}" {{ $loc==='id' ? 'required' : '' }}>
+          </div>
           <div class="fg"><label class="fl">Tagline</label>
             <input type="text" name="tagline[{{ $loc }}]" class="fc" value="{{ $d['tagline'] ?? ($dId['tagline'] ?? '') }}">
           </div>

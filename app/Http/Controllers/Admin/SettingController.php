@@ -20,7 +20,9 @@ class SettingController extends Controller
     public function saveSite(Request $request)
     {
         $request->validate([
-            'name'          => 'required|string|max:100',
+            'name'          => 'required|array',
+            'name.id'       => 'required|string|max:100',
+            'name.*'        => 'nullable|string|max:100',
             'tagline'       => 'nullable|array',
             'tagline.*'     => 'nullable|string|max:200',
             'wa_number'     => 'nullable|string|max:20',
@@ -44,7 +46,7 @@ class SettingController extends Controller
         // Field multi-bahasa (per locale)
         $locales = \App\Models\Language::aktif()->pluck('code')->toArray();
         foreach ($locales as $locale) {
-            foreach (['tagline', 'footer_desc', 'address', 'copyright'] as $key) {
+            foreach (['name', 'tagline', 'footer_desc', 'address', 'copyright'] as $key) {
                 $val = is_array($request->input($key))
                     ? $request->input("{$key}.{$locale}", '')
                     : ($locale === 'id' ? $request->input($key, '') : '');
@@ -55,7 +57,7 @@ class SettingController extends Controller
         }
 
         // Field tunggal (locale-independent, disimpan di 'id')
-        foreach (['name','wa_number','wa_number_2','email','instagram','fb_url','ig_url','yt_url','tiktok_url'] as $key) {
+        foreach (['wa_number','wa_number_2','email','instagram','fb_url','ig_url','yt_url','tiktok_url'] as $key) {
             Setting::set("site.{$key}", $request->input($key, ''));
         }
 

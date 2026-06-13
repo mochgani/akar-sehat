@@ -88,6 +88,10 @@ class SettingSeeder extends Seeder
 
         // Field site yang multi-bahasa — terjemahan en & ar
         $siteTrans = [
+            'site.name' => [
+                'en' => 'Akar Sehat',
+                'ar' => 'أكار سيهات',
+            ],
             'site.tagline' => [
                 'en' => 'Trusted Traditional Herbs',
                 'ar' => 'أعشاب تقليدية موثوقة',
