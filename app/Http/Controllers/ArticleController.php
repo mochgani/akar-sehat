@@ -38,8 +38,13 @@ class ArticleController extends Controller
         } catch (\Exception $e) {
             $kategoriList = collect();
         }
+        try {
+            $kategoriProdukList = \App\Models\KategoriProduk::aktif()->get()->keyBy('nama');
+        } catch (\Exception $e) {
+            $kategoriProdukList = collect();
+        }
 
         $siteSettings = Setting::getGroup('site');
-        return view('public.edukasi.show', compact('artikel', 'related', 'produkTerkait', 'siteSettings', 'kategoriList'));
+        return view('public.edukasi.show', compact('artikel', 'related', 'produkTerkait', 'siteSettings', 'kategoriList', 'kategoriProdukList'));
     }
 }

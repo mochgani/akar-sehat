@@ -141,5 +141,11 @@
     "edukasi.sort_label": "ترتيب المقالات",
     "edukasi.sort_newest": "الأحدث",
     "edukasi.sort_popular": "الأكثر شعبية",
-    "edukasi.sort_az": "أ–ي"
+    "edukasi.sort_az": "أ–ي",
+    "edukasi.tags_label": "وسوم:",
+    "edukasi.written_by": "بقلم",
+    "edukasi.author_bio": "معالج بالأعشاب معتمد بخبرة تزيد عن 15 عاماً في الطب التقليدي والاستشارات الصحية الشاملة. مؤسس أكار سيهات وممارس جامو نوسانتارا.",
+    "edukasi.no_prev": "لا توجد مقالة سابقة",
+    "edukasi.no_next": "لا توجد مقالة تالية",
+    "edukasi.related_products_desc": "منتجات عشبية مختارة ذات صلة بموضوع هذه المقالة."
 }

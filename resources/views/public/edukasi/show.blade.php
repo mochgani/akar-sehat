@@ -886,7 +886,7 @@
                 <!-- Tags -->
                 @if(($artikel->keywords ?? $artikel->tags ?? false) && count($artikel->keywords ?? $artikel->tags ?? []) > 0)
                 <div class="article-tags-row">
-                    <span class="tags-label">Tag:</span>
+                    <span class="tags-label">{{ __('edukasi.tags_label') }}</span>
                     @foreach($artikel->keywords ?? $artikel->tags ?? [] as $tag)
                     <a href="{{ route('edukasi.index', ['q' => $tag]) }}" class="article-tag-pill">{{ $tag }}</a>
                     @endforeach
@@ -901,9 +901,9 @@
                              onerror="this.style.display='none'">
                     </div>
                     <div class="author-card-info">
-                        <span class="author-card-label">Ditulis oleh</span>
+                        <span class="author-card-label">{{ __('edukasi.written_by') }}</span>
                         <div class="author-card-name">{{ $artikel->penulis ?? 'Kang Bahri' }}</div>
-                        <p class="author-card-bio">Terapis herbal bersertifikat dengan pengalaman lebih dari 15 tahun dalam bidang pengobatan tradisional dan konsultasi kesehatan holistik. Pendiri Akar Sehat dan praktisi jamu Nusantara.</p>
+                        <p class="author-card-bio">{{ __('edukasi.author_bio') }}</p>
                         <a href="{{ route('tentang') }}" class="btn btn-secondary" style="display:inline-flex;align-items:center;gap:6px;font-size:.875rem;">
                             {{ __('common.view_profile') }}
                         </a>
@@ -920,7 +920,7 @@
                     @else
                     <div class="article-nav-btn prev disabled">
                         <span class="nav-btn-label">{{ __('edukasi.prev') }}</span>
-                        <span class="nav-btn-title">Tidak ada artikel sebelumnya</span>
+                        <span class="nav-btn-title">{{ __('edukasi.no_prev') }}</span>
                     </div>
                     @endif
 
@@ -932,7 +932,7 @@
                     @else
                     <div class="article-nav-btn next disabled">
                         <span class="nav-btn-label">{{ __('edukasi.next') }}</span>
-                        <span class="nav-btn-title">Tidak ada artikel selanjutnya</span>
+                        <span class="nav-btn-title">{{ __('edukasi.no_next') }}</span>
                     </div>
                     @endif
                 </nav>
@@ -970,7 +970,7 @@
                                 {{ $r->published_at ? \Carbon\Carbon::parse($r->published_at)->format('d M Y') : ($r->tanggal ? \Carbon\Carbon::parse($r->tanggal)->format('d M Y') : '') }}
                             </span>
                             @if($r->read_time ?? $r->readTime ?? false)
-                            <span class="edu-article-read-time">{{ $r->read_time ?? $r->readTime }} menit</span>
+                            <span class="edu-article-read-time">{{ $r->read_time ?? $r->readTime }} {{ __('common.min_read') }}</span>
                             @endif
                         </div>
                         <h3 class="edu-article-title">{{ $r->trans('judul') }}</h3>
@@ -991,14 +991,14 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">{{ __('edukasi.related_products_title') }}</h2>
-                <p class="section-desc">Produk herbal pilihan yang berkaitan dengan topik artikel ini.</p>
+                <p class="section-desc">{{ __('edukasi.related_products_desc') }}</p>
             </div>
             <div class="produk-terkait-grid">
                 @foreach($produkTerkait as $p)
                 <a href="{{ route('produk.show', $p->slug) }}" class="pt-card">
                     <div class="pt-card-img-wrap {{ $p->fotos ? '' : 'no-img' }}">
                         @if($p->fotos)
-                            <img class="pt-card-img" src="{{ asset('storage/'.($p->fotos[0] ?? '')) }}" alt="{{ $p->nama }}" loading="lazy">
+                            <img class="pt-card-img" src="{{ asset('storage/'.($p->fotos[0] ?? '')) }}" alt="{{ $p->trans('nama') }}" loading="lazy">
                         @else
                             <svg class="pt-placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8">
                                 <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -1013,9 +1013,9 @@
                         @endif
                     </div>
                     <div class="pt-card-body">
-                        <div class="pt-card-category">{{ $p->kategori }}</div>
-                        <div class="pt-card-name">{{ $p->nama }}</div>
-                        <p class="pt-card-desc">{{ $p->deskripsi }}</p>
+                        <div class="pt-card-category">{{ ($kategoriProdukList[$p->kategori] ?? null)?->trans('nama') ?? $p->kategori }}</div>
+                        <div class="pt-card-name">{{ $p->trans('nama') }}</div>
+                        <p class="pt-card-desc">{{ $p->trans('deskripsi') }}</p>
                         <div class="pt-card-footer">
                             <span class="pt-card-price">Rp {{ number_format($p->harga, 0, ',', '.') }}</span>
                             <span class="pt-card-btn">{{ __('common.view_detail') }} →</span>

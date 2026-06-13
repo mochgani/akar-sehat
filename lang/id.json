@@ -141,5 +141,11 @@
     "edukasi.sort_label": "Urutkan artikel",
     "edukasi.sort_newest": "Terbaru",
     "edukasi.sort_popular": "Terpopuler",
-    "edukasi.sort_az": "A–Z"
+    "edukasi.sort_az": "A–Z",
+    "edukasi.tags_label": "Tag:",
+    "edukasi.written_by": "Ditulis oleh",
+    "edukasi.author_bio": "Terapis herbal bersertifikat dengan pengalaman lebih dari 15 tahun dalam bidang pengobatan tradisional dan konsultasi kesehatan holistik. Pendiri Akar Sehat dan praktisi jamu Nusantara.",
+    "edukasi.no_prev": "Tidak ada artikel sebelumnya",
+    "edukasi.no_next": "Tidak ada artikel selanjutnya",
+    "edukasi.related_products_desc": "Produk herbal pilihan yang berkaitan dengan topik artikel ini."
 }
