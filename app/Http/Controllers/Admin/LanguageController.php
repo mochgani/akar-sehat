@@ -49,8 +49,11 @@ class LanguageController extends Controller
 
     public function destroy(Language $language)
     {
-        if ($language->is_default || $language->code === 'id') {
-            return response()->json(['success' => false, 'message' => 'Bahasa default tidak dapat dihapus.'], 422);
+        if ($language->is_default) {
+            return response()->json(['success' => false, 'message' => 'Bahasa default tidak dapat dihapus. Pilih bahasa default lain terlebih dahulu.'], 422);
+        }
+        if ($language->code === 'id') {
+            return response()->json(['success' => false, 'message' => 'Bahasa Indonesia adalah fallback dan tidak dapat dihapus.'], 422);
         }
         $language->delete();
         return response()->json(['success' => true, 'message' => 'Bahasa berhasil dihapus.']);
@@ -59,10 +62,25 @@ class LanguageController extends Controller
     public function toggle(Language $language)
     {
         if ($language->is_default) {
-            return response()->json(['success' => false, 'message' => 'Bahasa default tidak dapat dinonaktifkan.'], 422);
+            return response()->json(['success' => false, 'message' => 'Bahasa default tidak dapat dinonaktifkan. Pilih bahasa default lain terlebih dahulu.'], 422);
+        }
+        if ($language->code === 'id' && $language->aktif) {
+            return response()->json(['success' => false, 'message' => 'Bahasa Indonesia adalah fallback dan harus tetap aktif.'], 422);
         }
         $language->update(['aktif' => !$language->aktif]);
         $status = $language->fresh()->aktif ? 'diaktifkan' : 'dinonaktifkan';
         return response()->json(['success' => true, 'message' => "Bahasa berhasil {$status}."]);
+    }
+
+    public function setDefault(Language $language)
+    {
+        if (!$language->aktif) {
+            return response()->json(['success' => false, 'message' => 'Bahasa harus aktif terlebih dahulu sebelum dijadikan default.'], 422);
+        }
+
+        Language::where('is_default', true)->update(['is_default' => false]);
+        $language->update(['is_default' => true]);
+
+        return response()->json(['success' => true, 'message' => "{$language->native_name} dijadikan bahasa default frontend."]);
     }
 }

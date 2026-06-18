@@ -122,6 +122,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/bahasa/{language}',   [LanguageController::class, 'update'])->name('bahasa.update');
             Route::delete('/bahasa/{language}',[LanguageController::class, 'destroy'])->name('bahasa.destroy');
             Route::patch('/bahasa/{language}/toggle', [LanguageController::class, 'toggle'])->name('bahasa.toggle');
+            Route::patch('/bahasa/{language}/default', [LanguageController::class, 'setDefault'])->name('bahasa.default');
         });
 
         // Testimoni

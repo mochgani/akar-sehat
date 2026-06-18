@@ -69,7 +69,10 @@
             @endif
           </td>
           <td style="padding:14px 16px;text-align:center">
-            <div style="display:flex;gap:6px;justify-content:center">
+            <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
+              @if(!$lang->is_default && $lang->aktif)
+              <button onclick="setDefaultLang({{ $lang->id }}, '{{ $lang->native_name }}')" class="btn btn-sm" style="color:var(--cp);border-color:var(--cp);background:none" title="Jadikan bahasa default frontend">★ Jadikan Default</button>
+              @endif
               <button onclick="editLang({{ $lang->id }}, {{ json_encode($lang) }})" class="btn btn-outline btn-sm">Edit</button>
               @if(!$lang->is_default && $lang->code !== 'id')
               <button onclick="deleteLang({{ $lang->id }}, '{{ $lang->name }}')" class="btn btn-sm" style="color:#ef4444;border-color:#ef4444;background:none">Hapus</button>
@@ -87,11 +90,11 @@
   <div class="card-hd"><h3>ℹ️ Cara Kerja Multi-Bahasa</h3></div>
   <div class="card-body">
     <ul style="font-size:13.5px;color:var(--cmt);line-height:1.9;padding-left:20px;margin:0">
-      <li>Bahasa <strong>Indonesia (ID)</strong> adalah bahasa default dan selalu digunakan sebagai fallback.</li>
+      <li>Bahasa berlabel <strong>DEFAULT</strong> adalah bahasa yang otomatis ditampilkan saat pengunjung pertama kali membuka website. Tekan <strong>★ Jadikan Default</strong> untuk mengubahnya (mis. langsung tampil Bahasa Arab).</li>
+      <li>Bahasa <strong>Indonesia (ID)</strong> selalu menjadi <em>fallback</em>: jika konten terjemahan tidak diisi, website otomatis menampilkan konten Bahasa Indonesia.</li>
       <li>Untuk mengisi konten terjemahan, buka <strong>Pengaturan → Homepage</strong> atau <strong>Pengaturan → Tentang</strong> dan pilih tab bahasa yang ingin diisi.</li>
-      <li>Jika konten terjemahan tidak diisi, website akan otomatis menampilkan konten bahasa Indonesia.</li>
-      <li>Pengunjung dapat mengganti bahasa melalui switcher di <strong>footer</strong> website.</li>
-      <li>Bahasa baru yang ditambahkan perlu diisi kontennya terlebih dahulu sebelum aktif di frontend.</li>
+      <li>Pengunjung dapat mengganti bahasa melalui switcher di <strong>footer</strong> website. Pilihan mereka akan diingat selama sesi.</li>
+      <li>Hanya bahasa yang <strong>aktif</strong> yang dapat dijadikan default.</li>
     </ul>
   </div>
 </div>
@@ -193,7 +196,16 @@ const ROUTES = {
   update: "{{ url('admin/bahasa') }}/",
   destroy:"{{ url('admin/bahasa') }}/",
   toggle: "{{ url('admin/bahasa') }}/",
+  setdef: "{{ url('admin/bahasa') }}/",
 };
+
+function setDefaultLang(id, name) {
+  if (!confirm(`Jadikan "${name}" sebagai bahasa default? Pengunjung baru akan melihat website dalam bahasa ini saat pertama kali dibuka.`)) return;
+  apiFetch(ROUTES.setdef + id + '/default', 'POST', { _method: 'PATCH' }).then(r => {
+    if (r.success) { showToast(r.message); setTimeout(() => location.reload(), 800); }
+    else showToast(r.message || 'Gagal.', 'error');
+  });
+}
 
 function submitAdd() {
   const body = {
